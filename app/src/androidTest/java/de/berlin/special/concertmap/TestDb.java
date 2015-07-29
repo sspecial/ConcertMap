@@ -9,7 +9,6 @@ import android.util.Log;
 import java.util.Map;
 import java.util.Set;
 
-import de.berlin.special.concertmap.data.EventContract;
 import de.berlin.special.concertmap.data.EventContract.EventEntry;
 import de.berlin.special.concertmap.data.EventContract.LocationEntry;
 import de.berlin.special.concertmap.data.EventDbHelper;
@@ -17,8 +16,6 @@ import de.berlin.special.concertmap.data.EventDbHelper;
 public class TestDb extends AndroidTestCase {
 
     public static final String LOG_TAG = TestDb.class.getSimpleName();
-    static final String TEST_LOCATION = "99705";
-    static final String TEST_DATE = "20141205";
 
     public void testCreateDb() throws Throwable {
         mContext.deleteDatabase(EventDbHelper.DATABASE_NAME);
@@ -60,11 +57,11 @@ public class TestDb extends AndroidTestCase {
 
         validateCursor(cursor, testValues);
 
-        // Fantastic.  Now that we have a location, add some weather!
+        // Fantastic.  Now that we have a location, add some Event!
         ContentValues concertValues = createconcertValues(locationRowId);
 
-        long weatherRowId = db.insert(EventEntry.TABLE_NAME, null, concertValues);
-        assertTrue(weatherRowId != -1);
+        long EventRowId = db.insert(EventEntry.TABLE_NAME, null, concertValues);
+        assertTrue(EventRowId != -1);
 
         // A cursor is your primary interface to the query results.
         Cursor concertCursor = db.query(
@@ -85,12 +82,12 @@ public class TestDb extends AndroidTestCase {
     static ContentValues createconcertValues(long locationRowId) {
         ContentValues concertValues = new ContentValues();
         concertValues.put(EventEntry.COLUMN_LOC_KEY, locationRowId);
-        concertValues.put(EventContract.EventEntry.COLUMN_EVENT_TITLE, "eventTitle");
-        concertValues.put(EventContract.EventEntry.COLUMN_EVENT_ARTIST, "artists");
-        concertValues.put(EventContract.EventEntry.COLUMN_EVENT_ARTIST_WEB, "artistWeb");
-        concertValues.put(EventContract.EventEntry.COLUMN_EVENT_IMAGE, "image");
-        concertValues.put(EventContract.EventEntry.COLUMN_EVENT_DESC, "description");
-        concertValues.put(EventContract.EventEntry.COLUMN_START_DATE, "startDate");
+        concertValues.put(EventEntry.COLUMN_EVENT_TITLE, "eventTitle");
+        concertValues.put(EventEntry.COLUMN_EVENT_ARTIST, "artists");
+        concertValues.put(EventEntry.COLUMN_EVENT_ARTIST_WEB, "artistWeb");
+        concertValues.put(EventEntry.COLUMN_EVENT_IMAGE, "image");
+        concertValues.put(EventEntry.COLUMN_EVENT_DESC, "description");
+        concertValues.put(EventEntry.COLUMN_EVENT_START_DATE, "startDate");
 
         return concertValues;
     }
@@ -99,14 +96,15 @@ public class TestDb extends AndroidTestCase {
         // Create a new map of values, where column names are the keys
         ContentValues locationValues = new ContentValues();
 
-        locationValues.put(EventContract.LocationEntry.COLUMN_LOC_NAME, "locName");
-        locationValues.put(EventContract.LocationEntry.COLUMN_LOC_CITY, "locCity");
-        locationValues.put(EventContract.LocationEntry.COLUMN_LOC_COUNTRY, "locCountry");
-        locationValues.put(EventContract.LocationEntry.COLUMN_LOC_STREET, "locStreet");
-        locationValues.put(EventContract.LocationEntry.COLUMN_LOC_POSTAL_CODE, "locPostalCode");
-        locationValues.put(EventContract.LocationEntry.COLUMN_LOC_WEB, "locWeb");
-        locationValues.put(EventContract.LocationEntry.COLUMN_LOC_GEO_LAT, 64.7488);
-        locationValues.put(EventContract.LocationEntry.COLUMN_LOC_GEO_LONG, -147.353);
+        locationValues.put(LocationEntry.COLUMN_LOC_SETTING, "locName");
+        locationValues.put(LocationEntry.COLUMN_LOC_NAME, "locName");
+        locationValues.put(LocationEntry.COLUMN_LOC_STREET, "locStreet");
+        locationValues.put(LocationEntry.COLUMN_LOC_POSTAL_CODE, "locPostalCode");
+        locationValues.put(LocationEntry.COLUMN_LOC_CITY, "locCity");
+        locationValues.put(LocationEntry.COLUMN_LOC_COUNTRY, "locCountry");
+        locationValues.put(LocationEntry.COLUMN_LOC_WEB, "locWeb");
+        locationValues.put(LocationEntry.COLUMN_LOC_GEO_LAT, 64.7488);
+        locationValues.put(LocationEntry.COLUMN_LOC_GEO_LONG, -147.353);
 
         return locationValues;
     }

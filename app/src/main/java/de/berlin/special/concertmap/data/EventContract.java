@@ -36,11 +36,14 @@ public class EventContract {
         // Table name
         public static final String TABLE_NAME = "location";
 
+        // The location setting string is what will be sent to last.fm
+        // as the location query.
+        public static final String COLUMN_LOC_SETTING = "location_setting";
         public static final String COLUMN_LOC_NAME = "loc_name";
-        public static final String COLUMN_LOC_CITY = "city_name";
-        public static final String COLUMN_LOC_COUNTRY = "country_name";
         public static final String COLUMN_LOC_STREET = "street_address";
         public static final String COLUMN_LOC_POSTAL_CODE = "postal_code";
+        public static final String COLUMN_LOC_CITY = "city_name";
+        public static final String COLUMN_LOC_COUNTRY = "country_name";
         public static final String COLUMN_LOC_WEB = "loc_web";
 
         // In order to uniquely pinpoint the location on the map when we launch the
@@ -66,7 +69,6 @@ public class EventContract {
 
         // Column with the foreign key into the location table.
         public static final String COLUMN_LOC_KEY = "location_id";
-
         // Information of event:
         public static final String COLUMN_EVENT_TITLE = "event_title";
         public static final String COLUMN_EVENT_ARTIST = "event_artist";
@@ -74,7 +76,7 @@ public class EventContract {
         public static final String COLUMN_EVENT_IMAGE = "event_image";
         public static final String COLUMN_EVENT_DESC = "event_desc";
         // Date, stored as Text with format yyyy-MM-dd
-        public static final String COLUMN_START_DATE = "start_date";
+        public static final String COLUMN_EVENT_START_DATE = "start_date";
 
         public static Uri buildEventUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
@@ -82,6 +84,22 @@ public class EventContract {
 
         public static Uri buildEventLocation(String locationSetting) {
             return CONTENT_URI.buildUpon().appendPath(locationSetting).build();
+        }
+
+        public static Uri buildLocationLocationWithDate(String locationSetting, String date) {
+            return CONTENT_URI.buildUpon().appendPath(locationSetting).appendPath(date).build();
+        }
+
+        public static String getLocationSettingFromUri(Uri uri) {
+            return uri.getPathSegments().get(1);
+        }
+
+        public static String getDateFromUri(Uri uri) {
+            return uri.getPathSegments().get(2);
+        }
+
+        public static String getStartDateFromUri(Uri uri) {
+            return uri.getQueryParameter(COLUMN_EVENT_START_DATE);
         }
     }
 }

@@ -26,11 +26,12 @@ public class EventDbHelper extends SQLiteOpenHelper {
         // location setting, the city name, and the latitude and longitude
         final String SQL_CREATE_LOCATION_TABLE = "CREATE TABLE " + LocationEntry.TABLE_NAME + " (" +
                 LocationEntry._ID + " INTEGER PRIMARY KEY," +
+                LocationEntry.COLUMN_LOC_SETTING + " TEXT, " +
                 LocationEntry.COLUMN_LOC_NAME + " TEXT, " +
-                LocationEntry.COLUMN_LOC_CITY + " TEXT, " +
-                LocationEntry.COLUMN_LOC_COUNTRY + " TEXT, " +
                 LocationEntry.COLUMN_LOC_STREET + " TEXT, " +
                 LocationEntry.COLUMN_LOC_POSTAL_CODE + " INTEGER, " +
+                LocationEntry.COLUMN_LOC_CITY + " TEXT, " +
+                LocationEntry.COLUMN_LOC_COUNTRY + " TEXT, " +
                 LocationEntry.COLUMN_LOC_WEB + " TEXT, " +
                 LocationEntry.COLUMN_LOC_GEO_LAT+ " REAL NOT NULL, " +
                 LocationEntry.COLUMN_LOC_GEO_LONG + " REAL NOT NULL " + " );";
@@ -46,7 +47,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
                 EventEntry.COLUMN_EVENT_ARTIST_WEB + " TEXT, " +
                 EventEntry.COLUMN_EVENT_DESC + " TEXT, " +
                 EventEntry.COLUMN_EVENT_IMAGE + " TEXT, " +
-                EventEntry.COLUMN_START_DATE + " TEXT, " +
+                EventEntry.COLUMN_EVENT_START_DATE + " TEXT, " +
 
                 // Set up the location column as a foreign key to location table.
                 " FOREIGN KEY (" + EventEntry.COLUMN_LOC_KEY + ") REFERENCES " +

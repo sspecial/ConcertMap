@@ -42,9 +42,7 @@ public class DataFetchService extends IntentService {
         int numDays = 14;
 
         try {
-            // Construct the URL for the OpenWeatherMap query
-            // Possible parameters are avaiable at OWM's forecast API page, at
-            // http://openweathermap.org/API#forecast
+            // Construct the URL for the last.fm query
             final String FORECAST_BASE_URL =
                     "http://ws.audioscrobbler.com/2.0/?";
             final String METHOD_PARAM = "method";
@@ -61,7 +59,7 @@ public class DataFetchService extends IntentService {
 
             URL url = new URL(builtUri.toString());
 
-            // Create the request to OpenWeatherMap, and open the connection
+            // Create the request to OpenEventMap, and open the connection
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
@@ -92,7 +90,7 @@ public class DataFetchService extends IntentService {
             Log.d(LOG_TAG, concertJsonStr);
         } catch (IOException e) {
             Log.e(LOG_TAG, "Error ", e);
-            // If the code didn't successfully get the weather data, there's no point in attempting
+            // If the code didn't successfully get the Event data, there's no point in attempting
             // to parse it.
             return;
         } finally {
