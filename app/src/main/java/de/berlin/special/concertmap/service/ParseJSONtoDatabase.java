@@ -142,7 +142,7 @@ public class ParseJSONtoDatabase {
                 eventValues.put(EventContract.EventEntry.COLUMN_EVENT_ARTIST_WEB, artistWeb);
                 eventValues.put(EventContract.EventEntry.COLUMN_EVENT_IMAGE, image);
                 eventValues.put(EventContract.EventEntry.COLUMN_EVENT_DESC, description);
-                eventValues.put(EventContract.EventEntry.COLUMN_START_DATE, startDate);
+                eventValues.put(EventContract.EventEntry.COLUMN_EVENT_START_DATE, startDate);
 
                 long newRowIdEvent;
                 newRowIdEvent = db.insert(
