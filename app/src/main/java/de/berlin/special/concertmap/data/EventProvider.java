@@ -18,9 +18,8 @@ public class EventProvider extends ContentProvider {
     private EventDbHelper mOpenHelper;
 
     private static final int EVENT = 100;
-    private static final int EVENT_ID = 101;
-    private static final int EVENT_WITH_LOCATION = 102;
-    private static final int EVENT_WITH_LOCATION_AND_DATE = 103;
+    private static final int EVENT_WITH_LOCATION = 101;
+    private static final int EVENT_WITH_LOCATION_AND_DATE = 102;
     private static final int LOCATION = 300;
     private static final int LOCATION_ID = 301;
 
@@ -43,7 +42,6 @@ public class EventProvider extends ContentProvider {
 
         // For each type of URI you want to add, create a corresponding code.
         matcher.addURI(authority, EventContract.PATH_EVENT, EVENT);
-        matcher.addURI(authority, EventContract.PATH_EVENT + "/#", EVENT_ID);
         matcher.addURI(authority, EventContract.PATH_EVENT + "/*", EVENT_WITH_LOCATION);
         matcher.addURI(authority, EventContract.PATH_EVENT + "/*/*", EVENT_WITH_LOCATION_AND_DATE);
         matcher.addURI(authority, EventContract.PATH_LOCATION, LOCATION);
@@ -86,6 +84,27 @@ public class EventProvider extends ContentProvider {
         );
     }
 
+    private Cursor getEventByLocationSettingAndDate(
+            Uri uri, String[] projection, String sortOrder) {
+
+        final String sLocationSettingAndDaySelection =
+                EventContract.LocationEntry.TABLE_NAME +
+                        "." + EventContract.LocationEntry.COLUMN_LOC_SETTING + " = ? AND " +
+                        EventContract.EventEntry.COLUMN_EVENT_START_DATE + " = ? ";
+
+        String locationSetting = EventContract.EventEntry.getLocationSettingFromUri(uri);
+        String date = EventContract.EventEntry.getDateFromUri(uri);
+
+        return sEventByLocationSettingQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+                projection,
+                sLocationSettingAndDaySelection,
+                new String[]{locationSetting, date},
+                null,
+                null,
+                sortOrder
+        );
+    }
+
     @Override
     public boolean onCreate() {
         mOpenHelper = new EventDbHelper(getContext());
@@ -112,22 +131,15 @@ public class EventProvider extends ContentProvider {
                 );
                 break;
             }
-            // "event/#"
-            case EVENT_ID: {
-                retCursor = mOpenHelper.getReadableDatabase().query(
-                        EventContract.EventEntry.TABLE_NAME,
-                        projection,
-                        EventContract.EventEntry._ID + " = '" + ContentUris.parseId(uri) + "'",
-                        null,
-                        null,
-                        null,
-                        sortOrder
-                );
-                break;
-            }
             // "event/*"
             case EVENT_WITH_LOCATION: {
                 retCursor = getEventByLocationSetting(uri, projection, sortOrder);
+                break;
+            }
+            // "Event/*/*"
+            case EVENT_WITH_LOCATION_AND_DATE:
+            {
+                retCursor = getEventByLocationSettingAndDate(uri, projection, sortOrder);
                 break;
             }
             // "location"
