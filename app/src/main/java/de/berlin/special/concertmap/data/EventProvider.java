@@ -5,6 +5,7 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 
@@ -70,8 +71,8 @@ public class EventProvider extends ContentProvider {
             selection = sLocationSettingSelection;
             selectionArgs = new String[]{locationSetting};
         } else {
-            selectionArgs = new String[]{locationSetting, startDate};
             selection = sLocationSettingWithStartDateSelection;
+            selectionArgs = new String[]{locationSetting, startDate};
         }
 
         return sEventByLocationSettingQueryBuilder.query(mOpenHelper.getReadableDatabase(),
@@ -132,7 +133,8 @@ public class EventProvider extends ContentProvider {
                 break;
             }
             // "event/*"
-            case EVENT_WITH_LOCATION: {
+            case EVENT_WITH_LOCATION:
+            {
                 retCursor = getEventByLocationSetting(uri, projection, sortOrder);
                 break;
             }
@@ -178,21 +180,100 @@ public class EventProvider extends ContentProvider {
 
     @Override
     public String getType(Uri uri) {
-        return null;
+        // Use the Uri Matcher to determine what kind of URI this is.
+        final int match = sUriMatcher.match(uri);
+
+        switch (match) {
+            case EVENT_WITH_LOCATION_AND_DATE:
+                return EventContract.EventEntry.CONTENT_ITEM_TYPE;
+            case EVENT_WITH_LOCATION:
+                return EventContract.EventEntry.CONTENT_TYPE;
+            case EVENT:
+                return EventContract.EventEntry.CONTENT_TYPE;
+            case LOCATION:
+                return EventContract.LocationEntry.CONTENT_TYPE;
+            case LOCATION_ID:
+                return EventContract.LocationEntry.CONTENT_ITEM_TYPE;
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
     }
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        return null;
+        final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+        final int match = sUriMatcher.match(uri);
+        Uri returnUri;
+
+        switch (match) {
+            case EVENT: {
+                long _id = db.insert(EventContract.EventEntry.TABLE_NAME, null, values);
+                if ( _id > 0 )
+                    returnUri = EventContract.EventEntry.buildEventUri(_id);
+                else
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                break;
+            }
+            case LOCATION: {
+                long _id = db.insert(EventContract.LocationEntry.TABLE_NAME, null, values);
+                if ( _id > 0 )
+                    returnUri = EventContract.LocationEntry.buildLocationUri(_id);
+                else
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                break;
+            }
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
+        getContext().getContentResolver().notifyChange(uri, null);
+        return returnUri;
     }
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        return 0;
+        final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+        final int match = sUriMatcher.match(uri);
+        int rowsDeleted;
+        switch (match) {
+            case EVENT:
+                rowsDeleted = db.delete(
+                        EventContract.EventEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            case LOCATION:
+                rowsDeleted = db.delete(
+                        EventContract.LocationEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
+        // Because a null deletes all rows
+        if (selection == null || rowsDeleted != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+        return rowsDeleted;
     }
 
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        return 0;
+        final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+        final int match = sUriMatcher.match(uri);
+        int rowsUpdated;
+
+        switch (match) {
+            case EVENT:
+                rowsUpdated = db.update(EventContract.EventEntry.TABLE_NAME, values, selection,
+                        selectionArgs);
+                break;
+            case LOCATION:
+                rowsUpdated = db.update(EventContract.LocationEntry.TABLE_NAME, values, selection,
+                        selectionArgs);
+                break;
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
+        if (rowsUpdated != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+        return rowsUpdated;
     }
 }
