@@ -86,8 +86,14 @@ public class EventContract {
             return CONTENT_URI.buildUpon().appendPath(locationSetting).build();
         }
 
-        public static Uri buildLocationLocationWithDate(String locationSetting, String date) {
+        public static Uri buildEventLocationWithDate(String locationSetting, String date) {
             return CONTENT_URI.buildUpon().appendPath(locationSetting).appendPath(date).build();
+        }
+
+        public static Uri buildEventLocationWithStartDate(
+                String locationSetting, String startDate) {
+            return CONTENT_URI.buildUpon().appendPath(locationSetting)
+                    .appendQueryParameter(COLUMN_EVENT_START_DATE, startDate).build();
         }
 
         public static String getLocationSettingFromUri(Uri uri) {

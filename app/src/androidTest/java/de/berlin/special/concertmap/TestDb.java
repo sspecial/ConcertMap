@@ -16,6 +16,8 @@ import de.berlin.special.concertmap.data.EventDbHelper;
 public class TestDb extends AndroidTestCase {
 
     public static final String LOG_TAG = TestDb.class.getSimpleName();
+    static final String TEST_LOCATION = "Berlin";
+    static final String TEST_START_DATE = "20150809";
 
     public void testCreateDb() throws Throwable {
         mContext.deleteDatabase(EventDbHelper.DATABASE_NAME);
@@ -58,7 +60,7 @@ public class TestDb extends AndroidTestCase {
         validateCursor(cursor, testValues);
 
         // Fantastic.  Now that we have a location, add some Event!
-        ContentValues concertValues = createconcertValues(locationRowId);
+        ContentValues concertValues = createEventTestValues(locationRowId);
 
         long EventRowId = db.insert(EventEntry.TABLE_NAME, null, concertValues);
         assertTrue(EventRowId != -1);
@@ -79,7 +81,7 @@ public class TestDb extends AndroidTestCase {
         dbHelper.close();
     }
 
-    static ContentValues createconcertValues(long locationRowId) {
+    static ContentValues createEventTestValues(long locationRowId) {
         ContentValues concertValues = new ContentValues();
         concertValues.put(EventEntry.COLUMN_LOC_KEY, locationRowId);
         concertValues.put(EventEntry.COLUMN_EVENT_TITLE, "eventTitle");
@@ -87,7 +89,7 @@ public class TestDb extends AndroidTestCase {
         concertValues.put(EventEntry.COLUMN_EVENT_ARTIST_WEB, "artistWeb");
         concertValues.put(EventEntry.COLUMN_EVENT_IMAGE, "image");
         concertValues.put(EventEntry.COLUMN_EVENT_DESC, "description");
-        concertValues.put(EventEntry.COLUMN_EVENT_START_DATE, "startDate");
+        concertValues.put(EventEntry.COLUMN_EVENT_START_DATE, TEST_START_DATE);
 
         return concertValues;
     }
@@ -96,7 +98,7 @@ public class TestDb extends AndroidTestCase {
         // Create a new map of values, where column names are the keys
         ContentValues locationValues = new ContentValues();
 
-        locationValues.put(LocationEntry.COLUMN_LOC_SETTING, "locName");
+        locationValues.put(LocationEntry.COLUMN_LOC_SETTING, TEST_LOCATION);
         locationValues.put(LocationEntry.COLUMN_LOC_NAME, "locName");
         locationValues.put(LocationEntry.COLUMN_LOC_STREET, "locStreet");
         locationValues.put(LocationEntry.COLUMN_LOC_POSTAL_CODE, "locPostalCode");
