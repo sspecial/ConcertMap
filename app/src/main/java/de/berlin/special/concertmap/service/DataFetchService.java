@@ -52,12 +52,14 @@ public class DataFetchService extends IntentService {
 
             Uri builtUri = Uri.parse(FORECAST_BASE_URL).buildUpon()
                     .appendQueryParameter(METHOD_PARAM, method)
-                    .appendQueryParameter(FORMAT_PARAM, format)
-                    .appendQueryParameter(KEY_PARAM, api_key)
                     .appendQueryParameter(LOCATION_PARAM, locationQuery)
+                    .appendQueryParameter(KEY_PARAM, api_key)
+                    .appendQueryParameter(FORMAT_PARAM, format)
                     .build();
 
             URL url = new URL(builtUri.toString());
+
+            Log.d(LOG_TAG, "URL: "+url.toString());
 
             // Create the request to OpenEventMap, and open the connection
             urlConnection = (HttpURLConnection) url.openConnection();

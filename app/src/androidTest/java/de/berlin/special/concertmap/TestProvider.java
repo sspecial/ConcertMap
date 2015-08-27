@@ -1,6 +1,7 @@
 package de.berlin.special.concertmap;
 
 import android.annotation.TargetApi;
+import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -20,6 +21,7 @@ public class TestProvider extends AndroidTestCase {
 
     // brings our database to an empty state
     public void deleteAllRecords() {
+
         mContext.getContentResolver().delete(
                 EventEntry.CONTENT_URI,
                 null,

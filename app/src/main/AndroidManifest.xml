@@ -19,6 +19,10 @@
             </intent-filter>
         </activity>
 
+        <provider
+            android:authorities="de.berlin.special.concertmap"
+            android:name=".data.EventProvider" />
+
         <service
             android:name=".service.DataFetchService"
             android:enabled="true"
