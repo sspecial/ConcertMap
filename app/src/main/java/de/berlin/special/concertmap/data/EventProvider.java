@@ -27,14 +27,14 @@ public class EventProvider extends ContentProvider {
     private static final SQLiteQueryBuilder sEventByLocationSettingQueryBuilder;
 
     static{
+        final String innerJoin = EventContract.EventEntry.TABLE_NAME + " INNER JOIN " + // innerJoin = ""
+                EventContract.LocationEntry.TABLE_NAME +
+                " ON " + EventContract.EventEntry.TABLE_NAME +
+                "." + EventContract.EventEntry.COLUMN_LOC_KEY +
+                " = " + EventContract.LocationEntry.TABLE_NAME +
+                "." + EventContract.LocationEntry._ID;
         sEventByLocationSettingQueryBuilder = new SQLiteQueryBuilder();
-        sEventByLocationSettingQueryBuilder.setTables(
-                EventContract.EventEntry.TABLE_NAME + " INNER JOIN " +
-                        EventContract.LocationEntry.TABLE_NAME +
-                        " ON " + EventContract.EventEntry.TABLE_NAME +
-                        "." + EventContract.EventEntry.COLUMN_LOC_KEY +
-                        " = " + EventContract.LocationEntry.TABLE_NAME +
-                        "." + EventContract.LocationEntry._ID);
+        sEventByLocationSettingQueryBuilder.setTables(innerJoin);
     }
 
     private static UriMatcher buildUriMatcher() {
@@ -53,14 +53,16 @@ public class EventProvider extends ContentProvider {
 
     private Cursor getEventByLocationSetting(Uri uri, String[] projection, String sortOrder) {
 
-        final String sLocationSettingSelection =
+        final String sLocationSettingSelection =    // "location.location_setting = ?"
                 EventContract.LocationEntry.TABLE_NAME+
                         "." + EventContract.LocationEntry.COLUMN_LOC_SETTING + " = ? ";
-        final String sLocationSettingWithStartDateSelection =
+        final String sLocationSettingWithStartDateSelection =   // "location.location_setting = ? AND start_date >= ?"
                 EventContract.LocationEntry.TABLE_NAME+
                         "." + EventContract.LocationEntry.COLUMN_LOC_SETTING + " = ? AND " +
                         EventContract.EventEntry.COLUMN_EVENT_START_DATE + " >= ? ";
 
+        // Uri: content://de.berlin.special.concertmap/event/Berlin, locationSetting = "Berlin", startDate = null
+        // Uri: content://de.berlin.special.concertmap/event/Berlin?start_date=20150809, locationSetting = "Berlin", startDate = "20150809"
         String locationSetting = EventContract.EventEntry.getLocationSettingFromUri(uri);
         String startDate = EventContract.EventEntry.getStartDateFromUri(uri);
 
@@ -86,15 +88,15 @@ public class EventProvider extends ContentProvider {
     }
 
     private Cursor getEventByLocationSettingAndDate(
-            Uri uri, String[] projection, String sortOrder) {
+            Uri uri, String[] projection, String sortOrder) {   // Uri: content://de.berlin.special.concertmap/event/Berlin/20150809
 
-        final String sLocationSettingAndDaySelection =
+        final String sLocationSettingAndDaySelection =      // "location.location_setting = ? AND start_date = ?"
                 EventContract.LocationEntry.TABLE_NAME +
                         "." + EventContract.LocationEntry.COLUMN_LOC_SETTING + " = ? AND " +
                         EventContract.EventEntry.COLUMN_EVENT_START_DATE + " = ? ";
 
-        String locationSetting = EventContract.EventEntry.getLocationSettingFromUri(uri);
-        String date = EventContract.EventEntry.getDateFromUri(uri);
+        String locationSetting = EventContract.EventEntry.getLocationSettingFromUri(uri);   // "Berlin"
+        String date = EventContract.EventEntry.getDateFromUri(uri);     // "20150809"
 
         return sEventByLocationSettingQueryBuilder.query(mOpenHelper.getReadableDatabase(),
                 projection,

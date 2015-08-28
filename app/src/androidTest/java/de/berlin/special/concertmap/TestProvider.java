@@ -63,8 +63,9 @@ public class TestProvider extends AndroidTestCase {
     public void testInsertReadProvider() {
 
         ContentValues testValues = TestDb.createLocationTestValues();
+        // testValues = "country_name=locCountry city_name=locCity postal_code=locPostalCode location_setting=Berlin geo_long=-147.353 geo_lat=64.7488 street_address=locStreet loc_web=locWeb loc_name=locName"
 
-        Uri locationUri = mContext.getContentResolver().insert(LocationEntry.CONTENT_URI, testValues);
+        Uri locationUri = mContext.getContentResolver().insert(LocationEntry.CONTENT_URI, testValues);  // locationUri = content://de.berlin.special.concertmap/location/1
         long locationRowId = ContentUris.parseId(locationUri);
 
         // Verify we got a row back.
@@ -97,8 +98,9 @@ public class TestProvider extends AndroidTestCase {
 
         // Fantastic.  Now that we have a location, add some Event!
         ContentValues EventValues = TestDb.createEventTestValues(locationRowId);
+        // EventValues = "event_artist_web=artistWeb location_id=2 event_title=eventTitle event_artist=artists start_date=20150809 event_desc=description event_image=image"
 
-        Uri EventInsertUri = mContext.getContentResolver()
+        Uri EventInsertUri = mContext.getContentResolver()  // EventInsertUri = content://de.berlin.special.concertmap/event/12
                 .insert(EventEntry.CONTENT_URI, EventValues);
         assertTrue(EventInsertUri != null);
 
@@ -118,9 +120,10 @@ public class TestProvider extends AndroidTestCase {
         // sure that the join worked and we actually get all the values back
         addAllContentValues(EventValues, testValues);
 
+        Uri eventLocationUri = EventEntry.buildEventLocation(TestDb.TEST_LOCATION); // eventLocationUri = content://de.berlin.special.concertmap/event/Berlin
         // Get the joined Event and Location data
         EventCursor = mContext.getContentResolver().query(
-                EventEntry.buildEventLocation(TestDb.TEST_LOCATION),
+                eventLocationUri,
                 null, // leaving "columns" null just returns all the columns.
                 null, // cols for "where" clause
                 null, // values for "where" clause
@@ -128,10 +131,11 @@ public class TestProvider extends AndroidTestCase {
         );
         TestDb.validateCursor(EventCursor, EventValues);
 
+        Uri eventLocationWithStartDateUri = EventEntry.buildEventLocationWithStartDate(
+                TestDb.TEST_LOCATION, TestDb.TEST_START_DATE);  // eventLocationWithStartDateUri = content://de.berlin.special.concertmap/event/Berlin?start_date=20150809
         // Get the joined Event and Location data with a start date
         EventCursor = mContext.getContentResolver().query(
-                EventEntry.buildEventLocationWithStartDate(
-                        TestDb.TEST_LOCATION, TestDb.TEST_START_DATE),
+                eventLocationWithStartDateUri,
                 null, // leaving "columns" null just returns all the columns.
                 null, // cols for "where" clause
                 null, // values for "where" clause
@@ -139,9 +143,10 @@ public class TestProvider extends AndroidTestCase {
         );
         TestDb.validateCursor(EventCursor, EventValues);
 
+        Uri eventLocationWithDate = EventEntry.buildEventLocationWithDate(TestDb.TEST_LOCATION, TestDb.TEST_START_DATE);  // eventLocationWithDate = content://de.berlin.special.concertmap/event/Berlin/20150809
         // Get the joined Event data for a specific date
         EventCursor = mContext.getContentResolver().query(
-                EventEntry.buildEventLocationWithDate(TestDb.TEST_LOCATION, TestDb.TEST_START_DATE),
+                eventLocationWithDate,
                 null,
                 null,
                 null,
