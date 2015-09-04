@@ -83,17 +83,17 @@ public class InitiateFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        // getAddress();
-        // Temporary:
+        getAddress();
+        /* Temporary:
         addressNotFoundLayout.setVisibility(View.INVISIBLE);
         locationNotFoundLayout.setVisibility(View.INVISIBLE);
         locationFoundLayout.setVisibility(View.VISIBLE);
-        locationView.setText("Berlin");
+        locationView.setText("Berlin");*/
 
         continueBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), MainActivity.class);
+                Intent intent = new Intent(getActivity(), NavigationActivity.class);
                 intent.putExtra(DataFetchService.LOCATION_EXTRA, "Berlin");
                 getActivity().startActivity(intent);
             }
