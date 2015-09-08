@@ -1,12 +1,12 @@
 package de.berlin.special.concertmap;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class StartActivity extends ActionBarActivity {
+public class StartActivity extends AppCompatActivity {
 
     InitiateFragment initiateFragment = new InitiateFragment();
 
@@ -44,6 +44,5 @@ public class StartActivity extends ActionBarActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
     }
 }

@@ -5,7 +5,7 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,7 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 
-public class NavigationActivity extends ActionBarActivity {
+public class NavigationActivity extends AppCompatActivity {
 
     private String[] eventNavItems;
     private DrawerLayout mDrawerLayout;
@@ -100,6 +100,7 @@ public class NavigationActivity extends ActionBarActivity {
         // set up the drawer's list view with items and click listener
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_drawer);
     }
 
     @Override
@@ -129,17 +130,6 @@ public class NavigationActivity extends ActionBarActivity {
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
-
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
     }
 
