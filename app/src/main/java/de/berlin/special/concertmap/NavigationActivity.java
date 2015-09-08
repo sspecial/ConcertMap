@@ -99,6 +99,7 @@ public class NavigationActivity extends AppCompatActivity {
 
         // set up the drawer's list view with items and click listener
         actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setHomeButtonEnabled(true);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_drawer);
     }
