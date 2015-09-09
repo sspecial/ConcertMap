@@ -1,18 +1,23 @@
 package de.berlin.special.concertmap;
 
+import android.content.Context;
 import android.content.res.Configuration;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.support.v4.widget.DrawerLayout;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 
 public class NavigationActivity extends AppCompatActivity {
@@ -23,6 +28,7 @@ public class NavigationActivity extends AppCompatActivity {
     private ActionBarDrawerToggle mDrawerToggle;
     private ActionBar actionBar;
     private CharSequence mTitle;
+    private MyAdapter myAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +37,7 @@ public class NavigationActivity extends AppCompatActivity {
 
         actionBar = getSupportActionBar();
         eventNavItems = getResources().getStringArray(R.array.event_nav_array);
+        myAdapter = new MyAdapter(this);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.drawer_list);
 
@@ -42,11 +49,15 @@ public class NavigationActivity extends AppCompatActivity {
             }
         });
         // Setting Adaptor for DrawerList
+        mDrawerList.setAdapter(myAdapter);
+        /*
+        // Setting Adaptor for DrawerList
         mDrawerList.setAdapter(new ArrayAdapter<String>(
                 this,
                 android.R.layout.simple_list_item_activated_1,
                 android.R.id.text1,
-                eventNavItems));
+                eventNavItems));*/
+
         // Setting Listener for DrawerList
         setUpDrawerToggle();
     }
@@ -134,4 +145,52 @@ public class NavigationActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+}
+
+class MyAdapter extends BaseAdapter {
+
+    private Context context;
+    private String[] eventNavItems;
+    private int[] images = {R.drawable.bell_lyre, R.drawable.music_conductor, R.drawable.dancing};
+
+    public MyAdapter(Context context) {
+        this.context = context;
+        eventNavItems = context.getResources().getStringArray(R.array.event_nav_array);
+    }
+
+    @Override
+    public int getCount() {
+        return eventNavItems.length;
+    }
+
+    @Override
+    public Object getItem(int i) {
+        return eventNavItems[i];
+    }
+
+    @Override
+    public long getItemId(int i) {
+        return i;
+    }
+
+    @Override
+    public View getView(int i, View view, ViewGroup viewGroup) {
+
+        View row = null;
+        if (view == null){
+            LayoutInflater inflater = (LayoutInflater) context
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            row = inflater.inflate(R.layout.custom_row, viewGroup, false);
+        }
+        else {
+            row = view;
+        }
+        TextView titleTextView = (TextView) row.findViewById(R.id.row_textView);
+        ImageView titleImageView = (ImageView) row.findViewById(R.id.row_imageView);
+
+        titleTextView.setText(eventNavItems[i]);
+        titleImageView.setImageResource(images[i]);
+
+        return row;
+    }
 }

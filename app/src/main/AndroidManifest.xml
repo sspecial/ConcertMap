@@ -9,7 +9,7 @@
         android:allowBackup="true"
         android:icon="@mipmap/blue_music_icon"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/MyTheme" >
         <activity
             android:name=".StartActivity"
             android:label="@string/title_activity_start" >
