@@ -112,7 +112,7 @@ public class NavigationActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setHomeButtonEnabled(true);
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_drawer);
+        actionBar.setHomeAsUpIndicator(R.drawable.menu2);
     }
 
     @Override
@@ -151,7 +151,7 @@ class MyAdapter extends BaseAdapter {
 
     private Context context;
     private String[] eventNavItems;
-    private int[] images = {R.drawable.bell_lyre, R.drawable.music_conductor, R.drawable.dancing};
+    private int[] images = {R.drawable.cornet_ins, R.drawable.music_conductor, R.drawable.audio_wave};
 
     public MyAdapter(Context context) {
         this.context = context;

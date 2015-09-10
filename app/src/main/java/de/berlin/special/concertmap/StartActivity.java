@@ -20,6 +20,8 @@ public class StartActivity extends AppCompatActivity {
                     .add(R.id.container, initiateFragment)
                     .commit();
         }
+
+        getSupportActionBar().hide();
     }
 
     @Override

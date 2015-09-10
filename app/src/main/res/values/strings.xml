@@ -2,10 +2,8 @@
 <resources>
 
     <string name="app_name">Concert Map</string>
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_start">Concert Map</string>
-    <string name="title_activity_navigation">Navigate here!</string>
+    <string name="title_activity_navigation">Concert Map</string>
 
     <string name="finding_your_city">Finding your city...</string>
     <string name="hit_the_refresh">Hit the refresh</string>

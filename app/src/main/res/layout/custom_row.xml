@@ -11,7 +11,7 @@
         android:layout_height="45dp"
         android:gravity="left"
         android:layout_marginLeft="8dp"
-        android:layout_marginRight="16dp" />
+        android:layout_marginRight="20dp" />
 
     <TextView
         android:id="@+id/row_textView"
