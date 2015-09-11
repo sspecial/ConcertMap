@@ -20,8 +20,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/location_view"
-            android:text="@string/finding_your_city" />
+            android:id="@+id/location_view" />
 
         <ProgressBar
             android:id="@+id/address_progress"

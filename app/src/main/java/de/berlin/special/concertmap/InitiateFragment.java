@@ -36,10 +36,11 @@ import de.berlin.special.concertmap.service.DataFetchService;
 public class InitiateFragment extends Fragment implements ConnectionCallbacks, OnConnectionFailedListener{
 
     private static final String LOG_TAG = InitiateFragment.class.getSimpleName();
-    private static final String enterTheCity = "Location is not available, Enter the city.";
+    private static final String ENTER_CITY = "Location is not available, Enter the city.";
+    private static final String PROCESS_MESSAGE = "Finding your city...";
 
-    private static final int locationAvailable = 100;
-    private static final int locationNotAvailable = 101;
+    private static final int LOCATION_AVAILABLE = 100;
+    private static final int LOCATION_NOT_AVAILABLE = 101;
 
     private String lastKnownLocation;
     private LinearLayout locationFoundLayout;
@@ -86,6 +87,9 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
         searchCityBtn = (ImageButton) rootView.findViewById(R.id.validate_city_button);
         continueBtn = (Button) rootView.findViewById(R.id.continue_button);
 
+        progressIndicator.setVisibility(View.VISIBLE);
+        locationView.setText(PROCESS_MESSAGE);
+
         return rootView;
     }
 
@@ -118,11 +122,12 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         getLastKnownLocation(mLastLocation);
 
-        if (connStat == locationNotAvailable) {
+        if (connStat == LOCATION_NOT_AVAILABLE) {
 
             locationFoundLayout.setVisibility(View.INVISIBLE);
             addressNotFoundLayout.setVisibility(View.VISIBLE);
-            commentView.setText(enterTheCity);
+            commentView.setVisibility(View.VISIBLE);
+            commentView.setText(ENTER_CITY);
             searchCityBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -130,9 +135,10 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
                             "Button is clicked", Toast.LENGTH_LONG).show();
                 }
             });
-        } else if (connStat == locationAvailable) {
+        } else if (connStat == LOCATION_AVAILABLE) {
 
             addressNotFoundLayout.setVisibility(View.INVISIBLE);
+            commentView.setVisibility(View.INVISIBLE);
             locationFoundLayout.setVisibility(View.VISIBLE);
             progressIndicator.setVisibility(View.GONE);
             locationView.setText(lastKnownLocation);
@@ -184,7 +190,7 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
         } catch (Exception e) {
             Log.e(LOG_TAG, "Exception in getFromLocation()");
             e.printStackTrace();
-            connStat = locationNotAvailable;
+            connStat = LOCATION_NOT_AVAILABLE;
         }
 
         if (addresses != null && addresses.size() > 0) {
@@ -198,9 +204,9 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
                     address.getCountryName());
             // Return the City + Country
             lastKnownLocation = addressText;
-            connStat = locationAvailable;
+            connStat = LOCATION_AVAILABLE;
         } else {
-            connStat = locationNotAvailable;
+            connStat = LOCATION_NOT_AVAILABLE;
         }
     }
 }
