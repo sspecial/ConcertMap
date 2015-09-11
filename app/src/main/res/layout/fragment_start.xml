@@ -29,32 +29,6 @@
             android:layout_height="wrap_content"
             style="@android:style/Widget.ProgressBar.Small"
             android:indeterminate="true"
-            android:visibility="gone"
-            android:layout_marginLeft="20dp"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="100dp"
-        android:gravity="center_vertical"
-        android:id="@+id/locationNotFoundLayout"
-        android:visibility="invisible">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/hit_the_refresh"
-            android:id="@+id/hit_the_refresh_view"/>
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/location_refresh_button"
-            android:src="@drawable/refresh"
             android:layout_marginLeft="20dp"/>
 
     </LinearLayout>
