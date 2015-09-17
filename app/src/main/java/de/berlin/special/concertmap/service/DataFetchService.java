@@ -5,6 +5,15 @@ import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 
+import org.scribe.builder.ServiceBuilder;
+import org.scribe.builder.api.LinkedInApi;
+import org.scribe.model.OAuthRequest;
+import org.scribe.model.Response;
+import org.scribe.model.Token;
+import org.scribe.model.Verb;
+import org.scribe.model.Verifier;
+import org.scribe.oauth.OAuthService;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,6 +36,27 @@ public class DataFetchService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         String locationQuery = intent.getStringExtra(LOCATION_EXTRA);
+
+        // ------------------------------------------------------
+        // Code to use Scribe Oauth
+        OAuthService service = new ServiceBuilder()
+                .provider(LinkedInApi.class)
+                .apiKey("4e2279091ef16766282d")
+                .apiSecret("fec0e1fbccab865838c7")
+                .build();
+
+        Token requestToken = service.getRequestToken();
+
+        String authUrl = service.getAuthorizationUrl(requestToken);
+
+        Verifier v = new Verifier("verifier you got from the user");
+        Token accessToken = service.getAccessToken(requestToken, v);
+
+        OAuthRequest request = new OAuthRequest(Verb.GET, "http://api.twitter.com/1/account/verify_credentials.xml");
+        service.signRequest(accessToken, request); // the access token from step 4
+        Response response = request.send();
+        System.out.println(response.getBody());
+        // ------------------------------------------------------
 
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
