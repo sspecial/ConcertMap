@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 
+import com.google.api.client.auth.oauth.OAuthHmacSigner;
+import com.google.api.client.auth.oauth.OAuthParameters;
+
 import org.scribe.builder.ServiceBuilder;
-import org.scribe.builder.api.LinkedInApi;
 import org.scribe.model.OAuthRequest;
 import org.scribe.model.Response;
 import org.scribe.model.Token;
@@ -33,16 +35,54 @@ public class DataFetchService extends IntentService {
         super("ConcertMap");
     }
 
+    String consumerKey = "4e2279091ef16766282d";
+    String consumerSecret = "fec0e1fbccab865838c7";
     @Override
     protected void onHandleIntent(Intent intent) {
         String locationQuery = intent.getStringExtra(LOCATION_EXTRA);
 
+        try {
+            // Construct the URL for the last.fm query
+            final String EVENTFUL_BASE_URL =
+                    "http://eventful.com/oauth/request_token/?";
+            final String CALLBACK_PARAM = "oauth_callback";
+            final String TIMES_TAMP_PARAM = "oauth_timestamp";
+            final String CONSUMER_KEY_PARAM = "oauth_consumer_key";
+            final String OAUTH_VERSION_PARAM = "oauth_version";
+            final String OAUTH_NONCE_PARAM = "oauth_nonce";
+            final String OAUTH_SIGNATURE_METHOD_PARAM = "oauth_signature_method";
+            final String OAUTH_SIGNATURE_PARAM = "oauth_signature";
+
+            Uri builtUri = Uri.parse(EVENTFUL_BASE_URL).buildUpon()
+                    .appendQueryParameter(CALLBACK_PARAM, "")
+                    .appendQueryParameter(TIMES_TAMP_PARAM, "")
+                    .appendQueryParameter(CONSUMER_KEY_PARAM, consumerKey)
+                    .appendQueryParameter(OAUTH_VERSION_PARAM, "")
+                    .appendQueryParameter(OAUTH_NONCE_PARAM, "")
+                    .appendQueryParameter(OAUTH_SIGNATURE_METHOD_PARAM, "")
+                    .appendQueryParameter(OAUTH_SIGNATURE_PARAM, "")
+                    .build();
+
+            URL url = new URL(builtUri.toString());
+
+            Log.d(LOG_TAG, "URL: "+url.toString());
+
+            // Create the request to OpenEventMap, and open the connection
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestMethod("POST");
+            urlConnection.connect();
+
+        } catch (IOException e) {
+            Log.e(LOG_TAG, "Error ", e);
+            return;
+        }
+
         // ------------------------------------------------------
+        /*
         // Code to use Scribe Oauth
         OAuthService service = new ServiceBuilder()
-                .provider(LinkedInApi.class)
-                .apiKey("4e2279091ef16766282d")
-                .apiSecret("fec0e1fbccab865838c7")
+                .apiKey(apiKey)
+                .apiSecret(apiSecret)
                 .build();
 
         Token requestToken = service.getRequestToken();
@@ -55,9 +95,10 @@ public class DataFetchService extends IntentService {
         OAuthRequest request = new OAuthRequest(Verb.GET, "http://api.twitter.com/1/account/verify_credentials.xml");
         service.signRequest(accessToken, request); // the access token from step 4
         Response response = request.send();
-        System.out.println(response.getBody());
+        Log.d(LOG_TAG, response.getBody());*/
         // ------------------------------------------------------
 
+        /*
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
         HttpURLConnection urlConnection = null;
@@ -144,7 +185,7 @@ public class DataFetchService extends IntentService {
 
         ParseJSONtoDatabase parseJSONtoDatabase;
         parseJSONtoDatabase = new ParseJSONtoDatabase(getApplicationContext(), concertJsonStr);
-        parseJSONtoDatabase.parseData();
+        parseJSONtoDatabase.parseData();*/
 
     }
 }
