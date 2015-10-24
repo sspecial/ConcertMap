@@ -5,17 +5,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 
-import com.google.api.client.auth.oauth.OAuthHmacSigner;
-import com.google.api.client.auth.oauth.OAuthParameters;
-
-import org.scribe.builder.ServiceBuilder;
-import org.scribe.model.OAuthRequest;
-import org.scribe.model.Response;
-import org.scribe.model.Token;
-import org.scribe.model.Verb;
-import org.scribe.model.Verifier;
-import org.scribe.oauth.OAuthService;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,70 +24,10 @@ public class DataFetchService extends IntentService {
         super("ConcertMap");
     }
 
-    String consumerKey = "4e2279091ef16766282d";
-    String consumerSecret = "fec0e1fbccab865838c7";
     @Override
     protected void onHandleIntent(Intent intent) {
         String locationQuery = intent.getStringExtra(LOCATION_EXTRA);
 
-        try {
-            // Construct the URL for the last.fm query
-            final String EVENTFUL_BASE_URL =
-                    "http://eventful.com/oauth/request_token/?";
-            final String CALLBACK_PARAM = "oauth_callback";
-            final String TIMES_TAMP_PARAM = "oauth_timestamp";
-            final String CONSUMER_KEY_PARAM = "oauth_consumer_key";
-            final String OAUTH_VERSION_PARAM = "oauth_version";
-            final String OAUTH_NONCE_PARAM = "oauth_nonce";
-            final String OAUTH_SIGNATURE_METHOD_PARAM = "oauth_signature_method";
-            final String OAUTH_SIGNATURE_PARAM = "oauth_signature";
-
-            Uri builtUri = Uri.parse(EVENTFUL_BASE_URL).buildUpon()
-                    .appendQueryParameter(CALLBACK_PARAM, "")
-                    .appendQueryParameter(TIMES_TAMP_PARAM, "")
-                    .appendQueryParameter(CONSUMER_KEY_PARAM, consumerKey)
-                    .appendQueryParameter(OAUTH_VERSION_PARAM, "")
-                    .appendQueryParameter(OAUTH_NONCE_PARAM, "")
-                    .appendQueryParameter(OAUTH_SIGNATURE_METHOD_PARAM, "")
-                    .appendQueryParameter(OAUTH_SIGNATURE_PARAM, "")
-                    .build();
-
-            URL url = new URL(builtUri.toString());
-
-            Log.d(LOG_TAG, "URL: "+url.toString());
-
-            // Create the request to OpenEventMap, and open the connection
-            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestMethod("POST");
-            urlConnection.connect();
-
-        } catch (IOException e) {
-            Log.e(LOG_TAG, "Error ", e);
-            return;
-        }
-
-        // ------------------------------------------------------
-        /*
-        // Code to use Scribe Oauth
-        OAuthService service = new ServiceBuilder()
-                .apiKey(apiKey)
-                .apiSecret(apiSecret)
-                .build();
-
-        Token requestToken = service.getRequestToken();
-
-        String authUrl = service.getAuthorizationUrl(requestToken);
-
-        Verifier v = new Verifier("verifier you got from the user");
-        Token accessToken = service.getAccessToken(requestToken, v);
-
-        OAuthRequest request = new OAuthRequest(Verb.GET, "http://api.twitter.com/1/account/verify_credentials.xml");
-        service.signRequest(accessToken, request); // the access token from step 4
-        Response response = request.send();
-        Log.d(LOG_TAG, response.getBody());*/
-        // ------------------------------------------------------
-
-        /*
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
         HttpURLConnection urlConnection = null;
@@ -107,25 +36,26 @@ public class DataFetchService extends IntentService {
         // Will contain the raw JSON response as a string.
         String concertJsonStr = null;
 
-        String method = "geo.getevents";
-        String format = "json";
-        String api_key = "41c56a91f8fa9d230c7e1c1282adca1a";
+        String geoLat = "52.5194";
+        String geoLong = "13.4067";
+        String eventLimit = "2";
+        String api_key = "d90d066add515bff";
         int numDays = 14;
 
         try {
-            // Construct the URL for the last.fm query
+            // Construct the URL for the api.thrillcall query
             final String FORECAST_BASE_URL =
-                    "http://ws.audioscrobbler.com/2.0/?";
-            final String METHOD_PARAM = "method";
-            final String FORMAT_PARAM = "format";
+                    "https://api.thrillcall.com/api/v3/events?";
+            final String LAT_PARAM = "lat";
+            final String LONG_PARAM = "long";
+            final String LIMIT_PARAM = "limit";
             final String KEY_PARAM = "api_key";
-            final String LOCATION_PARAM = "location";
 
             Uri builtUri = Uri.parse(FORECAST_BASE_URL).buildUpon()
-                    .appendQueryParameter(METHOD_PARAM, method)
-                    .appendQueryParameter(LOCATION_PARAM, locationQuery)
+                    .appendQueryParameter(LAT_PARAM, geoLat)
+                    .appendQueryParameter(LONG_PARAM, geoLong)
+                    .appendQueryParameter(LIMIT_PARAM, eventLimit)
                     .appendQueryParameter(KEY_PARAM, api_key)
-                    .appendQueryParameter(FORMAT_PARAM, format)
                     .build();
 
             URL url = new URL(builtUri.toString());
@@ -179,13 +109,9 @@ public class DataFetchService extends IntentService {
             }
         }
 
-        // Now we have a String representing the complete forecast in JSON Format.
-        // Fortunately parsing is easy:  constructor takes the JSON string and converts it
-        // into an Object hierarchy for us.
-
+        // Now we have a String representing the complete event list in JSON Format.
         ParseJSONtoDatabase parseJSONtoDatabase;
         parseJSONtoDatabase = new ParseJSONtoDatabase(getApplicationContext(), concertJsonStr);
-        parseJSONtoDatabase.parseData();*/
-
+        parseJSONtoDatabase.parseData();
     }
 }
