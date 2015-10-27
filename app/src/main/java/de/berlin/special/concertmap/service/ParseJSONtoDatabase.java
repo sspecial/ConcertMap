@@ -1,6 +1,5 @@
 package de.berlin.special.concertmap.service;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -9,9 +8,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
+import java.util.Hashtable;
 
-import de.berlin.special.concertmap.data.EventContract;
 import de.berlin.special.concertmap.data.EventDbHelper;
 
 /**
@@ -35,85 +33,71 @@ public class ParseJSONtoDatabase {
     public void parseData() {
 
         // These are the names of the JSON objects that need to be extracted.
-        final String CON_LIST = "events";
-        final String CON_EVENT = "event";
-        final String CON_TITLE = "title";
-        final String CON_ARTISTS = "artists";
-        final String CON_ARTIST = "artist";
-        final String CON_ARTIST_WEB = "website";
-        final String CON_IMAGE = "image";
-        final String CON_START_DATE = "startDate";
-        final String CON_DESCRIPTION = "description";
-        final String CON_LOC_VENUE = "venue";
-        final String CON_LOC_NAME = "name";
-        final String CON_LOC_LOCATION = "location";
-        final String CON_LOC_CITY = "city";
-        final String CON_LOC_COUNTRY = "country";
-        final String CON_LOC_STREET = "street";
-        final String CON_LOC_POSTAL_CODE = "postalcode";
-        final String CON_LOC_GEO_POINT = "geo:point";
-        final String CON_LOC_GEO_LAT = "geo:lat";
-        final String CON_LOC_GEO_LONG = "geo:long";
-        final String CON_LOC_WEB = "website";
+        final String CON_ID = "id";
+        final String CON_NAME = "name";
+        final String CON_START_AT = "starts_at";
+        final String CON_IMAGE_JSON_KEY = "photos";
+        final String CON_IMAGE = "mobile";
+
+
+        final String ART_JSON_KEY = "artists";
+        final String ART_ID = "id";
+        final String ART_NAME = "name";
+
+        final String VEN_JSON_KEY = "venue";
+        final String VEN_ID = "id";
+        final String VEN_NAME = "name";
+        final String VEN_STREET = "address1";
+        final String VEN_CITY = "city";
+        final String VEN_GEO_LAT = "latitude";
+        final String VEN_GEO_LONG = "longitude";
+        final String VEN_WEB = "official_url";
 
         try {
-            JSONObject concertJson = new JSONObject(concertJsonStr);
-            JSONObject eventsJSON = concertJson.getJSONObject(CON_LIST);
-            JSONArray eventArray = eventsJSON.getJSONArray(CON_EVENT);
+
+            JSONArray eventArray = new JSONArray(concertJsonStr);
 
             for(int i = 0; i < eventArray.length(); i++) {
 
-                String title;
-                ArrayList<String> artistsArray = new ArrayList<String>();
-                String locName;
-                String locWeb;
-                String locCity;
-                String locCountry;
-                String locStreet;
-                String locPostalCode;
-                double locGeoLatitude;
-                double locGeoLongitude;
-                String image;
-                String startDate;
-                String artistWeb;
-                String description;
+                String conID;
+                String conName;
+                String conStartAt;
+                String conImage;
+
+                Hashtable artList = new Hashtable();
+
+                String venID;
+                String venName;
+                String venStreet;
+                String venCity;
+                double venGeoLat;
+                double venGeoLong;
+                String venWeb;
 
                 // Get the JSON object representing the event
                 JSONObject event = eventArray.getJSONObject(i);
 
-                title = event.getString(CON_TITLE);
-                image = event.getString(CON_IMAGE);
-                startDate = event.getString(CON_START_DATE);
-                artistWeb = event.getString(CON_ARTIST_WEB);
-                description = event.getString(CON_DESCRIPTION);
+                conID = event.getString(CON_ID);
+                conName = event.getString(CON_NAME);
+                conStartAt = event.getString(CON_START_AT);
+                JSONObject photosJSONObject = event.getJSONObject(CON_IMAGE_JSON_KEY);
+                conImage = photosJSONObject.getString(CON_IMAGE);
 
-                JSONObject artistsJSON = event.getJSONObject(CON_ARTISTS);
-                Object item = artistsJSON.get(CON_ARTIST);
-                if (item instanceof JSONArray) {
-                    JSONArray artistsJSONArray = (JSONArray) item;
-                    for (int j = 0; j < artistsJSONArray.length(); j++) {
-                        String artist = artistsJSONArray.getString(j);
-                        Log.d(LOG_TAG, artist);
-                        artistsArray.add(artist);
-                    }
-                } else {
-                    String artist = artistsJSON.getString(CON_ARTIST);
-                    Log.d(LOG_TAG, artist);
-                    artistsArray.add(artist);
+                JSONArray artistsJSONArray = event.getJSONArray(ART_JSON_KEY);
+                for (int j = 0; j < artistsJSONArray.length(); j++) {
+                    JSONObject artistObject = eventArray.getJSONObject(j);
+                    artList.put(artistObject.getString(ART_NAME), artistObject.getString(ART_ID));
                 }
 
-                JSONObject venueJSON = event.getJSONObject(CON_LOC_VENUE);
-                locName = venueJSON.getString(CON_LOC_NAME);
-                locWeb = venueJSON.getString(CON_LOC_WEB);
-                JSONObject locJSON = venueJSON.getJSONObject(CON_LOC_LOCATION);
-                locCity = locJSON.getString(CON_LOC_CITY);
-                locCountry = locJSON.getString(CON_LOC_COUNTRY);
-                locStreet = locJSON.getString(CON_LOC_STREET);
-                locPostalCode = locJSON.getString(CON_LOC_POSTAL_CODE);
-                JSONObject geoJSON = locJSON.getJSONObject(CON_LOC_GEO_POINT);
-                locGeoLatitude = geoJSON.getDouble(CON_LOC_GEO_LAT);
-                locGeoLongitude = geoJSON.getDouble(CON_LOC_GEO_LONG);
-
+                JSONObject venueJSON = event.getJSONObject(VEN_JSON_KEY);
+                venID = venueJSON.getString(VEN_ID);
+                venName = venueJSON.getString(VEN_NAME);
+                venStreet = venueJSON.getString(VEN_STREET);
+                venCity = venueJSON.getString(VEN_CITY);
+                venGeoLat = venueJSON.getDouble(VEN_GEO_LAT);
+                venGeoLong = venueJSON.getDouble(VEN_GEO_LONG);
+                venWeb = venueJSON.getString(VEN_WEB);
+                /*
                 ContentValues eventValues = new ContentValues();
                 ContentValues locationValues = new ContentValues();
 
@@ -150,8 +134,9 @@ public class ParseJSONtoDatabase {
                         null,
                         eventValues);
                 Log.d(LOG_TAG, "Event id"+String.valueOf(newRowIdEvent));
+                */
 
-                artistsArray.clear();
+                artList.clear();
             }
 
         } catch (JSONException e) {
