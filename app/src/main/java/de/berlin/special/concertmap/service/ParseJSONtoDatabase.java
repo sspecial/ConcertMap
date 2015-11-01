@@ -1,5 +1,6 @@
 package de.berlin.special.concertmap.service;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -10,6 +11,9 @@ import org.json.JSONObject;
 
 import java.util.Hashtable;
 
+import de.berlin.special.concertmap.data.EventContract.ArtistEntry;
+import de.berlin.special.concertmap.data.EventContract.EventEntry;
+import de.berlin.special.concertmap.data.EventContract.VenueEntry;
 import de.berlin.special.concertmap.data.EventDbHelper;
 
 /**
@@ -23,7 +27,9 @@ public class ParseJSONtoDatabase {
     private String concertJsonStr;
 
     public ParseJSONtoDatabase(Context mContext, String json){
-        // Creating event and location databases
+        // Deleting the concert.db databases
+        mContext.deleteDatabase(EventDbHelper.DATABASE_NAME);
+        // Creating the concert.db databases
         mDbHelper = new EventDbHelper(mContext);
         // Gets the data repository in write mode
         db = mDbHelper.getWritableDatabase();
@@ -33,7 +39,7 @@ public class ParseJSONtoDatabase {
     public void parseData() {
 
         // These are the names of the JSON objects that need to be extracted.
-        final String CON_ID = "id";
+        final String CON_Thrill_ID = "id";
         final String CON_NAME = "name";
         final String CON_START_AT = "starts_at";
         final String CON_IMAGE_JSON_KEY = "photos";
@@ -41,11 +47,11 @@ public class ParseJSONtoDatabase {
 
 
         final String ART_JSON_KEY = "artists";
-        final String ART_ID = "id";
+        final String ART_Thrill_ID = "id";
         final String ART_NAME = "name";
 
         final String VEN_JSON_KEY = "venue";
-        final String VEN_ID = "id";
+        final String VEN_Thrill_ID = "id";
         final String VEN_NAME = "name";
         final String VEN_STREET = "address1";
         final String VEN_CITY = "city";
@@ -59,14 +65,14 @@ public class ParseJSONtoDatabase {
 
             for(int i = 0; i < eventArray.length(); i++) {
 
-                String conID;
+                String conThrillID;
                 String conName;
                 String conStartAt;
                 String conImage;
 
-                Hashtable artList = new Hashtable();
+                Hashtable<String, String> artList = new Hashtable<String, String>();
 
-                String venID;
+                String venThrillID;
                 String venName;
                 String venStreet;
                 String venCity;
@@ -77,7 +83,7 @@ public class ParseJSONtoDatabase {
                 // Get the JSON object representing the event
                 JSONObject event = eventArray.getJSONObject(i);
 
-                conID = event.getString(CON_ID);
+                conThrillID = event.getString(CON_Thrill_ID);
                 conName = event.getString(CON_NAME);
                 conStartAt = event.getString(CON_START_AT);
                 JSONObject photosJSONObject = event.getJSONObject(CON_IMAGE_JSON_KEY);
@@ -86,55 +92,66 @@ public class ParseJSONtoDatabase {
                 JSONArray artistsJSONArray = event.getJSONArray(ART_JSON_KEY);
                 for (int j = 0; j < artistsJSONArray.length(); j++) {
                     JSONObject artistObject = eventArray.getJSONObject(j);
-                    artList.put(artistObject.getString(ART_NAME), artistObject.getString(ART_ID));
+                    artList.put(artistObject.getString(ART_Thrill_ID), artistObject.getString(ART_NAME));
                 }
 
                 JSONObject venueJSON = event.getJSONObject(VEN_JSON_KEY);
-                venID = venueJSON.getString(VEN_ID);
+                venThrillID = venueJSON.getString(VEN_Thrill_ID);
                 venName = venueJSON.getString(VEN_NAME);
                 venStreet = venueJSON.getString(VEN_STREET);
                 venCity = venueJSON.getString(VEN_CITY);
                 venGeoLat = venueJSON.getDouble(VEN_GEO_LAT);
                 venGeoLong = venueJSON.getDouble(VEN_GEO_LONG);
                 venWeb = venueJSON.getString(VEN_WEB);
-                /*
+
                 ContentValues eventValues = new ContentValues();
-                ContentValues locationValues = new ContentValues();
-
-                // Create a new map of values for location, where column names are the keys
-                locationValues.put(EventContract.LocationEntry.COLUMN_LOC_NAME, locName);
-                locationValues.put(EventContract.LocationEntry.COLUMN_LOC_CITY, locCity);
-                locationValues.put(EventContract.LocationEntry.COLUMN_LOC_COUNTRY, locCountry);
-                locationValues.put(EventContract.LocationEntry.COLUMN_LOC_STREET, locStreet);
-                locationValues.put(EventContract.LocationEntry.COLUMN_LOC_POSTAL_CODE, locPostalCode);
-                locationValues.put(EventContract.LocationEntry.COLUMN_LOC_WEB, locWeb);
-                locationValues.put(EventContract.LocationEntry.COLUMN_LOC_GEO_LAT, locGeoLatitude);
-                locationValues.put(EventContract.LocationEntry.COLUMN_LOC_GEO_LONG, locGeoLongitude);
-
-                // Insert the new row, returning the primary key value of the new row
-                long newRowId;
-                newRowId = db.insert(
-                        EventContract.LocationEntry.TABLE_NAME,
-                        null,
-                        locationValues);
-                Log.d(LOG_TAG, "Location id"+String.valueOf(newRowId));
-
                 // Create a new map of values for event, where column names are the keys
-                eventValues.put(EventContract.EventEntry.COLUMN_LOC_KEY, newRowId);
-                eventValues.put(EventContract.EventEntry.COLUMN_EVENT_TITLE, title);
-                eventValues.put(EventContract.EventEntry.COLUMN_EVENT_ARTIST, artistsArray.get(0));
-                eventValues.put(EventContract.EventEntry.COLUMN_EVENT_ARTIST_WEB, artistWeb);
-                eventValues.put(EventContract.EventEntry.COLUMN_EVENT_IMAGE, image);
-                eventValues.put(EventContract.EventEntry.COLUMN_EVENT_DESC, description);
-                eventValues.put(EventContract.EventEntry.COLUMN_EVENT_START_DATE, startDate);
+                eventValues.put(EventEntry.COLUMN_CON_THRILL_ID, conThrillID);
+                eventValues.put(EventEntry.COLUMN_CON_NAME, conName);
+                eventValues.put(EventEntry.COLUMN_CON_START_AT, conStartAt);
+                eventValues.put(EventEntry.COLUMN_CON_IMAGE, conImage);
 
+                // Insert the new event row
                 long newRowIdEvent;
                 newRowIdEvent = db.insert(
-                        EventContract.EventEntry.TABLE_NAME,
+                        EventEntry.TABLE_NAME,
                         null,
                         eventValues);
                 Log.d(LOG_TAG, "Event id"+String.valueOf(newRowIdEvent));
-                */
+
+                ContentValues locationValues = new ContentValues();
+                // Create a new map of values for location, where column names are the keys
+                locationValues.put(VenueEntry.COLUMN_VEN_CON_ID, newRowIdEvent);
+                locationValues.put(VenueEntry.COLUMN_VEN_THRILL_ID, venThrillID);
+                locationValues.put(VenueEntry.COLUMN_VEN_NAME, venName);
+                locationValues.put(VenueEntry.COLUMN_VEN_STREET, venStreet);
+                locationValues.put(VenueEntry.COLUMN_VEN_CITY, venCity);
+                locationValues.put(VenueEntry.COLUMN_VEN_GEO_LAT, venGeoLat);
+                locationValues.put(VenueEntry.COLUMN_VEN_GEO_LONG, venGeoLong);
+                locationValues.put(VenueEntry.COLUMN_VEN_WEB, venWeb);
+
+                // Insert the new venue row
+                long newRowIdVenue;
+                newRowIdVenue = db.insert(
+                        VenueEntry.TABLE_NAME,
+                        null,
+                        locationValues);
+                Log.d(LOG_TAG, "Location id"+String.valueOf(newRowIdVenue));
+
+                for (String key : artList.keySet()) {
+                    ContentValues artistValues = new ContentValues();
+                    // Create a new map of values for artist, where column names are the keys
+                    artistValues.put(ArtistEntry.COLUMN_ART_CON_ID, newRowIdEvent);
+                    artistValues.put(ArtistEntry.COLUMN_ART_THRILL_ID, key);
+                    artistValues.put(ArtistEntry.COLUMN_ART_NAME, artList.get(key));
+                    // Insert the new venue row
+                    long newRowIdArtist;
+                    newRowIdArtist = db.insert(
+                            ArtistEntry.TABLE_NAME,
+                            null,
+                            artistValues);
+                    Log.d(LOG_TAG, "Artist id" + String.valueOf(newRowIdArtist));
+                }
 
                 artList.clear();
             }

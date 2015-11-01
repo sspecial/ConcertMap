@@ -5,7 +5,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import de.berlin.special.concertmap.data.EventContract.EventEntry;
-import de.berlin.special.concertmap.data.EventContract.LocationEntry;
+import de.berlin.special.concertmap.data.EventContract.VenueEntry;
+import de.berlin.special.concertmap.data.EventContract.ArtistEntry;
 
 /**
  * Created by Saeed on 18-Apr-15.
@@ -22,40 +23,47 @@ public class EventDbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        // Create a table to hold locations.  A location consists of the string supplied in the
-        // location setting, the city name, and the latitude and longitude
-        final String SQL_CREATE_LOCATION_TABLE = "CREATE TABLE " + LocationEntry.TABLE_NAME + " (" +
-                LocationEntry._ID + " INTEGER PRIMARY KEY," +
-                LocationEntry.COLUMN_LOC_SETTING + " TEXT, " +
-                LocationEntry.COLUMN_LOC_NAME + " TEXT, " +
-                LocationEntry.COLUMN_LOC_STREET + " TEXT, " +
-                LocationEntry.COLUMN_LOC_POSTAL_CODE + " INTEGER, " +
-                LocationEntry.COLUMN_LOC_CITY + " TEXT, " +
-                LocationEntry.COLUMN_LOC_COUNTRY + " TEXT, " +
-                LocationEntry.COLUMN_LOC_WEB + " TEXT, " +
-                LocationEntry.COLUMN_LOC_GEO_LAT+ " REAL NOT NULL, " +
-                LocationEntry.COLUMN_LOC_GEO_LONG + " REAL NOT NULL " + " );";
-
         // Create a table to hold events.
         final String SQL_CREATE_EVENT_TABLE = "CREATE TABLE " + EventEntry.TABLE_NAME + " (" +
 
                 EventEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 // the ID of the location entry associated with this event
-                EventEntry.COLUMN_LOC_KEY + " INTEGER NOT NULL, " +
-                EventEntry.COLUMN_EVENT_TITLE + " TEXT NOT NULL, " +
-                EventEntry.COLUMN_EVENT_ARTIST + " TEXT NOT NULL, " +
-                EventEntry.COLUMN_EVENT_ARTIST_WEB + " TEXT, " +
-                EventEntry.COLUMN_EVENT_DESC + " TEXT, " +
-                EventEntry.COLUMN_EVENT_IMAGE + " TEXT, " +
-                EventEntry.COLUMN_EVENT_START_DATE + " TEXT, " +
+                EventEntry.COLUMN_CON_THRILL_ID + " TEXT NOT NULL, " +
+                EventEntry.COLUMN_CON_NAME + " TEXT NOT NULL, " +
+                EventEntry.COLUMN_CON_START_AT + " TEXT, " +
+                EventEntry.COLUMN_CON_IMAGE + " TEXT " + ");";
 
-                // Set up the location column as a foreign key to location table.
-                " FOREIGN KEY (" + EventEntry.COLUMN_LOC_KEY + ") REFERENCES " +
-                LocationEntry.TABLE_NAME + " (" + LocationEntry._ID + ") " +
+        // Create a table to hold locations.
+        final String SQL_CREATE_VENUE_TABLE = "CREATE TABLE " + VenueEntry.TABLE_NAME + " (" +
+                VenueEntry._ID + " INTEGER PRIMARY KEY," +
+                VenueEntry.COLUMN_VEN_CON_ID + " INTEGER NOT NULL, " +
+                VenueEntry.COLUMN_VEN_THRILL_ID + " TEXT NOT NULL, " +
+                VenueEntry.COLUMN_VEN_NAME + " TEXT NOT NULL, " +
+                VenueEntry.COLUMN_VEN_STREET + " TEXT, " +
+                VenueEntry.COLUMN_VEN_CITY + " TEXT, " +
+                VenueEntry.COLUMN_VEN_GEO_LAT + " REAL NOT NULL, " +
+                VenueEntry.COLUMN_VEN_GEO_LONG + " REAL NOT NULL, " +
+                VenueEntry.COLUMN_VEN_WEB+ " REAL NOT NULL, " +
+                " FOREIGN KEY (" + VenueEntry.COLUMN_VEN_CON_ID + ") REFERENCES " +
+                EventEntry.TABLE_NAME + " (" + EventEntry._ID + ") " +
                 ");";
 
-        db.execSQL(SQL_CREATE_LOCATION_TABLE);
+        // Create a table to hold artists.
+        final String SQL_CREATE_ARTISTS_TABLE = "CREATE TABLE " + ArtistEntry.TABLE_NAME + " (" +
+                ArtistEntry._ID + " INTEGER PRIMARY KEY," +
+                ArtistEntry.COLUMN_ART_CON_ID + " INTEGER NOT NULL, " +
+                ArtistEntry.COLUMN_ART_THRILL_ID + " TEXT NOT NULL, " +
+                ArtistEntry.COLUMN_ART_NAME + " TEXT NOT NULL, " +
+                " FOREIGN KEY (" + ArtistEntry.COLUMN_ART_CON_ID + ") REFERENCES " +
+                EventEntry.TABLE_NAME + " (" + EventEntry._ID + ") " +
+                ");";
+
+        db.execSQL("DROP TABLE IF EXISTS " + EventEntry.TABLE_NAME + ";");
+        db.execSQL("DROP TABLE IF EXISTS " + VenueEntry.TABLE_NAME + ";");
+        db.execSQL("DROP TABLE IF EXISTS " + ArtistEntry.TABLE_NAME + ";");
         db.execSQL(SQL_CREATE_EVENT_TABLE);
+        db.execSQL(SQL_CREATE_VENUE_TABLE);
+        db.execSQL(SQL_CREATE_ARTISTS_TABLE);
     }
 
     @Override

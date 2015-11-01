@@ -1,17 +1,19 @@
 package de.berlin.special.concertmap;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
-import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.support.v4.widget.DrawerLayout;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
@@ -68,8 +70,18 @@ public class NavigationActivity extends AppCompatActivity {
         if (mDrawerList != null) {
             mDrawerList.setItemChecked(position, true);
             setTitle(eventNavItems[position]);
+            initFrag(position);
             mDrawerLayout.closeDrawer(mDrawerList);
         }
+    }
+
+    public void initFrag(int position){
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        GeoFragment fragment = new GeoFragment();
+        fragmentTransaction.add(R.id.container, fragment);
+        fragmentTransaction.commit();
     }
 
     @Override
@@ -87,8 +99,8 @@ public class NavigationActivity extends AppCompatActivity {
         // between the navigation drawer and the action bar app icon.
         mDrawerToggle = new ActionBarDrawerToggle(
                 this,                      /* host Activity */
-                mDrawerLayout,                    /* DrawerLayout object */
-                R.drawable.ic_drawer,             /* nav drawer image to replace 'Up' caret */
+                mDrawerLayout,             /* DrawerLayout object */
+                R.drawable.ic_drawer,      /* nav drawer image to replace 'Up' caret */
                 R.string.navigation_drawer_open,  /* "open drawer" description for accessibility */
                 R.string.navigation_drawer_close  /* "close drawer" description for accessibility */
         ) {
