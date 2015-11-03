@@ -23,8 +23,9 @@ public class ParseJSONtoDatabase {
 
     private final String LOG_TAG = ParseJSONtoDatabase.class.getSimpleName();
     private EventDbHelper mDbHelper;
-    private SQLiteDatabase db;
     private String concertJsonStr;
+    public static SQLiteDatabase db;
+
 
     public ParseJSONtoDatabase(Context mContext, String json){
         // Deleting the concert.db databases
@@ -91,7 +92,7 @@ public class ParseJSONtoDatabase {
 
                 JSONArray artistsJSONArray = event.getJSONArray(ART_JSON_KEY);
                 for (int j = 0; j < artistsJSONArray.length(); j++) {
-                    JSONObject artistObject = eventArray.getJSONObject(j);
+                    JSONObject artistObject = artistsJSONArray.getJSONObject(j);
                     artList.put(artistObject.getString(ART_Thrill_ID), artistObject.getString(ART_NAME));
                 }
 

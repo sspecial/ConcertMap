@@ -4,18 +4,7 @@
     android:layout_height="match_parent"
     tools:context="de.berlin.special.concertmap.GeoFragment">
 
-    <TextView
-        android:id="@+id/row_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="45dp"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:gravity="center_vertical"
-        android:textStyle="bold"
-        android:text="bold"
-        android:textColor="@color/black" />
-
     <ListView android:id="@+id/geo_list_view"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:cacheColorHint="#FFDAFF7F" />
+        android:layout_height="fill_parent" />
 </FrameLayout>

@@ -30,7 +30,7 @@ public class NavigationActivity extends AppCompatActivity {
     private ActionBarDrawerToggle mDrawerToggle;
     private ActionBar actionBar;
     private CharSequence mTitle;
-    private MyAdapter myAdapter;
+    private NavigateAdapter myAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +39,7 @@ public class NavigationActivity extends AppCompatActivity {
 
         actionBar = getSupportActionBar();
         eventNavItems = getResources().getStringArray(R.array.event_nav_array);
-        myAdapter = new MyAdapter(this);
+        myAdapter = new NavigateAdapter(this);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.drawer_list);
 
@@ -159,13 +159,13 @@ public class NavigationActivity extends AppCompatActivity {
 
 }
 
-class MyAdapter extends BaseAdapter {
+class NavigateAdapter extends BaseAdapter {
 
     private Context context;
     private String[] eventNavItems;
     private int[] images = {R.drawable.cornet_ins, R.drawable.music_conductor, R.drawable.audio_wave};
 
-    public MyAdapter(Context context) {
+    public NavigateAdapter(Context context) {
         this.context = context;
         eventNavItems = context.getResources().getStringArray(R.array.event_nav_array);
     }
