@@ -5,11 +5,11 @@
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:minHeight="?android:attr/listPreferredItemHeight"
-    android:padding="16dp">
+    android:padding="12dp">
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_height="50dp"
+        android:layout_height="55dp"
         android:layout_width="0dp"
         android:gravity="center_horizontal"
         android:layout_weight="1">

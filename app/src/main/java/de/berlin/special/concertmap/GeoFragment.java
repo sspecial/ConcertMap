@@ -4,6 +4,9 @@ import android.app.Fragment;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.CursorAdapter;
 import android.util.Log;
@@ -13,6 +16,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import java.io.InputStream;
 
 import de.berlin.special.concertmap.service.ParseJSONtoDatabase;
 
@@ -95,12 +100,34 @@ class TodayCursorAdapter extends CursorAdapter {
         addressView = (TextView) view.findViewById(R.id.list_item_address_textview);
         dateView = (TextView) view.findViewById(R.id.list_item_date_textview);
 
+        imageView.setImageResource(R.drawable.concert);
+        new DownloadImageTask(imageView).execute(cursor.getString(GeoFragment.COL_EVENT_IMAGE));
         nameView.setText(cursor.getString(GeoFragment.COL_ARTIST_NAME));
         addressView.setText(cursor.getString(GeoFragment.COL_VENUE_STREET));
         dateView.setText(cursor.getString(GeoFragment.COL_EVENT_START_AT));
+    }
+}
 
-        //nameView.setText("name");
-        //addressView.setText("address");
-        //dateView.setText("date");
+class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+    ImageView bmImage;
+
+    public DownloadImageTask(ImageView bmImage) {
+        this.bmImage = bmImage;
+    }
+    protected Bitmap doInBackground(String... urls) {
+        String imageURL = urls[0];
+        Bitmap mIcon = null;
+        try {
+            InputStream in = new java.net.URL(imageURL).openStream();
+            mIcon = BitmapFactory.decodeStream(in);
+        } catch (Exception e) {
+            Log.e("Error", e.getMessage());
+            e.printStackTrace();
+        }
+        return mIcon;
+    }
+
+    protected void onPostExecute(Bitmap result) {
+        bmImage.setImageBitmap(result);
     }
 }

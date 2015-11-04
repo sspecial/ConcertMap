@@ -18,15 +18,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
-
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.location.LocationServices;
+
+import java.util.List;
+import java.util.Locale;
 
 import de.berlin.special.concertmap.service.DataFetchService;
 
@@ -38,10 +37,14 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
     private static final String LOG_TAG = InitiateFragment.class.getSimpleName();
     private static final String ENTER_CITY = "Location is not available, Enter the city.";
     private static final String PROCESS_MESSAGE = "Finding your city...";
+    private static final String GEO_TAG_LAT = "lat";
+    private static final String GEO_TAG_LONG = "long";
 
     private static final int LOCATION_AVAILABLE = 100;
     private static final int LOCATION_NOT_AVAILABLE = 101;
 
+    private double geo_lat;
+    private double geo_long;
     private String lastKnownLocation;
     private LinearLayout locationFoundLayout;
     private LinearLayout addressNotFoundLayout;
@@ -111,7 +114,8 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), NavigationActivity.class);
-                intent.putExtra(DataFetchService.LOCATION_EXTRA, "Berlin");
+                intent.putExtra(GEO_TAG_LAT, geo_lat);
+                intent.putExtra(GEO_TAG_LONG, geo_long);
                 getActivity().startActivity(intent);
             }
         });
@@ -120,6 +124,9 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
     @Override
     public void onConnected(Bundle bundle) {
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        // Latitude & Longitude
+        geo_lat = mLastLocation.getLatitude();
+        geo_long = mLastLocation.getLongitude();
         getLastKnownLocation(mLastLocation);
 
         if (connStat == LOCATION_NOT_AVAILABLE) {
@@ -144,7 +151,8 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
             locationView.setText(lastKnownLocation);
             // Fetching data from last.fm based on retrieved location
             Intent intent = new Intent(getActivity(), DataFetchService.class);
-            intent.putExtra(DataFetchService.LOCATION_EXTRA, "Berlin");
+            intent.putExtra(GEO_TAG_LAT, geo_lat);
+            intent.putExtra(GEO_TAG_LONG, geo_long);
             getActivity().startService(intent);
         }
     }

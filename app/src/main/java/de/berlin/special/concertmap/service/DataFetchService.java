@@ -18,15 +18,18 @@ import java.net.URL;
 
 public class DataFetchService extends IntentService {
 
-    public static final String LOCATION_EXTRA = "city";
+    private static final String GEO_TAG_LAT = "lat";
+    private static final String GEO_TAG_LONG = "long";
+    private static final double GEO_DEFAULT_LAT = 52.5194;
+    private static final double GEO_DEFAULT_LONG = 13.4067;
     private final String LOG_TAG = DataFetchService.class.getSimpleName();
+
     public DataFetchService() {
         super("ConcertMap");
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        String locationQuery = intent.getStringExtra(LOCATION_EXTRA);
 
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
@@ -36,8 +39,8 @@ public class DataFetchService extends IntentService {
         // Will contain the raw JSON response as a string.
         String concertJsonStr = null;
 
-        String geoLat = "52.5194";
-        String geoLong = "13.4067";
+        double geoLat = intent.getDoubleExtra(GEO_TAG_LAT, GEO_DEFAULT_LAT);
+        double geoLong = intent.getDoubleExtra(GEO_TAG_LONG, GEO_DEFAULT_LONG);
         String eventLimit = "2";
         String api_key = "d90d066add515bff";
         int numDays = 14;
@@ -52,8 +55,8 @@ public class DataFetchService extends IntentService {
             final String KEY_PARAM = "api_key";
 
             Uri builtUri = Uri.parse(FORECAST_BASE_URL).buildUpon()
-                    .appendQueryParameter(LAT_PARAM, geoLat)
-                    .appendQueryParameter(LONG_PARAM, geoLong)
+                    .appendQueryParameter(LAT_PARAM, String.valueOf(geoLat))
+                    .appendQueryParameter(LONG_PARAM, String.valueOf(geoLong))
                     .appendQueryParameter(LIMIT_PARAM, eventLimit)
                     .appendQueryParameter(KEY_PARAM, api_key)
                     .build();

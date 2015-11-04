@@ -24,6 +24,10 @@ import android.widget.TextView;
 
 public class NavigationActivity extends AppCompatActivity {
 
+    public static final int NAV_CASE_CITY = 0;
+    public static final int NAV_CASE_TRACKED_ARTISTS  = 1;
+    public static final int NAV_CASE_ATTENDED_EVENTS  = 2;
+
     private String[] eventNavItems;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -52,13 +56,6 @@ public class NavigationActivity extends AppCompatActivity {
         });
         // Setting Adaptor for DrawerList
         mDrawerList.setAdapter(myAdapter);
-        /*
-        // Setting Adaptor for DrawerList
-        mDrawerList.setAdapter(new ArrayAdapter<String>(
-                this,
-                android.R.layout.simple_list_item_activated_1,
-                android.R.id.text1,
-                eventNavItems));*/
 
         // Setting Listener for DrawerList
         setUpDrawerToggle();
@@ -76,12 +73,23 @@ public class NavigationActivity extends AppCompatActivity {
     }
 
     public void initFrag(int position){
+
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        GeoFragment fragment = new GeoFragment();
-        fragmentTransaction.add(R.id.container, fragment);
-        fragmentTransaction.commit();
+        switch (position) {
+            case NAV_CASE_CITY:
+                GeoFragment fragment = new GeoFragment();
+                fragmentTransaction.add(R.id.container, fragment);
+                fragmentTransaction.commit();
+                break;
+            case NAV_CASE_TRACKED_ARTISTS:
+                break;
+            case NAV_CASE_ATTENDED_EVENTS:
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
