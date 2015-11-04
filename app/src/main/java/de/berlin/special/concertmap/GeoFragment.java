@@ -26,9 +26,9 @@ public class GeoFragment extends Fragment {
 
     // These indices are tied to CURSOR_COLUMNS
     public static final int COL_EVENT_ID = 0;
-    public static final int COL_EVENT_START_AT = 1;
-    public static final int COL_EVENT_IMAGE = 2;
-    public static final int COL_ARTIST_NAME = 3;
+    public static final int COL_EVENT_NAME = 1;
+    public static final int COL_EVENT_START_AT = 2;
+    public static final int COL_EVENT_IMAGE = 3;
     public static final int COL_VENUE_NAME = 4;
     public static final int COL_VENUE_STREET = 5;
     public static final int COL_VENUE_CITY = 6;
@@ -48,23 +48,22 @@ public class GeoFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_geo, container, false);
 
-        String queryStr = "SELECT event._ID, event.event_start_at, event.event_image, " +
-                "artists.artist_name, " +
+        String eventQueryStr = "SELECT event._ID, " +
+                "event.event_name, event.event_start_at, event.event_image, " +
                 "venue.venue_name, venue.venue_street, venue.venue_city " +
                 "FROM event " +
-                "INNER JOIN artists " +
-                "ON event._ID = artists.event_ID " +
                 "INNER JOIN venue " +
-                "ON event._ID = venue.event_ID;";
-
-            Cursor cursor = ParseJSONtoDatabase.db.rawQuery(queryStr, null);
-            Log.v("Cursor Object", DatabaseUtils.dumpCursorToString(cursor));
+                "ON event._ID = venue.event_ID " +
+                "GROUP BY event._ID;";
+        try{
+            Cursor eventCursor = ParseJSONtoDatabase.db.rawQuery(eventQueryStr, null);
+            Log.v("Event Cursor", DatabaseUtils.dumpCursorToString(eventCursor));
 
             // Find ListView to populate
             ListView todayListItems = (ListView) rootView.findViewById(R.id.geo_list_view);
             // Setup cursor adapter using cursor from last step
-        try{
-            TodayCursorAdapter todayCursorAdapter = new TodayCursorAdapter(getActivity(), cursor, 0);
+
+            TodayCursorAdapter todayCursorAdapter = new TodayCursorAdapter(getActivity(), eventCursor, 0);
             // Attach cursor adapter to the ListView
             todayListItems.setAdapter(todayCursorAdapter);
         }
@@ -100,10 +99,24 @@ class TodayCursorAdapter extends CursorAdapter {
         addressView = (TextView) view.findViewById(R.id.list_item_address_textview);
         dateView = (TextView) view.findViewById(R.id.list_item_date_textview);
 
+        // Event image
         imageView.setImageResource(R.drawable.concert);
         new DownloadImageTask(imageView).execute(cursor.getString(GeoFragment.COL_EVENT_IMAGE));
-        nameView.setText(cursor.getString(GeoFragment.COL_ARTIST_NAME));
-        addressView.setText(cursor.getString(GeoFragment.COL_VENUE_STREET));
+
+        // Artists Names
+        String artNames = cursor.getString(GeoFragment.COL_EVENT_NAME);
+        int beginIndex = 0;
+        int endIndex = artNames.indexOf("@");
+        if(endIndex != -1)
+            artNames = artNames.substring(beginIndex, endIndex);
+        nameView.setText(artNames);
+
+        // Venue Name & City
+        addressView.setText(cursor.getString(GeoFragment.COL_VENUE_NAME)
+                + ", "
+                + cursor.getString(GeoFragment.COL_VENUE_CITY));
+
+        // Event time
         dateView.setText(cursor.getString(GeoFragment.COL_EVENT_START_AT));
     }
 }
