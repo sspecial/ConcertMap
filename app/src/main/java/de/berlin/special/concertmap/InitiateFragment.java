@@ -39,12 +39,15 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
     private static final String PROCESS_MESSAGE = "Finding your city...";
     private static final String GEO_TAG_LAT = "lat";
     private static final String GEO_TAG_LONG = "long";
+    private static final String NAV_TAG_CITY = "city";
+
 
     private static final int LOCATION_AVAILABLE = 100;
     private static final int LOCATION_NOT_AVAILABLE = 101;
 
     private double geo_lat;
     private double geo_long;
+    private String city;
     private String lastKnownLocation;
     private LinearLayout locationFoundLayout;
     private LinearLayout addressNotFoundLayout;
@@ -114,8 +117,7 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), NavigationActivity.class);
-                intent.putExtra(GEO_TAG_LAT, geo_lat);
-                intent.putExtra(GEO_TAG_LONG, geo_long);
+                intent.putExtra(NAV_TAG_CITY, city);
                 getActivity().startActivity(intent);
             }
         });
@@ -124,9 +126,6 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
     @Override
     public void onConnected(Bundle bundle) {
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        // Latitude & Longitude
-        geo_lat = mLastLocation.getLatitude();
-        geo_long = mLastLocation.getLongitude();
         getLastKnownLocation(mLastLocation);
 
         if (connStat == LOCATION_NOT_AVAILABLE) {
@@ -143,6 +142,10 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
                 }
             });
         } else if (connStat == LOCATION_AVAILABLE) {
+
+            // Latitude & Longitude
+            geo_lat = mLastLocation.getLatitude();
+            geo_long = mLastLocation.getLongitude();
 
             addressNotFoundLayout.setVisibility(View.INVISIBLE);
             commentView.setVisibility(View.INVISIBLE);
@@ -204,6 +207,10 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
         if (addresses != null && addresses.size() > 0) {
 
             Address address = addresses.get(0);
+
+            // to present in navigation activity
+            city = address.getLocality();
+
             String addressText = String.format(
                     "%s, %s",
                     // Locality is usually a city

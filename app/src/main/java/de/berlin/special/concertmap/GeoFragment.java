@@ -17,6 +17,9 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 
 import de.berlin.special.concertmap.service.ParseJSONtoDatabase;
@@ -33,6 +36,8 @@ public class GeoFragment extends Fragment {
     public static final int COL_VENUE_STREET = 5;
     public static final int COL_VENUE_CITY = 6;
 
+    private View rootView;
+
     public GeoFragment() {
         // Required empty public constructor
     }
@@ -46,7 +51,7 @@ public class GeoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_geo, container, false);
+        rootView = inflater.inflate(R.layout.fragment_geo, container, false);
 
         String eventQueryStr = "SELECT event._ID, " +
                 "event.event_name, event.event_start_at, event.event_image, " +
@@ -61,8 +66,7 @@ public class GeoFragment extends Fragment {
 
             // Find ListView to populate
             ListView todayListItems = (ListView) rootView.findViewById(R.id.geo_list_view);
-            // Setup cursor adapter using cursor from last step
-
+            // Setup cursor adapter
             TodayCursorAdapter todayCursorAdapter = new TodayCursorAdapter(getActivity(), eventCursor, 0);
             // Attach cursor adapter to the ListView
             todayListItems.setAdapter(todayCursorAdapter);
@@ -70,20 +74,33 @@ public class GeoFragment extends Fragment {
         catch (Exception e){
             Log.e("error..." , e.getMessage());
         }
-
         return rootView;
     }
 }
 
 class TodayCursorAdapter extends CursorAdapter {
 
-    public ImageView imageView;
-    public TextView nameView;
-    public TextView addressView;
-    public TextView dateView;
+    private ImageView imageView;
+    private TextView nameView;
+    private TextView addressView;
+    private TextView dateView;
+    private final String LOG_TAG = TodayCursorAdapter.class.getSimpleName();
+
+    private final String imageDirPath = "/sdcard/ImageDir/";
+    File imageDir;
 
     public TodayCursorAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
+
+        File dir = new File(imageDirPath);
+        if (dir.exists()) {
+            for (File imFile : dir.listFiles()) {
+                imFile.delete();
+            }
+            dir.delete();
+        }
+        imageDir = new File(imageDirPath);
+        imageDir.mkdirs();
     }
 
     @Override
@@ -100,9 +117,23 @@ class TodayCursorAdapter extends CursorAdapter {
         dateView = (TextView) view.findViewById(R.id.list_item_date_textview);
 
         // Event image
-        imageView.setImageResource(R.drawable.concert);
-        new DownloadImageTask(imageView).execute(cursor.getString(GeoFragment.COL_EVENT_IMAGE));
-
+        String imageName =String.valueOf(cursor.getPosition());
+        // Let's see if it is necessary to download the image file
+        File file = new File(imageDir, imageName);
+        if (file.exists()) {
+            try {
+                FileInputStream in = new FileInputStream(file);
+                imageView.setImageBitmap(BitmapFactory.decodeStream(in));
+                in.close();
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "Error reading the image from file");
+                Log.e(LOG_TAG, e.getMessage());
+            }
+        }else {
+            imageView.setImageResource(R.drawable.concert2);
+            new DownloadImageTask(imageView, imageDir, imageName)
+                    .execute(cursor.getString(GeoFragment.COL_EVENT_IMAGE));
+        }
         // Artists Names
         String artNames = cursor.getString(GeoFragment.COL_EVENT_NAME);
         int beginIndex = 0;
@@ -117,15 +148,25 @@ class TodayCursorAdapter extends CursorAdapter {
                 + cursor.getString(GeoFragment.COL_VENUE_CITY));
 
         // Event time
-        dateView.setText(cursor.getString(GeoFragment.COL_EVENT_START_AT));
+        String dateStr = cursor.getString(GeoFragment.COL_EVENT_START_AT);
+        String dayStr = dateStr.split("T")[0];
+        String timeStr = dateStr.split("T")[1];
+        dayStr = dayStr.substring(0,dayStr.length());
+        timeStr = timeStr.substring(0,timeStr.length()-4);
+        dateView.setText(dayStr + "  " + timeStr);
     }
 }
 
 class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-    ImageView bmImage;
+    ImageView imageView;
+    File imageDir;
+    String imageName;
+    private final String LOG_TAG = DownloadImageTask.class.getSimpleName();
 
-    public DownloadImageTask(ImageView bmImage) {
-        this.bmImage = bmImage;
+    public DownloadImageTask(ImageView imageView, File imageDir, String imageName) {
+        this.imageView = imageView;
+        this.imageDir = imageDir;
+        this.imageName = imageName;
     }
     protected Bitmap doInBackground(String... urls) {
         String imageURL = urls[0];
@@ -133,14 +174,26 @@ class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         try {
             InputStream in = new java.net.URL(imageURL).openStream();
             mIcon = BitmapFactory.decodeStream(in);
+            in.close();
         } catch (Exception e) {
-            Log.e("Error", e.getMessage());
-            e.printStackTrace();
+            Log.e(LOG_TAG, "Error downloading the image");
+            Log.e(LOG_TAG, e.getMessage());
         }
         return mIcon;
     }
 
-    protected void onPostExecute(Bitmap result) {
-        bmImage.setImageBitmap(result);
+    protected void onPostExecute(Bitmap imageToSave) {
+        imageView.setImageBitmap(imageToSave);
+
+        File file = new File(imageDir, imageName);
+        try {
+            FileOutputStream out = new FileOutputStream(file);
+            imageToSave.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            out.flush();
+            out.close();
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "Error writing the image file to sdcard");
+            Log.e(LOG_TAG, e.getMessage());
+        }
     }
 }

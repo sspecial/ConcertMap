@@ -3,6 +3,7 @@ package de.berlin.special.concertmap;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -24,10 +25,17 @@ import android.widget.TextView;
 
 public class NavigationActivity extends AppCompatActivity {
 
-    public static final int NAV_CASE_CITY = 0;
-    public static final int NAV_CASE_TRACKED_ARTISTS  = 1;
-    public static final int NAV_CASE_ATTENDED_EVENTS  = 2;
+    private static final int NAV_CASE_CITY = 0;
+    private static final int NAV_CASE_TRACKED_ARTISTS  = 1;
+    private static final int NAV_CASE_ATTENDED_EVENTS  = 2;
 
+    // Navigation bar items
+    private String navItem1;
+    private final String navItem2 = "Tracked Artists";
+    private final String navItem3 = "Attended Events";
+
+    private static final String NAV_TAG_CITY = "city";
+    private String city;
     private String[] eventNavItems;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -36,17 +44,23 @@ public class NavigationActivity extends AppCompatActivity {
     private CharSequence mTitle;
     private NavigateAdapter myAdapter;
 
+    GeoFragment geoFragment = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
 
+        Intent intent = this.getIntent();
+        city = intent.getStringExtra(NAV_TAG_CITY);
+        // Populating navigation bar
+        navItem1 = city + " Concerts";
+        eventNavItems = new String[]{navItem1, navItem2, navItem3};
+
         actionBar = getSupportActionBar();
-        eventNavItems = getResources().getStringArray(R.array.event_nav_array);
-        myAdapter = new NavigateAdapter(this);
+        myAdapter = new NavigateAdapter(this, eventNavItems);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.drawer_list);
-
         // Setting ItemClickListener for DrawerList
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -75,13 +89,18 @@ public class NavigationActivity extends AppCompatActivity {
     public void initFrag(int position){
 
         FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        FragmentTransaction ft = fragmentManager.beginTransaction();
 
         switch (position) {
             case NAV_CASE_CITY:
-                GeoFragment fragment = new GeoFragment();
-                fragmentTransaction.add(R.id.container, fragment);
-                fragmentTransaction.commit();
+                if (geoFragment != null) {
+                    ft.attach(geoFragment);
+                    ft.commit();
+                }else {
+                    geoFragment = new GeoFragment();
+                    ft.replace(R.id.container, geoFragment);
+                    ft.commit();
+                }
                 break;
             case NAV_CASE_TRACKED_ARTISTS:
                 break;
@@ -173,9 +192,9 @@ class NavigateAdapter extends BaseAdapter {
     private String[] eventNavItems;
     private int[] images = {R.drawable.cornet_ins, R.drawable.music_conductor, R.drawable.audio_wave};
 
-    public NavigateAdapter(Context context) {
+    public NavigateAdapter(Context context, String[] eventNavItems) {
         this.context = context;
-        eventNavItems = context.getResources().getStringArray(R.array.event_nav_array);
+        this.eventNavItems = eventNavItems;
     }
 
     @Override

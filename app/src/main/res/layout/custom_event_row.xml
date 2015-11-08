@@ -5,14 +5,15 @@
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:minHeight="?android:attr/listPreferredItemHeight"
-    android:padding="12dp">
+    android:padding="8dp">
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_height="55dp"
+        android:layout_height="wrap_content"
         android:layout_width="0dp"
         android:gravity="center_horizontal"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:layout_marginRight="5dp">
         <ImageView
             android:id="@+id/list_item_imageView"
             android:layout_width="wrap_content"
@@ -29,23 +30,20 @@
             android:id="@+id/list_item_name_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textStyle="bold"
-            android:textColor="@color/black" />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/blue" />
         <TextView
             android:id="@+id/list_item_address_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textStyle="bold"
-            android:textColor="@color/black" />
+            android:textColor="@color/grey_700" />
         <TextView
             android:id="@+id/list_item_date_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textStyle="bold"
-            android:textColor="@color/black" />
+            android:textColor="@color/grey_700" />
     </LinearLayout>
 
 </LinearLayout>

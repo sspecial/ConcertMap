@@ -20,13 +20,15 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/location_view" />
+            android:id="@+id/location_view"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/grey_700"/>
 
         <ProgressBar
             android:id="@+id/address_progress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@android:style/Widget.ProgressBar.Small"
+            style="@android:style/Widget.ProgressBar.Small.Inverse"
             android:indeterminate="true"
             android:layout_marginLeft="20dp"/>
 
@@ -70,6 +72,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@color/grey_700"
         android:id="@+id/comment_view"
         android:layout_marginTop="5dp"
         android:layout_below="@+id/line"
@@ -82,6 +85,7 @@
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         android:text="@string/continue_key"
+        android:textColor="@color/black"
         android:id="@+id/continue_button"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />

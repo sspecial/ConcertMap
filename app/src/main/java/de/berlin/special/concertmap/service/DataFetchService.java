@@ -41,7 +41,7 @@ public class DataFetchService extends IntentService {
 
         double geoLat = intent.getDoubleExtra(GEO_TAG_LAT, GEO_DEFAULT_LAT);
         double geoLong = intent.getDoubleExtra(GEO_TAG_LONG, GEO_DEFAULT_LONG);
-        String eventLimit = "2";
+        String eventLimit = "20";
         String api_key = "d90d066add515bff";
         int numDays = 14;
 
