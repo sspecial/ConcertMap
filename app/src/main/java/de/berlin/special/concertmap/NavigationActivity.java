@@ -1,6 +1,5 @@
 package de.berlin.special.concertmap;
 
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +10,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,6 +34,7 @@ public class NavigationActivity extends AppCompatActivity {
     private final String navItem2 = "Tracked Artists";
     private final String navItem3 = "Attended Events";
 
+    private final String LOG_TAG = NavigationActivity.class.getSimpleName();
     private static final String NAV_TAG_CITY = "city";
     private String city;
     private String[] eventNavItems;
@@ -44,16 +45,23 @@ public class NavigationActivity extends AppCompatActivity {
     private CharSequence mTitle;
     private NavigateAdapter myAdapter;
 
-    GeoFragment geoFragment = null;
+    FragmentTransaction ft = getFragmentManager().beginTransaction();
+    GeoFragment geoFragment = new GeoFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
 
+        // Initiating GeoFragment as default view of activity
+        if (savedInstanceState == null) {
+            ft.add(R.id.container, geoFragment);
+            ft.commit();
+        }
+
+        // Constructing array used ba navigation bar
         Intent intent = this.getIntent();
         city = intent.getStringExtra(NAV_TAG_CITY);
-        // Populating navigation bar
         navItem1 = city + " Concerts";
         eventNavItems = new String[]{navItem1, navItem2, navItem3};
 
@@ -70,7 +78,6 @@ public class NavigationActivity extends AppCompatActivity {
         });
         // Setting Adaptor for DrawerList
         mDrawerList.setAdapter(myAdapter);
-
         // Setting Listener for DrawerList
         setUpDrawerToggle();
     }
@@ -87,27 +94,22 @@ public class NavigationActivity extends AppCompatActivity {
     }
 
     public void initFrag(int position){
-
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction ft = fragmentManager.beginTransaction();
-
-        switch (position) {
-            case NAV_CASE_CITY:
-                if (geoFragment != null) {
+        try {
+            switch (position) {
+                case NAV_CASE_CITY:
                     ft.attach(geoFragment);
-                    ft.commit();
-                }else {
-                    geoFragment = new GeoFragment();
-                    ft.replace(R.id.container, geoFragment);
-                    ft.commit();
-                }
-                break;
-            case NAV_CASE_TRACKED_ARTISTS:
-                break;
-            case NAV_CASE_ATTENDED_EVENTS:
-                break;
-            default:
-                break;
+                    break;
+                case NAV_CASE_TRACKED_ARTISTS:
+                    break;
+                case NAV_CASE_ATTENDED_EVENTS:
+                    break;
+                default:
+                    break;
+            }
+
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "Error navigating through different fragments");
+            Log.e(LOG_TAG, e.getMessage());
         }
     }
 

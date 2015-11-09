@@ -55,7 +55,7 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
     private TextView locationView;
     private TextView commentView;
     private ImageButton searchCityBtn;
-    private Button continueBtn;
+    private static Button continueBtn;
 
     // Client to request last known location
     private GoogleApiClient mGoogleApiClient;
@@ -106,8 +106,6 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
             mGoogleApiClient.connect();
         }
     }
-
-
 
     @Override
     public void onResume() {
