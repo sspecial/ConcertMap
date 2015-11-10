@@ -1,16 +1,16 @@
 package de.berlin.special.concertmap;
 
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,6 +21,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class NavigationActivity extends AppCompatActivity {
@@ -45,18 +48,33 @@ public class NavigationActivity extends AppCompatActivity {
     private CharSequence mTitle;
     private NavigateAdapter myAdapter;
 
-    FragmentTransaction ft = getFragmentManager().beginTransaction();
-    GeoFragment geoFragment = new GeoFragment();
+    FragmentManager manager;
+
+    Fragment geoFragment = new GeoFragment();
+    Bundle args = new Bundle();
+    // To decide if the event image folder should be kept ot not!
+    public static final String FRAG_GEO_TYPE = "type";
+    public static final String FRAG_GEO_ADD = "add";
+    public static final String FRAG_GEO_REPLACE = "replace";
+
+    ArtistListFragment artistListFragment = new ArtistListFragment();
+
+    EventListFragment eventListFragment = new EventListFragment();
+
+    Bundle bundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        bundle = savedInstanceState;
+        super.onCreate(bundle);
         setContentView(R.layout.activity_navigation);
 
         // Initiating GeoFragment as default view of activity
-        if (savedInstanceState == null) {
-            ft.add(R.id.container, geoFragment);
-            ft.commit();
+        manager = getSupportFragmentManager();
+        if (bundle == null) {
+            args.putString(FRAG_GEO_TYPE, FRAG_GEO_ADD);
+            geoFragment.setArguments(args);
+            manager.beginTransaction().add(R.id.content_frame, geoFragment).commit();
         }
 
         // Constructing array used ba navigation bar
@@ -93,23 +111,33 @@ public class NavigationActivity extends AppCompatActivity {
         }
     }
 
-    public void initFrag(int position){
-        try {
-            switch (position) {
-                case NAV_CASE_CITY:
-                    ft.attach(geoFragment);
-                    break;
-                case NAV_CASE_TRACKED_ARTISTS:
-                    break;
-                case NAV_CASE_ATTENDED_EVENTS:
-                    break;
-                default:
-                    break;
-            }
+    public void initFrag(int position) {
+        manager.executePendingTransactions();
+        switch (position) {
 
-        } catch (Exception e) {
-            Log.e(LOG_TAG, "Error navigating through different fragments");
-            Log.e(LOG_TAG, e.getMessage());
+            case NAV_CASE_CITY:
+                args.putString(FRAG_GEO_TYPE, FRAG_GEO_REPLACE);
+                geoFragment.setArguments(args);
+                manager.beginTransaction()
+                        .replace(R.id.content_frame, geoFragment)
+                        .commit();
+                break;
+
+            case NAV_CASE_TRACKED_ARTISTS:
+                manager.beginTransaction()
+                        .replace(R.id.content_frame, artistListFragment)
+                        .commit();
+                break;
+
+            case NAV_CASE_ATTENDED_EVENTS:
+                manager.beginTransaction()
+                        .replace(R.id.content_frame, eventListFragment)
+                        .commit();
+
+                break;
+
+            default:
+                break;
         }
     }
 

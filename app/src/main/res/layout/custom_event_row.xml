@@ -13,7 +13,7 @@
         android:layout_width="0dp"
         android:gravity="center_horizontal"
         android:layout_weight="1"
-        android:layout_marginRight="8dp">
+        android:layout_marginRight="10dp">
         <ImageView
             android:id="@+id/list_item_imageView"
             android:layout_width="wrap_content"
@@ -31,13 +31,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/blue" />
+            android:textColor="@color/blue"
+            android:lines="1"
+            android:ellipsize="marquee"/>
         <TextView
             android:id="@+id/list_item_address_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/grey_700" />
+            android:textColor="@color/grey_700"
+            android:lines="1"
+            android:ellipsize="marquee"/>
         <TextView
             android:id="@+id/list_item_date_textview"
             android:layout_width="wrap_content"

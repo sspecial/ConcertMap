@@ -1,6 +1,6 @@
 package de.berlin.special.concertmap;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
@@ -27,16 +27,8 @@ import de.berlin.special.concertmap.service.ParseJSONtoDatabase;
 
 public class GeoFragment extends Fragment {
 
-    // These indices are tied to CURSOR_COLUMNS
-    public static final int COL_EVENT_ID = 0;
-    public static final int COL_EVENT_NAME = 1;
-    public static final int COL_EVENT_START_AT = 2;
-    public static final int COL_EVENT_IMAGE = 3;
-    public static final int COL_VENUE_NAME = 4;
-    public static final int COL_VENUE_STREET = 5;
-    public static final int COL_VENUE_CITY = 6;
-
     private View rootView;
+    private String args;
 
     public GeoFragment() {
         // Required empty public constructor
@@ -45,6 +37,7 @@ public class GeoFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        args = getArguments().getString(NavigationActivity.FRAG_GEO_TYPE);
     }
 
     @Override
@@ -67,7 +60,7 @@ public class GeoFragment extends Fragment {
             // Find ListView to populate
             ListView todayListItems = (ListView) rootView.findViewById(R.id.geo_list_view);
             // Setup cursor adapter
-            TodayCursorAdapter todayCursorAdapter = new TodayCursorAdapter(getActivity(), eventCursor, 0);
+            TodayCursorAdapter todayCursorAdapter = new TodayCursorAdapter(getActivity(), eventCursor, 0, args);
             // Attach cursor adapter to the ListView
             todayListItems.setAdapter(todayCursorAdapter);
         }
@@ -80,6 +73,15 @@ public class GeoFragment extends Fragment {
 
 class TodayCursorAdapter extends CursorAdapter {
 
+    // These indices are tied to CURSOR_COLUMNS
+    private final int COL_EVENT_ID = 0;
+    private final int COL_EVENT_NAME = 1;
+    private final int COL_EVENT_START_AT = 2;
+    private final int COL_EVENT_IMAGE = 3;
+    private final int COL_VENUE_NAME = 4;
+    private final int COL_VENUE_STREET = 5;
+    private final int COL_VENUE_CITY = 6;
+
     private ImageView imageView;
     private TextView nameView;
     private TextView addressView;
@@ -89,15 +91,19 @@ class TodayCursorAdapter extends CursorAdapter {
     private final String imageDirPath = "/sdcard/ImageDir/";
     File imageDir;
 
-    public TodayCursorAdapter(Context context, Cursor c, int flags) {
+    public TodayCursorAdapter(Context context, Cursor c, int flags, String args) {
         super(context, c, flags);
 
-        File dir = new File(imageDirPath);
-        if (dir.exists()) {
-            for (File imFile : dir.listFiles()) {
-                imFile.delete();
+        // Only if it is the first time GeoFragment constructed delete the image folder
+        // Otherwise use the already downloaded images
+        if (args.equals(NavigationActivity.FRAG_GEO_ADD)) {
+            File dir = new File(imageDirPath);
+            if (dir.exists()) {
+                for (File imFile : dir.listFiles()) {
+                    imFile.delete();
+                }
+                dir.delete();
             }
-            dir.delete();
         }
         imageDir = new File(imageDirPath);
         imageDir.mkdirs();
@@ -132,10 +138,10 @@ class TodayCursorAdapter extends CursorAdapter {
         }else {
             imageView.setImageResource(R.drawable.concert2);
             new DownloadImageTask(imageView, imageDir, imageName)
-                    .execute(cursor.getString(GeoFragment.COL_EVENT_IMAGE));
+                    .execute(cursor.getString(COL_EVENT_IMAGE));
         }
         // Artists Names
-        String artNames = cursor.getString(GeoFragment.COL_EVENT_NAME);
+        String artNames = cursor.getString(COL_EVENT_NAME);
         int beginIndex = 0;
         int endIndex = artNames.indexOf("@");
         if(endIndex != -1)
@@ -143,12 +149,12 @@ class TodayCursorAdapter extends CursorAdapter {
         nameView.setText(artNames);
 
         // Venue Name & City
-        addressView.setText(cursor.getString(GeoFragment.COL_VENUE_NAME)
+        addressView.setText(cursor.getString(COL_VENUE_NAME)
                 + ", "
-                + cursor.getString(GeoFragment.COL_VENUE_CITY));
+                + cursor.getString(COL_VENUE_CITY));
 
         // Event time
-        String dateStr = cursor.getString(GeoFragment.COL_EVENT_START_AT);
+        String dateStr = cursor.getString(COL_EVENT_START_AT);
         String dayStr = dateStr.split("T")[0];
         String timeStr = dateStr.split("T")[1];
         dayStr = dayStr.substring(0,dayStr.length());
