@@ -88,6 +88,7 @@
         android:textColor="@color/black"
         android:id="@+id/continue_button"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible"/>
 
 </RelativeLayout>

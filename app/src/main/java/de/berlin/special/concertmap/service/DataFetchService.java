@@ -1,9 +1,11 @@
 package de.berlin.special.concertmap.service;
 
-import android.app.IntentService;
-import android.content.Intent;
+import android.content.Context;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,35 +14,48 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import de.berlin.special.concertmap.R;
+
 /**
  * Created by Saeed on 30-Mar-15.
  */
 
-public class DataFetchService extends IntentService {
+public class DataFetchService extends AsyncTask<Double, Void, String> {
 
-    private static final String GEO_TAG_LAT = "lat";
-    private static final String GEO_TAG_LONG = "long";
     private static final double GEO_DEFAULT_LAT = 52.5194;
     private static final double GEO_DEFAULT_LONG = 13.4067;
     private final String LOG_TAG = DataFetchService.class.getSimpleName();
+    private final String Error_MSG = "Error obtaining data from remote server!";
+    private Context mContext;
+    private Button mButton;
 
-    public DataFetchService() {
-        super("ConcertMap");
+    public DataFetchService(Context context, View view){
+        mContext = context;
+        mButton = (Button) view.findViewById(R.id.continue_button);
     }
 
     @Override
-    protected void onHandleIntent(Intent intent) {
-
+    protected String doInBackground(Double... params) {
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
 
         // Will contain the raw JSON response as a string.
-        String concertJsonStr = null;
+        String concertJSONStr = null;
 
-        double geoLat = intent.getDoubleExtra(GEO_TAG_LAT, GEO_DEFAULT_LAT);
-        double geoLong = intent.getDoubleExtra(GEO_TAG_LONG, GEO_DEFAULT_LONG);
+        double geoLat;
+        if (params[0] != null)
+            geoLat = params[0];
+        else
+            geoLat = GEO_DEFAULT_LAT;
+
+        double geoLong;
+        if (params[1] != null)
+            geoLong = params[1];
+        else
+            geoLong = GEO_DEFAULT_LONG;
+
         String eventLimit = "20";
         String api_key = "d90d066add515bff";
         int numDays = 14;
@@ -75,7 +90,7 @@ public class DataFetchService extends IntentService {
             StringBuffer buffer = new StringBuffer();
             if (inputStream == null) {
                 // Nothing to do.
-                return;
+                return Error_MSG;
             }
 
             reader = new BufferedReader(new InputStreamReader(inputStream));
@@ -90,15 +105,18 @@ public class DataFetchService extends IntentService {
 
             if (buffer.length() == 0) {
                 // Stream was empty.  No point in parsing.
-                return;
+                return Error_MSG;
             }
-            concertJsonStr = buffer.toString();
-            Log.d(LOG_TAG, concertJsonStr);
+            concertJSONStr = buffer.toString();
+            // Returning JSON data containing complete event list
+            Log.d(LOG_TAG, concertJSONStr);
+            return concertJSONStr;
+
         } catch (IOException e) {
             Log.e(LOG_TAG, "Error ", e);
             // If the code didn't successfully get the Event data, there's no point in attempting
             // to parse it.
-            return;
+            return Error_MSG;
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
@@ -112,9 +130,15 @@ public class DataFetchService extends IntentService {
             }
         }
 
+
+    }
+
+    protected void onPostExecute(String concertJSONStr) {
         // Now we have a String representing the complete event list in JSON Format.
         ParseJSONtoDatabase parseJSONtoDatabase;
-        parseJSONtoDatabase = new ParseJSONtoDatabase(getApplicationContext(), concertJsonStr);
+        parseJSONtoDatabase = new ParseJSONtoDatabase(mContext, concertJSONStr);
         parseJSONtoDatabase.parseData();
+        //Displaying the 'CONTINUE' button after parsing data into database
+        mButton.setVisibility(View.VISIBLE);
     }
 }

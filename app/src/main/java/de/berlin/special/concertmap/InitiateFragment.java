@@ -49,13 +49,15 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
     private double geo_long;
     private String city;
     private String lastKnownLocation;
+
+    private View rootView;
     private LinearLayout locationFoundLayout;
     private LinearLayout addressNotFoundLayout;
     private ProgressBar progressIndicator;
     private TextView locationView;
     private TextView commentView;
     private ImageButton searchCityBtn;
-    private static Button continueBtn;
+    private Button continueBtn;
 
     // Client to request last known location
     private GoogleApiClient mGoogleApiClient;
@@ -83,7 +85,7 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_start, container, false);
+        rootView = inflater.inflate(R.layout.fragment_start, container, false);
 
         progressIndicator = (ProgressBar) rootView.findViewById(R.id.address_progress);
         locationFoundLayout = (LinearLayout) rootView.findViewById(R.id.locationFoundLayout);
@@ -144,17 +146,16 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
             // Latitude & Longitude
             geo_lat = mLastLocation.getLatitude();
             geo_long = mLastLocation.getLongitude();
+            Double[] geoArr = new Double[]{geo_lat, geo_long};
 
             addressNotFoundLayout.setVisibility(View.INVISIBLE);
             commentView.setVisibility(View.INVISIBLE);
             locationFoundLayout.setVisibility(View.VISIBLE);
             progressIndicator.setVisibility(View.GONE);
             locationView.setText(lastKnownLocation);
-            // Fetching data from last.fm based on retrieved location
-            Intent intent = new Intent(getActivity(), DataFetchService.class);
-            intent.putExtra(GEO_TAG_LAT, geo_lat);
-            intent.putExtra(GEO_TAG_LONG, geo_long);
-            getActivity().startService(intent);
+
+            // Fetching data from Thrillcall API based on retrieved location
+            new DataFetchService(getActivity(), rootView).execute(geoArr);
         }
     }
 
