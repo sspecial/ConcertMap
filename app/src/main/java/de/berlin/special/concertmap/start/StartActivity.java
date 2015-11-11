@@ -1,9 +1,11 @@
-package de.berlin.special.concertmap;
+package de.berlin.special.concertmap.start;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import de.berlin.special.concertmap.R;
 
 
 public class StartActivity extends AppCompatActivity {

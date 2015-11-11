@@ -1,4 +1,4 @@
-package de.berlin.special.concertmap;
+package de.berlin.special.concertmap.start;
 
 import android.content.Intent;
 import android.content.IntentSender;
@@ -27,6 +27,8 @@ import com.google.android.gms.location.LocationServices;
 import java.util.List;
 import java.util.Locale;
 
+import de.berlin.special.concertmap.R;
+import de.berlin.special.concertmap.navigation.NavigationActivity;
 import de.berlin.special.concertmap.service.DataFetchService;
 
 /**
