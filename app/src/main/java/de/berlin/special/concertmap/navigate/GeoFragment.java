@@ -25,6 +25,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 
 import de.berlin.special.concertmap.R;
+import de.berlin.special.concertmap.Utility;
 import de.berlin.special.concertmap.event.EventActivity;
 import de.berlin.special.concertmap.service.ParseJSONtoDatabase;
 
@@ -32,7 +33,6 @@ import de.berlin.special.concertmap.service.ParseJSONtoDatabase;
 public class GeoFragment extends Fragment {
 
     private View rootView;
-    // To figure out if images should be taken from image-folder or downloaded
     private String args;
 
     public GeoFragment() {
@@ -53,13 +53,14 @@ public class GeoFragment extends Fragment {
 
         String eventQueryStr = "SELECT event._ID, " +
                 "event.event_name, event.event_start_at, event.event_image, " +
-                "venue.venue_name, venue.venue_street, venue.venue_city " +
+                "venue.venue_name, venue.venue_street, venue.venue_city, " +
+                "venue.venue_geo_lat, venue.venue_geo_lat " +
                 "FROM event " +
                 "INNER JOIN venue " +
                 "ON event._ID = venue.event_ID " +
                 "GROUP BY event._ID;";
         try{
-            Cursor eventCursor = ParseJSONtoDatabase.db.rawQuery(eventQueryStr, null);
+            final Cursor eventCursor = ParseJSONtoDatabase.db.rawQuery(eventQueryStr, null);
             Log.v("Event Cursor", DatabaseUtils.dumpCursorToString(eventCursor));
 
             // Find ListView to populate
@@ -72,8 +73,27 @@ public class GeoFragment extends Fragment {
             todayListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                    eventCursor.moveToPosition(position);
+
+                    String artistsName = Utility.retrieveArtistName(eventCursor.getString(Utility.COL_EVENT_NAME));
+                    String startAt = eventCursor.getString(Utility.COL_EVENT_START_AT);
+                    String imagePath = Utility.imageDirPath + String.valueOf(position);
+                    String venueName = eventCursor.getString(Utility.COL_VENUE_NAME);
+                    String venueStreet = eventCursor.getString(Utility.COL_VENUE_STREET);
+                    String venueCity = eventCursor.getString(Utility.COL_VENUE_CITY);
+                    double venueLat = eventCursor.getDouble(Utility.COL_VENUE_GEO_LAT);
+                    double venueLong = eventCursor.getDouble(Utility.COL_VENUE_GEO_LONG);
+
                     Intent intent = new Intent(getActivity(), EventActivity.class);
-                    intent.putExtra("position", position);
+                    intent.putExtra(String.valueOf(Utility.COL_EVENT_NAME), artistsName);
+                    intent.putExtra(String.valueOf(Utility.COL_EVENT_START_AT), startAt);
+                    intent.putExtra(String.valueOf(Utility.COL_EVENT_IMAGE), imagePath);
+                    intent.putExtra(String.valueOf(Utility.COL_VENUE_NAME), venueName);
+                    intent.putExtra(String.valueOf(Utility.COL_VENUE_STREET), venueStreet);
+                    intent.putExtra(String.valueOf(Utility.COL_VENUE_CITY), venueCity);
+                    intent.putExtra(String.valueOf(Utility.COL_VENUE_GEO_LAT), venueLat);
+                    intent.putExtra(String.valueOf(Utility.COL_VENUE_GEO_LONG), venueLong);
                     getActivity().startActivity(intent);
                 }
             });
@@ -87,22 +107,12 @@ public class GeoFragment extends Fragment {
 
 class TodayCursorAdapter extends CursorAdapter {
 
-    // These indices are tied to CURSOR_COLUMNS
-    private final int COL_EVENT_ID = 0;
-    private final int COL_EVENT_NAME = 1;
-    private final int COL_EVENT_START_AT = 2;
-    private final int COL_EVENT_IMAGE = 3;
-    private final int COL_VENUE_NAME = 4;
-    private final int COL_VENUE_STREET = 5;
-    private final int COL_VENUE_CITY = 6;
-
     private ImageView imageView;
     private TextView nameView;
     private TextView addressView;
     private TextView dateView;
     private final String LOG_TAG = TodayCursorAdapter.class.getSimpleName();
 
-    private final String imageDirPath = "/sdcard/ImageDir/";
     File imageDir;
 
     public TodayCursorAdapter(Context context, Cursor c, int flags, String args) {
@@ -111,7 +121,7 @@ class TodayCursorAdapter extends CursorAdapter {
         // Only if it is the first time GeoFragment constructed delete the image folder
         // Otherwise use the already downloaded images
         if (args.equals(NavigationActivity.FRAG_GEO_ADD)) {
-            File dir = new File(imageDirPath);
+            File dir = new File(Utility.imageDirPath);
             if (dir.exists()) {
                 for (File imFile : dir.listFiles()) {
                     imFile.delete();
@@ -119,7 +129,7 @@ class TodayCursorAdapter extends CursorAdapter {
                 dir.delete();
             }
         }
-        imageDir = new File(imageDirPath);
+        imageDir = new File(Utility.imageDirPath);
         imageDir.mkdirs();
     }
 
@@ -137,7 +147,7 @@ class TodayCursorAdapter extends CursorAdapter {
         dateView = (TextView) view.findViewById(R.id.list_item_date_textview);
 
         // Event image
-        String imageName =String.valueOf(cursor.getPosition());
+        String imageName = String.valueOf(cursor.getPosition());
         // Let's see if it is necessary to download the image file
         File file = new File(imageDir, imageName);
         if (file.exists()) {
@@ -152,29 +162,21 @@ class TodayCursorAdapter extends CursorAdapter {
         }else {
             imageView.setImageResource(R.drawable.concert2);
             new DownloadImageTask(imageView, imageDir, imageName)
-                    .execute(cursor.getString(COL_EVENT_IMAGE));
+                    .execute(cursor.getString(Utility.COL_EVENT_IMAGE));
         }
         // Artists Names
-        String artNames = cursor.getString(COL_EVENT_NAME);
-        int beginIndex = 0;
-        int endIndex = artNames.indexOf("@");
-        if(endIndex != -1)
-            artNames = artNames.substring(beginIndex, endIndex);
-        nameView.setText(artNames);
+        nameView.setText(Utility.retrieveArtistName(cursor.getString(Utility.COL_EVENT_NAME)));
 
         // Venue Name & City
-        addressView.setText(cursor.getString(COL_VENUE_NAME)
+        addressView.setText(cursor.getString(Utility.COL_VENUE_NAME)
                 + ", "
-                + cursor.getString(COL_VENUE_CITY));
+                + cursor.getString(Utility.COL_VENUE_CITY));
 
         // Event time
-        String dateStr = cursor.getString(COL_EVENT_START_AT);
-        String dayStr = dateStr.split("T")[0];
-        String timeStr = dateStr.split("T")[1];
-        dayStr = dayStr.substring(0,dayStr.length());
-        timeStr = timeStr.substring(0,timeStr.length()-4);
-        dateView.setText(dayStr + "  " + timeStr);
+        String dateArr[] = Utility.retrieveDateAndTime(cursor.getString(Utility.COL_EVENT_START_AT));
+        dateView.setText(dateArr[0] + "  " + dateArr[1]);
     }
+
 }
 
 class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {

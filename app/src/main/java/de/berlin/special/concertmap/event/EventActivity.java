@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import de.berlin.special.concertmap.R;
+import de.berlin.special.concertmap.Utility;
 
 public class EventActivity extends AppCompatActivity {
 
@@ -17,10 +18,29 @@ public class EventActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event);
+
         Intent intent = this.getIntent();
-        int position = intent.getIntExtra("position", 0);
         Bundle args = new Bundle();
-        args.putInt("position", position);
+        // setting title of activity
+        setTitle("Event - " + intent.getStringExtra(String.valueOf(Utility.COL_EVENT_NAME)));
+
+        args.putString(String.valueOf(Utility.COL_EVENT_NAME)
+                , intent.getStringExtra(String.valueOf(Utility.COL_EVENT_NAME)));
+        args.putString(String.valueOf(Utility.COL_EVENT_START_AT)
+                , intent.getStringExtra(String.valueOf(Utility.COL_EVENT_START_AT)));
+        args.putString(String.valueOf(Utility.COL_EVENT_IMAGE)
+                , intent.getStringExtra(String.valueOf(Utility.COL_EVENT_IMAGE)));
+        args.putString(String.valueOf(Utility.COL_VENUE_NAME)
+                , intent.getStringExtra(String.valueOf(Utility.COL_VENUE_NAME)));
+        args.putString(String.valueOf(Utility.COL_VENUE_STREET)
+                , intent.getStringExtra(String.valueOf(Utility.COL_VENUE_STREET)));
+        args.putString(String.valueOf(Utility.COL_VENUE_CITY)
+                , intent.getStringExtra(String.valueOf(Utility.COL_VENUE_CITY)));
+        args.putDouble(String.valueOf(Utility.COL_VENUE_GEO_LAT)
+                , intent.getDoubleExtra(String.valueOf(Utility.COL_VENUE_GEO_LAT), Utility.GEO_DEFAULT_LAT));
+        args.putDouble(String.valueOf(Utility.COL_VENUE_GEO_LONG)
+                , intent.getDoubleExtra(String.valueOf(Utility.COL_VENUE_GEO_LONG), Utility.GEO_DEFAULT_LONG));
+
         eventActivityFragment.setArguments(args);
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.event_container, eventActivityFragment)

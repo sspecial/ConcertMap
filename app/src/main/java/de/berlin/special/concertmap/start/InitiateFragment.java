@@ -39,8 +39,6 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
     private static final String LOG_TAG = InitiateFragment.class.getSimpleName();
     private static final String ENTER_CITY = "Location is not available, Enter the city.";
     private static final String PROCESS_MESSAGE = "Finding your city...";
-    private static final String GEO_TAG_LAT = "lat";
-    private static final String GEO_TAG_LONG = "long";
     private static final String NAV_TAG_CITY = "city";
 
 

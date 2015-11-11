@@ -15,6 +15,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import de.berlin.special.concertmap.R;
+import de.berlin.special.concertmap.Utility;
 
 /**
  * Created by Saeed on 30-Mar-15.
@@ -22,8 +23,6 @@ import de.berlin.special.concertmap.R;
 
 public class DataFetchService extends AsyncTask<Double, Void, String> {
 
-    private static final double GEO_DEFAULT_LAT = 52.5194;
-    private static final double GEO_DEFAULT_LONG = 13.4067;
     private final String LOG_TAG = DataFetchService.class.getSimpleName();
     private final String Error_MSG = "Error obtaining data from remote server!";
     private Context mContext;
@@ -48,17 +47,16 @@ public class DataFetchService extends AsyncTask<Double, Void, String> {
         if (params[0] != null)
             geoLat = params[0];
         else
-            geoLat = GEO_DEFAULT_LAT;
+            geoLat = Utility.GEO_DEFAULT_LAT;
 
         double geoLong;
         if (params[1] != null)
             geoLong = params[1];
         else
-            geoLong = GEO_DEFAULT_LONG;
+            geoLong = Utility.GEO_DEFAULT_LONG;
 
         String eventLimit = "20";
         String api_key = "d90d066add515bff";
-        int numDays = 14;
 
         try {
             // Construct the URL for the api.thrillcall query
