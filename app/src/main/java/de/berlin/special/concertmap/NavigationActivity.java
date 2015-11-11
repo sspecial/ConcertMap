@@ -22,9 +22,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 
 public class NavigationActivity extends AppCompatActivity {
 
@@ -57,21 +54,17 @@ public class NavigationActivity extends AppCompatActivity {
     public static final String FRAG_GEO_ADD = "add";
     public static final String FRAG_GEO_REPLACE = "replace";
 
-    ArtistListFragment artistListFragment = new ArtistListFragment();
-
-    EventListFragment eventListFragment = new EventListFragment();
-
-    Bundle bundle;
+    Fragment artistListFragment = new ArtistListFragment();
+    Fragment eventListFragment = new EventListFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        bundle = savedInstanceState;
-        super.onCreate(bundle);
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
 
         // Initiating GeoFragment as default view of activity
         manager = getSupportFragmentManager();
-        if (bundle == null) {
+        if (savedInstanceState == null) {
             args.putString(FRAG_GEO_TYPE, FRAG_GEO_ADD);
             geoFragment.setArguments(args);
             manager.beginTransaction().add(R.id.content_frame, geoFragment).commit();

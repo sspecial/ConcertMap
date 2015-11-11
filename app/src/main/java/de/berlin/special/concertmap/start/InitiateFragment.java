@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Locale;
 
 import de.berlin.special.concertmap.R;
-import de.berlin.special.concertmap.navigation.NavigationActivity;
+import de.berlin.special.concertmap.NavigationActivity;
 import de.berlin.special.concertmap.service.DataFetchService;
 
 /**

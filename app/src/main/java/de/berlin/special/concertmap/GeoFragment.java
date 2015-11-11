@@ -1,5 +1,6 @@
 package de.berlin.special.concertmap;
 
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.database.Cursor;
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -22,12 +24,14 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 
+import de.berlin.special.concertmap.event.EventActivity;
 import de.berlin.special.concertmap.service.ParseJSONtoDatabase;
 
 
 public class GeoFragment extends Fragment {
 
     private View rootView;
+    // To figure out if images should be taken from image-folder or downloaded
     private String args;
 
     public GeoFragment() {
@@ -58,11 +62,20 @@ public class GeoFragment extends Fragment {
             Log.v("Event Cursor", DatabaseUtils.dumpCursorToString(eventCursor));
 
             // Find ListView to populate
-            ListView todayListItems = (ListView) rootView.findViewById(R.id.geo_list_view);
+            ListView todayListView = (ListView) rootView.findViewById(R.id.geo_list_view);
             // Setup cursor adapter
             TodayCursorAdapter todayCursorAdapter = new TodayCursorAdapter(getActivity(), eventCursor, 0, args);
             // Attach cursor adapter to the ListView
-            todayListItems.setAdapter(todayCursorAdapter);
+            todayListView.setAdapter(todayCursorAdapter);
+            // Setup OnClickListener
+            todayListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Intent intent = new Intent(getActivity(), EventActivity.class);
+                    intent.putExtra("position", position);
+                    getActivity().startActivity(intent);
+                }
+            });
         }
         catch (Exception e){
             Log.e("error..." , e.getMessage());

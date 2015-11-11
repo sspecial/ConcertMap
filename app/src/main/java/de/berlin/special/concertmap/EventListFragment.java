@@ -1,11 +1,12 @@
 package de.berlin.special.concertmap;
 
-import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import de.berlin.special.concertmap.R;
 
 /**
  * Created by Saeed on 10-Nov-15.
