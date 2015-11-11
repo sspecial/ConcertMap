@@ -1,4 +1,4 @@
-package de.berlin.special.concertmap;
+package de.berlin.special.concertmap.navigate;
 
 import android.content.Context;
 import android.content.Intent;
@@ -21,6 +21,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import de.berlin.special.concertmap.R;
 
 
 public class NavigationActivity extends AppCompatActivity {

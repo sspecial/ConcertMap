@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".NavigationActivity"
+            android:name=".navigate.NavigationActivity"
             android:label="@string/title_activity_navigation" >
         </activity>
         <activity

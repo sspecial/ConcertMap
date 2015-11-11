@@ -1,4 +1,4 @@
-package de.berlin.special.concertmap;
+package de.berlin.special.concertmap.navigate;
 
 import android.support.v4.app.Fragment;
 import android.os.Bundle;

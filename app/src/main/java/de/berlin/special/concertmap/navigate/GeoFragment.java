@@ -1,4 +1,4 @@
-package de.berlin.special.concertmap;
+package de.berlin.special.concertmap.navigate;
 
 import android.content.Intent;
 import android.support.v4.app.Fragment;
@@ -24,6 +24,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 
+import de.berlin.special.concertmap.R;
 import de.berlin.special.concertmap.event.EventActivity;
 import de.berlin.special.concertmap.service.ParseJSONtoDatabase;
 
