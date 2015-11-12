@@ -54,7 +54,7 @@ public class GeoFragment extends Fragment {
         String eventQueryStr = "SELECT event._ID, " +
                 "event.event_name, event.event_start_at, event.event_image, " +
                 "venue.venue_name, venue.venue_street, venue.venue_city, " +
-                "venue.venue_geo_lat, venue.venue_geo_lat " +
+                "venue.venue_geo_lat, venue.venue_geo_long " +
                 "FROM event " +
                 "INNER JOIN venue " +
                 "ON event._ID = venue.event_ID " +
