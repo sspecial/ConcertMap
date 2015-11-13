@@ -23,6 +23,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import de.berlin.special.concertmap.R;
 import de.berlin.special.concertmap.Utility;
@@ -78,7 +80,7 @@ public class GeoFragment extends Fragment {
 
                     String artistsName = Utility.retrieveArtistName(eventCursor.getString(Utility.COL_EVENT_NAME));
                     String startAt = eventCursor.getString(Utility.COL_EVENT_START_AT);
-                    String imagePath = Utility.imageDirPath + String.valueOf(position);
+                    String imagePath = Utility.imageDirPath() +"/"+ String.valueOf(position);
                     String venueName = eventCursor.getString(Utility.COL_VENUE_NAME);
                     String venueStreet = eventCursor.getString(Utility.COL_VENUE_STREET);
                     String venueCity = eventCursor.getString(Utility.COL_VENUE_CITY);
@@ -121,15 +123,18 @@ class TodayCursorAdapter extends CursorAdapter {
         // Only if it is the first time GeoFragment constructed delete the image folder
         // Otherwise use the already downloaded images
         if (args.equals(NavigationActivity.FRAG_GEO_ADD)) {
-            File dir = new File(Utility.imageDirPath);
+            File dir = new File(Utility.imageDirPath());
             if (dir.exists()) {
-                for (File imFile : dir.listFiles()) {
-                    imFile.delete();
+                // Only download event images once per day
+                if (!dir.getName().equals(new SimpleDateFormat("yyyy-MM-dd").format(new Date()))) {
+                    for (File imFile : dir.listFiles()) {
+                        imFile.delete();
+                    }
+                    dir.delete();
                 }
-                dir.delete();
             }
         }
-        imageDir = new File(Utility.imageDirPath);
+        imageDir = new File(Utility.imageDirPath());
         imageDir.mkdirs();
     }
 
@@ -165,12 +170,14 @@ class TodayCursorAdapter extends CursorAdapter {
                     .execute(cursor.getString(Utility.COL_EVENT_IMAGE));
         }
         // Artists Names
-        nameView.setText(Utility.retrieveArtistName(cursor.getString(Utility.COL_EVENT_NAME)));
+        nameView.setText(Utility.artistNamePartition(Utility.retrieveArtistName(cursor.getString(Utility.COL_EVENT_NAME))));
+
 
         // Venue Name & City
-        addressView.setText(cursor.getString(Utility.COL_VENUE_NAME)
+        String venueNameCity = cursor.getString(Utility.COL_VENUE_NAME)
                 + ", "
-                + cursor.getString(Utility.COL_VENUE_CITY));
+                + cursor.getString(Utility.COL_VENUE_CITY);
+        addressView.setText(Utility.venueNamePartition(venueNameCity));
 
         // Event time
         String dateArr[] = Utility.retrieveDateAndTime(cursor.getString(Utility.COL_EVENT_START_AT));

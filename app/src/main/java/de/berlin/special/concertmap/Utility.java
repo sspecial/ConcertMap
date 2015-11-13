@@ -1,5 +1,8 @@
 package de.berlin.special.concertmap;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by Saeed on 11-Nov-15.
  */
@@ -19,7 +22,11 @@ public class Utility {
     public static final int COL_VENUE_GEO_LAT = 7;
     public static final int COL_VENUE_GEO_LONG = 8;
 
-    public static final String imageDirPath = "/sdcard/ImageDir/";
+    private static final String imageDirBase = "/sdcard/ImageDir/";
+    public static String imageDirPath(){
+        String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        return imageDirBase + date;
+    }
 
     public static String retrieveArtistName(String eventName){
         String artNames = null;
@@ -28,6 +35,22 @@ public class Utility {
         if(endIndex != -1)
             artNames = eventName.substring(beginIndex, endIndex);
         return artNames;
+    }
+    // To make a break when the artist name is too long
+    public static String artistNamePartition(String str){
+        if (str.length() > 18) {
+            return str.replaceFirst(" ", "\n");
+        } else {
+            return str;
+        }
+    }
+    // To make a break when the venue name is too long
+    public static String venueNamePartition(String str){
+        if (str.length() > 28) {
+            return str.replaceFirst(" ", "\n");
+        } else {
+            return str;
+        }
     }
 
     public static String[] retrieveDateAndTime(String dateStr){
