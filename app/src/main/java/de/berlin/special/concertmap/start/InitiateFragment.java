@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -23,11 +24,15 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import de.berlin.special.concertmap.R;
+import de.berlin.special.concertmap.Utility;
 import de.berlin.special.concertmap.navigate.NavigationActivity;
 import de.berlin.special.concertmap.service.DataFetchService;
 
@@ -39,8 +44,6 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
     private static final String LOG_TAG = InitiateFragment.class.getSimpleName();
     private static final String ENTER_CITY = "Location is not available, Enter the city.";
     private static final String PROCESS_MESSAGE = "Finding your city...";
-    private static final String NAV_TAG_CITY = "city";
-
 
     private static final int LOCATION_AVAILABLE = 100;
     private static final int LOCATION_NOT_AVAILABLE = 101;
@@ -48,6 +51,7 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
     private double geo_lat;
     private double geo_long;
     private String city;
+    private String cityUserEntry;
     private String lastKnownLocation;
 
     private View rootView;
@@ -56,6 +60,7 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
     private ProgressBar progressIndicator;
     private TextView locationView;
     private TextView commentView;
+    private EditText userEntry;
     private ImageButton searchCityBtn;
     private Button continueBtn;
 
@@ -92,6 +97,7 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
         addressNotFoundLayout = (LinearLayout) rootView.findViewById(R.id.addressNotFoundLayout);
         locationView = (TextView) rootView.findViewById(R.id.location_view);
         commentView = (TextView) rootView.findViewById(R.id.comment_view);
+        userEntry = (EditText) rootView.findViewById(R.id.enter_city_edit_text);
         searchCityBtn = (ImageButton) rootView.findViewById(R.id.validate_city_button);
         continueBtn = (Button) rootView.findViewById(R.id.continue_button);
 
@@ -117,8 +123,14 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), NavigationActivity.class);
-                intent.putExtra(NAV_TAG_CITY, city);
+                if (city != null) {
+                    Utility.city = city;
+                } else {
+                    Utility.city = cityUserEntry;
+                }
                 getActivity().startActivity(intent);
+                // Finishing start activity
+                getActivity().finish();
             }
         });
     }
@@ -137,8 +149,10 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
             searchCityBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(getActivity(),
-                            "Button is clicked", Toast.LENGTH_LONG).show();
+                    // Fetching data from Thrillcall API based on user entry
+                    cityUserEntry = userEntry.getText().toString();
+                    Double[] geoArr = getGeoInfoFromCity(cityUserEntry);
+                    new DataFetchService(getActivity(), rootView, geoArr, false).execute();
                 }
             });
         } else if (connStat == LOCATION_AVAILABLE) {
@@ -149,14 +163,39 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
             Double[] geoArr = new Double[]{geo_lat, geo_long};
 
             addressNotFoundLayout.setVisibility(View.INVISIBLE);
-            commentView.setVisibility(View.INVISIBLE);
             locationFoundLayout.setVisibility(View.VISIBLE);
             progressIndicator.setVisibility(View.GONE);
             locationView.setText(lastKnownLocation);
 
-            // Fetching data from Thrillcall API based on retrieved location
-            new DataFetchService(getActivity(), rootView).execute(geoArr);
+            // Fetching data from Thrillcall API based on Geo information
+            new DataFetchService(getActivity(), rootView, geoArr, true).execute();
         }
+    }
+
+    public Double[] getGeoInfoFromCity(String location){
+        Double[] geoArr = null;
+        if(Geocoder.isPresent()){
+            try {
+                Geocoder gc = new Geocoder(getActivity());
+                // get the found Address Objects
+                List<Address> addresses= gc.getFromLocationName(location, 5);
+
+                for(Address a : addresses){
+                    if(a.hasLatitude() && a.hasLongitude()){
+                        geoArr = new Double[]{a.getLatitude(), a.getLongitude()};
+                    }
+                }
+            } catch (IOException e) {
+                geoArr = new Double[]{Utility.GEO_DEFAULT_LAT, Utility.GEO_DEFAULT_LONG};
+                // To-Do when user entry is not valid
+                Log.e(LOG_TAG, "Not a valid location!");
+            }
+        }
+        else {
+            geoArr = new Double[]{Utility.GEO_DEFAULT_LAT, Utility.GEO_DEFAULT_LONG};
+            Log.e(LOG_TAG, "Geo-Coder is not available. Default values are utilized!");
+        }
+        return geoArr;
     }
 
     @Override

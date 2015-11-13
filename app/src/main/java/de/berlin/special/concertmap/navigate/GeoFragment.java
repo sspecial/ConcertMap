@@ -44,7 +44,7 @@ public class GeoFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        args = getArguments().getString(NavigationActivity.FRAG_GEO_TYPE);
+        args = getArguments().getString(Utility.FRAG_GEO_TYPE);
     }
 
     @Override
@@ -122,10 +122,11 @@ class TodayCursorAdapter extends CursorAdapter {
 
         // Only if it is the first time GeoFragment constructed delete the image folder
         // Otherwise use the already downloaded images
-        if (args.equals(NavigationActivity.FRAG_GEO_ADD)) {
+        if (args.equals(Utility.FRAG_GEO_ADD)) {
             File dir = new File(Utility.imageDirPath());
             if (dir.exists()) {
                 // Only download event images once per day
+                // To_Do considering change of city for downloading images using SharedPreferences
                 if (!dir.getName().equals(new SimpleDateFormat("yyyy-MM-dd").format(new Date()))) {
                     for (File imFile : dir.listFiles()) {
                         imFile.delete();

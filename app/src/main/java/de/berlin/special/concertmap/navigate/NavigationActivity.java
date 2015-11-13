@@ -23,6 +23,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import de.berlin.special.concertmap.R;
+import de.berlin.special.concertmap.Utility;
 
 
 public class NavigationActivity extends AppCompatActivity {
@@ -36,9 +37,6 @@ public class NavigationActivity extends AppCompatActivity {
     private final String navItem2 = "Tracked Artists";
     private final String navItem3 = "Attended Events";
 
-    private final String LOG_TAG = NavigationActivity.class.getSimpleName();
-    private static final String NAV_TAG_CITY = "city";
-    private String city;
     private String[] eventNavItems;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -49,12 +47,8 @@ public class NavigationActivity extends AppCompatActivity {
 
     FragmentManager manager;
 
-    Fragment geoFragment = new GeoFragment();
+    Fragment geoFragment;
     Bundle args = new Bundle();
-    // To decide if the event image folder should be kept ot not!
-    public static final String FRAG_GEO_TYPE = "type";
-    public static final String FRAG_GEO_ADD = "add";
-    public static final String FRAG_GEO_REPLACE = "replace";
 
     Fragment artistListFragment = new ArtistListFragment();
     Fragment eventListFragment = new EventListFragment();
@@ -64,19 +58,20 @@ public class NavigationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
 
+        // Constructing array used ba navigation bar
+        Intent intent = this.getIntent();
+        navItem1 = Utility.city + " Concerts";
+        eventNavItems = new String[]{navItem1, navItem2, navItem3};
+
         // Initiating GeoFragment as default view of activity
         manager = getSupportFragmentManager();
         if (savedInstanceState == null) {
-            args.putString(FRAG_GEO_TYPE, FRAG_GEO_ADD);
+            geoFragment = new GeoFragment();
+            args.clear();
+            args.putString(Utility.FRAG_GEO_TYPE, Utility.FRAG_GEO_ADD);
             geoFragment.setArguments(args);
             manager.beginTransaction().add(R.id.content_frame, geoFragment).commit();
         }
-
-        // Constructing array used ba navigation bar
-        Intent intent = this.getIntent();
-        city = intent.getStringExtra(NAV_TAG_CITY);
-        navItem1 = city + " Concerts";
-        eventNavItems = new String[]{navItem1, navItem2, navItem3};
 
         actionBar = getSupportActionBar();
         myAdapter = new NavigateAdapter(this, eventNavItems);
@@ -111,7 +106,9 @@ public class NavigationActivity extends AppCompatActivity {
         switch (position) {
 
             case NAV_CASE_CITY:
-                args.putString(FRAG_GEO_TYPE, FRAG_GEO_REPLACE);
+                geoFragment = new GeoFragment();
+                args.clear();
+                args.putString(Utility.FRAG_GEO_TYPE, Utility.FRAG_GEO_REPLACE);
                 geoFragment.setArguments(args);
                 manager.beginTransaction()
                         .replace(R.id.content_frame, geoFragment)

@@ -33,7 +33,12 @@
         </activity>
         <activity
             android:name=".event.EventActivity"
-            android:label="@string/title_activity_event" >
+            android:label="@string/title_activity_event"
+            android:parentActivityName=".navigate.NavigationActivity" >
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".navigate.NavigationActivity" />
         </activity>
 
         <!--Google MAP API key-->

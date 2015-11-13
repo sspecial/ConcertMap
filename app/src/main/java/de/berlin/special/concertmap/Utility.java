@@ -8,8 +8,18 @@ import java.util.Date;
  */
 public class Utility {
 
+    public static String city;
     public static final double GEO_DEFAULT_LAT = 52.5194;
     public static final double GEO_DEFAULT_LONG = 13.4067;
+    public static final String EVENT_LIMIT = "20";
+    public static final String THRILLCALL_API_KEY = "d90d066add515bff";
+
+    // To decide if the event image folder should be kept ot not!
+    public static final String FRAG_GEO_TYPE = "type";
+    public static final String FRAG_GEO_CITY = "city";
+    public static final String FRAG_GEO_ADD = "add";
+    public static final String FRAG_GEO_REPLACE = "replace";
+
 
     // These indices are tied to CURSOR_COLUMNS
     public static final int COL_EVENT_ID = 0;
