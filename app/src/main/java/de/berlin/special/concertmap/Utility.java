@@ -1,5 +1,7 @@
 package de.berlin.special.concertmap;
 
+import android.database.sqlite.SQLiteDatabase;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -16,10 +18,10 @@ public class Utility {
 
     // To decide if the event image folder should be kept ot not!
     public static final String FRAG_GEO_TYPE = "type";
-    public static final String FRAG_GEO_CITY = "city";
     public static final String FRAG_GEO_ADD = "add";
     public static final String FRAG_GEO_REPLACE = "replace";
 
+    public static SQLiteDatabase db;
 
     // These indices are tied to CURSOR_COLUMNS
     public static final int COL_EVENT_ID = 0;
@@ -31,6 +33,9 @@ public class Utility {
     public static final int COL_VENUE_CITY = 6;
     public static final int COL_VENUE_GEO_LAT = 7;
     public static final int COL_VENUE_GEO_LONG = 8;
+
+    public static final int EVENT_ATTEND_YES = 1;
+    public static final int EVENT_ATTEND_NO = 0;
 
     private static final String imageDirBase = "/sdcard/ImageDir/";
     public static String imageDirPath(){
@@ -49,7 +54,12 @@ public class Utility {
     // To make a break when the artist name is too long
     public static String artistNamePartition(String str){
         if (str.length() > 18) {
-            return str.replaceFirst(" ", "\n");
+            int spaceIndex = str.indexOf(" ", 10);
+            if (spaceIndex != -1)
+                str = str.substring(0, spaceIndex) + "..";
+            else
+                str = str.substring(0, 18) + "..";
+            return str;
         } else {
             return str;
         }
@@ -57,7 +67,13 @@ public class Utility {
     // To make a break when the venue name is too long
     public static String venueNamePartition(String str){
         if (str.length() > 28) {
-            return str.replaceFirst(" ", "\n");
+            int spaceIndex = str.indexOf(" ", 20);
+            if (spaceIndex != -1) {
+                str = str.substring(0, spaceIndex) + "..";
+            } else {
+                str = str.substring(0, 28) + "..";
+            }
+            return str;
         } else {
             return str;
         }

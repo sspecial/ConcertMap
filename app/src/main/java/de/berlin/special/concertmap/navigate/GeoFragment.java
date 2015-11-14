@@ -1,14 +1,14 @@
 package de.berlin.special.concertmap.navigate;
 
-import android.content.Intent;
-import android.support.v4.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.CursorAdapter;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,7 +29,6 @@ import java.util.Date;
 import de.berlin.special.concertmap.R;
 import de.berlin.special.concertmap.Utility;
 import de.berlin.special.concertmap.event.EventActivity;
-import de.berlin.special.concertmap.service.ParseJSONtoDatabase;
 
 
 public class GeoFragment extends Fragment {
@@ -62,7 +61,7 @@ public class GeoFragment extends Fragment {
                 "ON event._ID = venue.event_ID " +
                 "GROUP BY event._ID;";
         try{
-            final Cursor eventCursor = ParseJSONtoDatabase.db.rawQuery(eventQueryStr, null);
+            final Cursor eventCursor = Utility.db.rawQuery(eventQueryStr, null);
             Log.v("Event Cursor", DatabaseUtils.dumpCursorToString(eventCursor));
 
             // Find ListView to populate
@@ -77,7 +76,7 @@ public class GeoFragment extends Fragment {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                     eventCursor.moveToPosition(position);
-
+                    int eventID = eventCursor.getInt(Utility.COL_EVENT_ID);
                     String artistsName = Utility.retrieveArtistName(eventCursor.getString(Utility.COL_EVENT_NAME));
                     String startAt = eventCursor.getString(Utility.COL_EVENT_START_AT);
                     String imagePath = Utility.imageDirPath() +"/"+ String.valueOf(position);
@@ -88,6 +87,7 @@ public class GeoFragment extends Fragment {
                     double venueLong = eventCursor.getDouble(Utility.COL_VENUE_GEO_LONG);
 
                     Intent intent = new Intent(getActivity(), EventActivity.class);
+                    intent.putExtra(String.valueOf(Utility.COL_EVENT_ID), eventID);
                     intent.putExtra(String.valueOf(Utility.COL_EVENT_NAME), artistsName);
                     intent.putExtra(String.valueOf(Utility.COL_EVENT_START_AT), startAt);
                     intent.putExtra(String.valueOf(Utility.COL_EVENT_IMAGE), imagePath);
@@ -176,7 +176,7 @@ class TodayCursorAdapter extends CursorAdapter {
 
         // Venue Name & City
         String venueNameCity = cursor.getString(Utility.COL_VENUE_NAME)
-                + ", "
+                + " , "
                 + cursor.getString(Utility.COL_VENUE_CITY);
         addressView.setText(Utility.venueNamePartition(venueNameCity));
 

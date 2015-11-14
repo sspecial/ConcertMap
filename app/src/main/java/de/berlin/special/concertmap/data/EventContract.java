@@ -15,6 +15,7 @@ public class EventContract {
         public static final String COLUMN_CON_NAME = "event_name";
         public static final String COLUMN_CON_START_AT = "event_start_at";
         public static final String COLUMN_CON_IMAGE = "event_image";
+        public static final String COLUMN_CON_ATTEND = "event_attended";
 
     }
 

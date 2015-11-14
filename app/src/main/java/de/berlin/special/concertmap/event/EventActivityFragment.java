@@ -1,24 +1,31 @@
 package de.berlin.special.concertmap.event;
 
+import android.content.ContentValues;
+import android.database.Cursor;
 import android.graphics.BitmapFactory;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.*;
-import com.google.android.gms.maps.model.*;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.File;
 import java.io.FileInputStream;
 
 import de.berlin.special.concertmap.R;
 import de.berlin.special.concertmap.Utility;
+import de.berlin.special.concertmap.data.EventContract.EventEntry;
 
 /**
  * A placeholder fragment containing a event view.
@@ -28,6 +35,7 @@ public class EventActivityFragment extends Fragment {
     private View rootView;
     private final String LOG_TAG = EventActivityFragment.class.getSimpleName();
 
+    private int eventID;
     private String imagePath;
     private String eventStartAt;
     private String venueName;
@@ -36,6 +44,7 @@ public class EventActivityFragment extends Fragment {
     private double geoLong;
     private GoogleMap map;
 
+    private Button attendBtn;
 
     public EventActivityFragment() {
     }
@@ -44,6 +53,7 @@ public class EventActivityFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        eventID = getArguments().getInt(String.valueOf(Utility.COL_EVENT_ID), -1);
         imagePath = getArguments().getString(String.valueOf(Utility.COL_EVENT_IMAGE), Utility.imageDirPath());
         eventStartAt = getArguments().getString(String.valueOf(Utility.COL_EVENT_START_AT), "START_AT");
         venueName = getArguments().getString(String.valueOf(Utility.COL_VENUE_NAME), "VENUE_NAME");
@@ -63,6 +73,7 @@ public class EventActivityFragment extends Fragment {
         TextView startAtView = (TextView) rootView.findViewById(R.id.textview_event_artist_name);
         TextView venueNameView = (TextView) rootView.findViewById(R.id.textview_event_venue_name);
         TextView venueAddressView = (TextView) rootView.findViewById(R.id.textview_event_venue_street);
+        attendBtn = (Button) rootView.findViewById(R.id.button_attend);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         map = mapFragment.getMap();
@@ -97,4 +108,35 @@ public class EventActivityFragment extends Fragment {
                 .title(venueName)
                 .position(eventGeo));
     }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        attendBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ContentValues args = new ContentValues();
+                args.put(EventEntry.COLUMN_CON_ATTEND, Utility.EVENT_ATTEND_YES);
+                int row = Utility.db.update(
+                        EventEntry.TABLE_NAME,
+                        args,
+                        EventEntry._ID + "=" + eventID,
+                        null);
+
+                String eventQueryStr = "SELECT event._ID " +
+                        "FROM event " +
+                        "WHERE " +
+                        EventEntry.COLUMN_CON_ATTEND + " = " + Utility.EVENT_ATTEND_YES + ";";
+
+                Cursor cursor = Utility.db.rawQuery(eventQueryStr, null);
+                String msg = null;
+                while (cursor.moveToNext()) {
+                    msg += String.valueOf(cursor.getInt(Utility.COL_EVENT_ID))+"\n";
+                }
+                Toast.makeText(getActivity(),
+                        msg, Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
 }

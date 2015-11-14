@@ -22,8 +22,10 @@ public class EventActivity extends AppCompatActivity {
         Intent intent = this.getIntent();
         Bundle args = new Bundle();
         // setting title of activity
-        setTitle("Event - " + intent.getStringExtra(String.valueOf(Utility.COL_EVENT_NAME)));
+        setTitle(intent.getStringExtra(String.valueOf(Utility.COL_EVENT_NAME)));
 
+        args.putInt(String.valueOf(Utility.COL_EVENT_ID)
+                , intent.getIntExtra(String.valueOf(Utility.COL_EVENT_ID), -1));
         args.putString(String.valueOf(Utility.COL_EVENT_NAME)
                 , intent.getStringExtra(String.valueOf(Utility.COL_EVENT_NAME)));
         args.putString(String.valueOf(Utility.COL_EVENT_START_AT)

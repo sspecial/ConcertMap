@@ -4,9 +4,9 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import de.berlin.special.concertmap.data.EventContract.ArtistEntry;
 import de.berlin.special.concertmap.data.EventContract.EventEntry;
 import de.berlin.special.concertmap.data.EventContract.VenueEntry;
-import de.berlin.special.concertmap.data.EventContract.ArtistEntry;
 
 /**
  * Created by Saeed on 18-Apr-15.
@@ -31,7 +31,8 @@ public class EventDbHelper extends SQLiteOpenHelper {
                 EventEntry.COLUMN_CON_THRILL_ID + " TEXT NOT NULL, " +
                 EventEntry.COLUMN_CON_NAME + " TEXT NOT NULL, " +
                 EventEntry.COLUMN_CON_START_AT + " TEXT, " +
-                EventEntry.COLUMN_CON_IMAGE + " TEXT " + ");";
+                EventEntry.COLUMN_CON_IMAGE + " TEXT, " +
+                EventEntry.COLUMN_CON_ATTEND + " INTEGER NOT NULL " + ");";
 
         // Create a table to hold locations.
         final String SQL_CREATE_VENUE_TABLE = "CREATE TABLE " + VenueEntry.TABLE_NAME + " (" +
@@ -58,9 +59,6 @@ public class EventDbHelper extends SQLiteOpenHelper {
                 EventEntry.TABLE_NAME + " (" + EventEntry._ID + ") " +
                 ");";
 
-        db.execSQL("DROP TABLE IF EXISTS " + EventEntry.TABLE_NAME + ";");
-        db.execSQL("DROP TABLE IF EXISTS " + VenueEntry.TABLE_NAME + ";");
-        db.execSQL("DROP TABLE IF EXISTS " + ArtistEntry.TABLE_NAME + ";");
         db.execSQL(SQL_CREATE_EVENT_TABLE);
         db.execSQL(SQL_CREATE_VENUE_TABLE);
         db.execSQL(SQL_CREATE_ARTISTS_TABLE);

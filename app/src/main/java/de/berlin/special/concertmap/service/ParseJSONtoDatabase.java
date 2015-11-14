@@ -9,8 +9,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.Hashtable;
 
+import de.berlin.special.concertmap.Utility;
 import de.berlin.special.concertmap.data.EventContract.ArtistEntry;
 import de.berlin.special.concertmap.data.EventContract.EventEntry;
 import de.berlin.special.concertmap.data.EventContract.VenueEntry;
@@ -24,17 +26,36 @@ public class ParseJSONtoDatabase {
     private final String LOG_TAG = ParseJSONtoDatabase.class.getSimpleName();
     private EventDbHelper mDbHelper;
     private String concertJsonStr;
-    public static SQLiteDatabase db;
-
 
     public ParseJSONtoDatabase(Context mContext, String json){
         // Deleting the concert.db databases
-        mContext.deleteDatabase(EventDbHelper.DATABASE_NAME);
-        // Creating the concert.db databases
-        mDbHelper = new EventDbHelper(mContext);
-        // Gets the data repository in write mode
-        db = mDbHelper.getWritableDatabase();
+        // mContext.deleteDatabase(EventDbHelper.DATABASE_NAME);
+
+        // If Database exist?
+        File dbFile = mContext.getDatabasePath(EventDbHelper.DATABASE_NAME);
+        if(dbFile.exists())
+            Utility.db = mContext.openOrCreateDatabase(EventDbHelper.DATABASE_NAME, Context.MODE_PRIVATE, null);
+        else {
+            // Creating the concert.db databases
+            mDbHelper = new EventDbHelper(mContext);
+            // Gets the data repository in write mode
+            Utility.db = mDbHelper.getWritableDatabase();
+        }
+        // Deleting old records from Database
+        deleteOldDataFromDatabase(Utility.db);
         concertJsonStr = json;
+    }
+
+    public void deleteOldDataFromDatabase(SQLiteDatabase db){
+
+        db.execSQL("DELETE FROM " + EventEntry.TABLE_NAME
+                + " WHERE " + EventEntry.COLUMN_CON_ATTEND + " = " + Utility.EVENT_ATTEND_NO + ";");
+
+        db.execSQL("DELETE FROM " + VenueEntry.TABLE_NAME
+                + " WHERE " + VenueEntry.COLUMN_VEN_CON_ID + " NOT IN "
+                + "( SELECT " + EventEntry._ID + " FROM " + EventEntry.TABLE_NAME + " );");
+
+        db.execSQL("DELETE FROM " + ArtistEntry.TABLE_NAME + ";");
     }
 
     public void parseData() {
@@ -111,10 +132,11 @@ public class ParseJSONtoDatabase {
                 eventValues.put(EventEntry.COLUMN_CON_NAME, conName);
                 eventValues.put(EventEntry.COLUMN_CON_START_AT, conStartAt);
                 eventValues.put(EventEntry.COLUMN_CON_IMAGE, conImage);
+                eventValues.put(EventEntry.COLUMN_CON_ATTEND, Utility.EVENT_ATTEND_NO);
 
                 // Insert the new event row
                 long newRowIdEvent;
-                newRowIdEvent = db.insert(
+                newRowIdEvent = Utility.db.insert(
                         EventEntry.TABLE_NAME,
                         null,
                         eventValues);
@@ -133,7 +155,7 @@ public class ParseJSONtoDatabase {
 
                 // Insert the new venue row
                 long newRowIdVenue;
-                newRowIdVenue = db.insert(
+                newRowIdVenue = Utility.db.insert(
                         VenueEntry.TABLE_NAME,
                         null,
                         locationValues);
@@ -147,7 +169,7 @@ public class ParseJSONtoDatabase {
                     artistValues.put(ArtistEntry.COLUMN_ART_NAME, artList.get(key));
                     // Insert the new venue row
                     long newRowIdArtist;
-                    newRowIdArtist = db.insert(
+                    newRowIdArtist = Utility.db.insert(
                             ArtistEntry.TABLE_NAME,
                             null,
                             artistValues);

@@ -3,7 +3,8 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="8dp">
+    android:padding="8dp"
+    android:background="@color/blue_sky">
 
     <ImageView
         android:id="@+id/row_imageView"
@@ -17,9 +18,8 @@
         android:id="@+id/row_textView"
         android:layout_width="wrap_content"
         android:layout_height="45dp"
-        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textAppearance="?android:attr/textAppearanceMedium"
         android:gravity="center_vertical"
-        android:textStyle="bold"
-        android:textColor="@color/black" />
+        android:textColor="@color/black_cow"/>
 
 </LinearLayout>
