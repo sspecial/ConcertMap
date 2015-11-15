@@ -13,7 +13,7 @@
     <color name="blue_light">#51acf4</color>
     <color name="blue_grey">#98AFC7</color>
     <color name="blue">#ff1ca8f4</color>
-    <color name="blue_dark">#e83673cc</color>
-    <color name="blue_azure">#F0FFFF</color>
     <color name="blue_sky">#26cff7ff</color>
+    <color name="action_bar_color">#e83673cc</color>
+    <color name="action_bar_text_color">#dde0e6</color>
 </resources>

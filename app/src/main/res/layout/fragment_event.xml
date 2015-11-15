@@ -25,24 +25,33 @@
 
         <Button
             android:id="@+id/button_attend"
+            style="?android:attr/buttonStyleInset"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/black"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="ATTEND" />
+            android:text="Attend" />
 
         <Button
             android:id="@+id/button_maybe"
+            style="?android:attr/buttonStyleInset"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/black"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="ARTIST" />
+            android:text="Artist" />
 
         <Button
             android:id="@+id/button_ticket"
+            style="?android:attr/buttonStyleInset"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/black"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="TICKET" />
+            android:text="Ticket" />
     </LinearLayout>
 
     <LinearLayout

@@ -25,6 +25,7 @@
         </activity>
         <activity
             android:name=".navigate.NavigationActivity"
+            android:launchMode="singleTop"
             android:label="@string/title_activity_navigation" >
         </activity>
         <activity

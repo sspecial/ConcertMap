@@ -17,17 +17,14 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -43,6 +40,7 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
 
     private static final String LOG_TAG = InitiateFragment.class.getSimpleName();
     private static final String ENTER_CITY = "Location is not available, Enter the city.";
+    private static final String CITY_NAME_NOT_VALID = "Please enter a valid city name.";
     private static final String PROCESS_MESSAGE = "Finding your city...";
 
     private static final int LOCATION_AVAILABLE = 100;
@@ -50,9 +48,6 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
 
     private double geo_lat;
     private double geo_long;
-    private String city;
-    private String cityUserEntry;
-    private String lastKnownLocation;
 
     private View rootView;
     private LinearLayout locationFoundLayout;
@@ -74,6 +69,8 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
     private int connStat;
     // Location to be retrieved
     private Location mLastLocation;
+    // City & Country presented to the user
+    private String lastKnownLocation;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -123,11 +120,6 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), NavigationActivity.class);
-                if (city != null) {
-                    Utility.city = city;
-                } else {
-                    Utility.city = cityUserEntry;
-                }
                 getActivity().startActivity(intent);
                 // Finishing start activity
                 getActivity().finish();
@@ -140,6 +132,7 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         getLastKnownLocation(mLastLocation);
 
+        // When location is NOT available!
         if (connStat == LOCATION_NOT_AVAILABLE) {
 
             locationFoundLayout.setVisibility(View.INVISIBLE);
@@ -149,12 +142,27 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
             searchCityBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // Fetching data from Thrillcall API based on user entry
-                    cityUserEntry = userEntry.getText().toString();
-                    Double[] geoArr = getGeoInfoFromCity(cityUserEntry);
-                    new DataFetchService(getActivity(), rootView, geoArr, false).execute();
+
+                    // Obtaining lat & long for the user entry city
+                    Double[] geoArr = getGeoInfoFromCityName(userEntry.getText().toString());
+
+                    // To see if the user entry is a valid city name
+                    if (geoArr != null) {
+
+                        addressNotFoundLayout.setVisibility(View.INVISIBLE);
+                        locationFoundLayout.setVisibility(View.VISIBLE);
+                        progressIndicator.setVisibility(View.GONE);
+                        commentView.setVisibility(View.INVISIBLE);
+                        locationView.setText(lastKnownLocation);
+
+                        // Fetching data from Thrillcall API based on Geo information
+                        new DataFetchService(getActivity(), rootView, geoArr).execute();
+                    } else {
+                        commentView.setText(CITY_NAME_NOT_VALID);
+                    }
                 }
             });
+        // When location is available!
         } else if (connStat == LOCATION_AVAILABLE) {
 
             // Latitude & Longitude
@@ -168,30 +176,32 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
             locationView.setText(lastKnownLocation);
 
             // Fetching data from Thrillcall API based on Geo information
-            new DataFetchService(getActivity(), rootView, geoArr, true).execute();
+            new DataFetchService(getActivity(), rootView, geoArr).execute();
         }
     }
 
-    public Double[] getGeoInfoFromCity(String location){
-        Double[] geoArr = null;
-        if(Geocoder.isPresent()){
-            try {
-                Geocoder gc = new Geocoder(getActivity());
-                // get the found Address Objects
-                List<Address> addresses= gc.getFromLocationName(location, 5);
+    // Obtaining lat & long for the user entry city
+    public Double[] getGeoInfoFromCityName(String location){
 
-                for(Address a : addresses){
-                    if(a.hasLatitude() && a.hasLongitude()){
-                        geoArr = new Double[]{a.getLatitude(), a.getLongitude()};
-                    }
+        Double[] geoArr = null;
+        try {
+            Geocoder gc = new Geocoder(getActivity());
+            // get the found Address Objects
+            List<Address> addresses = gc.getFromLocationName(location, 1);
+            for (Address a : addresses) {
+                if (a.hasLatitude() && a.hasLongitude()) {
+                    geoArr = new Double[]{a.getLatitude(), a.getLongitude()};
+                    // to present the city name in the navigation activity
+                    Utility.city = a.getLocality();
+                    lastKnownLocation = String.format(
+                            "%s, %s",
+                            // Locality is usually a city
+                            a.getLocality(),
+                            // The country of the address
+                            a.getCountryName());
                 }
-            } catch (IOException e) {
-                geoArr = new Double[]{Utility.GEO_DEFAULT_LAT, Utility.GEO_DEFAULT_LONG};
-                // To-Do when user entry is not valid
-                Log.e(LOG_TAG, "Not a valid location!");
             }
-        }
-        else {
+        } catch (IOException e) {
             geoArr = new Double[]{Utility.GEO_DEFAULT_LAT, Utility.GEO_DEFAULT_LONG};
             Log.e(LOG_TAG, "Geo-Coder is not available. Default values are utilized!");
         }
@@ -232,33 +242,32 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
 
     public void getLastKnownLocation(Location loc) {
 
-        Geocoder gcd = new Geocoder(getContext(), Locale.getDefault());
         List<Address> addresses = null;
         try {
+            Geocoder gcd = new Geocoder(getContext(), Locale.getDefault());
             addresses = gcd.getFromLocation(loc.getLatitude(), loc.getLongitude(), 1);
+            if (addresses != null && addresses.size() > 0) {
+                Address address = addresses.get(0);
+
+                // to present the city name in the navigation activity
+                Utility.city = address.getLocality();
+
+                // Return the City + Country
+                lastKnownLocation = String.format(
+                        "%s, %s",
+                        // Locality is usually a city
+                        address.getLocality(),
+                        // The country of the address
+                        address.getCountryName());
+
+                connStat = LOCATION_AVAILABLE;
+
+            } else {
+                connStat = LOCATION_NOT_AVAILABLE;
+            }
+
         } catch (Exception e) {
-            Log.e(LOG_TAG, "Exception in getFromLocation()");
-            e.printStackTrace();
-            connStat = LOCATION_NOT_AVAILABLE;
-        }
-
-        if (addresses != null && addresses.size() > 0) {
-
-            Address address = addresses.get(0);
-
-            // to present in navigation activity
-            city = address.getLocality();
-
-            String addressText = String.format(
-                    "%s, %s",
-                    // Locality is usually a city
-                    address.getLocality(),
-                    // The country of the address
-                    address.getCountryName());
-            // Return the City + Country
-            lastKnownLocation = addressText;
-            connStat = LOCATION_AVAILABLE;
-        } else {
+            Log.e(LOG_TAG, e.getMessage());
             connStat = LOCATION_NOT_AVAILABLE;
         }
     }

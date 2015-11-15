@@ -6,15 +6,12 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.TextView;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import de.berlin.special.concertmap.R;
@@ -30,17 +27,11 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
     private final String Error_MSG = "Error obtaining data from remote server!";
     private Context mContext;
     private Button continueBtn;
-    private ImageButton searchCityBtn;
-    private TextView commentView;
     private URL url;
-    private boolean automaticGeo;
 
-    public DataFetchService(Context context, View view, Double[] geoParams, boolean automaticGeo){
+    public DataFetchService(Context context, View view, Double[] geoParams){
         mContext = context;
         continueBtn = (Button) view.findViewById(R.id.continue_button);
-        searchCityBtn = (ImageButton) view.findViewById(R.id.validate_city_button);
-        commentView = (TextView) view.findViewById(R.id.comment_view);
-        this.automaticGeo = automaticGeo;
         geoBasedURL(geoParams);
     }
 
@@ -153,8 +144,6 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
         parseJSONtoDatabase = new ParseJSONtoDatabase(mContext, concertJSONStr);
         parseJSONtoDatabase.parseData();
         //Displaying the 'CONTINUE' button after parsing data into database
-        searchCityBtn.setVisibility(View.INVISIBLE);
-        commentView.setVisibility(View.INVISIBLE);
         continueBtn.setVisibility(View.VISIBLE);
     }
 }

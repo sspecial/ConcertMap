@@ -47,7 +47,8 @@
         <EditText
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:id="@+id/enter_city_edit_text"/>
+            android:id="@+id/enter_city_edit_text"
+            android:theme="@android:style/Theme.Dialog"/>
 
         <ImageButton
             android:layout_width="wrap_content"
@@ -81,14 +82,15 @@
         android:visibility="invisible"/>
 
     <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
+        style="?android:attr/buttonStyleInset"
+        android:layout_width="110dp"
         android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
+        android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="@string/continue_key"
         android:textColor="@color/black"
         android:id="@+id/continue_button"
-        android:layout_alignParentBottom="true"
+        android:layout_marginTop="35dp"
+        android:layout_below="@+id/comment_view"
         android:layout_centerHorizontal="true"
         android:visibility="invisible"/>
 

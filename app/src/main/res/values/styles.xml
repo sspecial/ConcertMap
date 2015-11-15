@@ -1,20 +1,18 @@
 <resources>
-<!-- the theme applied to the application or activity -->
-    <style name="MyTheme"
-        parent="@style/Theme.AppCompat.Light.DarkActionBar">
+    <!-- the theme applied to the application or activity -->
+    <style name="MyTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
         <item name="actionBarStyle">@style/MyActionBar</item>
     </style>
 
     <!-- ActionBar styles -->
-    <style name="MyActionBar"
-        parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
-        <item name="background">@color/blue_dark</item>
-        <!-- <item name="titleTextStyle">@style/MyActionBarTitleText</item> -->
-</style>
+    <style name="MyActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="background">@color/action_bar_color</item>
+        <item name="titleTextStyle">@style/MyActionBarTitleText</item>
+    </style>
 
     <!-- ActionBar title text -->
-    <!-- <style name="MyActionBarTitleText"
+    <style name="MyActionBarTitleText"
         parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
-        <item name="android:textColor">@color/grey_700</item>
-    </style> -->
+        <item name="android:textColor">@color/action_bar_text_color</item>
+    </style>
 </resources>

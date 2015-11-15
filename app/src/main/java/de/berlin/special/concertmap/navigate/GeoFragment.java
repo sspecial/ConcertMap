@@ -23,8 +23,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import de.berlin.special.concertmap.R;
 import de.berlin.special.concertmap.Utility;
@@ -127,12 +125,12 @@ class TodayCursorAdapter extends CursorAdapter {
             if (dir.exists()) {
                 // Only download event images once per day
                 // To_Do considering change of city for downloading images using SharedPreferences
-                if (!dir.getName().equals(new SimpleDateFormat("yyyy-MM-dd").format(new Date()))) {
+                // if (!dir.getName().equals(new SimpleDateFormat("yyyy-MM-dd").format(new Date()))) {
                     for (File imFile : dir.listFiles()) {
                         imFile.delete();
                     }
                     dir.delete();
-                }
+                // }
             }
         }
         imageDir = new File(Utility.imageDirPath());
