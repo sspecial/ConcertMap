@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -27,11 +28,13 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
     private final String Error_MSG = "Error obtaining data from remote server!";
     private Context mContext;
     private Button continueBtn;
+    private ProgressBar dataProcessPI;
     private URL url;
 
     public DataFetchService(Context context, View view, Double[] geoParams){
         mContext = context;
         continueBtn = (Button) view.findViewById(R.id.continue_button);
+        dataProcessPI = (ProgressBar) view.findViewById(R.id.parse_data_progress);
         geoBasedURL(geoParams);
     }
 
@@ -144,6 +147,7 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
         parseJSONtoDatabase = new ParseJSONtoDatabase(mContext, concertJSONStr);
         parseJSONtoDatabase.parseData();
         //Displaying the 'CONTINUE' button after parsing data into database
+        dataProcessPI.setVisibility(View.GONE);
         continueBtn.setVisibility(View.VISIBLE);
     }
 }

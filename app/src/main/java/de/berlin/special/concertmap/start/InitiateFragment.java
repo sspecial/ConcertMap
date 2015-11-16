@@ -52,7 +52,8 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
     private View rootView;
     private LinearLayout locationFoundLayout;
     private LinearLayout addressNotFoundLayout;
-    private ProgressBar progressIndicator;
+    private ProgressBar addressPI;
+    private ProgressBar dataProcessPI;
     private TextView locationView;
     private TextView commentView;
     private EditText userEntry;
@@ -89,7 +90,8 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_start, container, false);
 
-        progressIndicator = (ProgressBar) rootView.findViewById(R.id.address_progress);
+        addressPI = (ProgressBar) rootView.findViewById(R.id.address_progress);
+        dataProcessPI = (ProgressBar) rootView.findViewById(R.id.parse_data_progress);
         locationFoundLayout = (LinearLayout) rootView.findViewById(R.id.locationFoundLayout);
         addressNotFoundLayout = (LinearLayout) rootView.findViewById(R.id.addressNotFoundLayout);
         locationView = (TextView) rootView.findViewById(R.id.location_view);
@@ -98,7 +100,7 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
         searchCityBtn = (ImageButton) rootView.findViewById(R.id.validate_city_button);
         continueBtn = (Button) rootView.findViewById(R.id.continue_button);
 
-        progressIndicator.setVisibility(View.VISIBLE);
+        addressPI.setVisibility(View.VISIBLE);
         locationView.setText(PROCESS_MESSAGE);
 
         return rootView;
@@ -151,11 +153,12 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
 
                         addressNotFoundLayout.setVisibility(View.INVISIBLE);
                         locationFoundLayout.setVisibility(View.VISIBLE);
-                        progressIndicator.setVisibility(View.GONE);
+                        addressPI.setVisibility(View.GONE);
                         commentView.setVisibility(View.INVISIBLE);
                         locationView.setText(lastKnownLocation);
 
                         // Fetching data from Thrillcall API based on Geo information
+                        dataProcessPI.setVisibility(View.VISIBLE);
                         new DataFetchService(getActivity(), rootView, geoArr).execute();
                     } else {
                         commentView.setText(CITY_NAME_NOT_VALID);
@@ -172,10 +175,11 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
 
             addressNotFoundLayout.setVisibility(View.INVISIBLE);
             locationFoundLayout.setVisibility(View.VISIBLE);
-            progressIndicator.setVisibility(View.GONE);
+            addressPI.setVisibility(View.GONE);
             locationView.setText(lastKnownLocation);
 
             // Fetching data from Thrillcall API based on Geo information
+            dataProcessPI.setVisibility(View.VISIBLE);
             new DataFetchService(getActivity(), rootView, geoArr).execute();
         }
     }
