@@ -131,6 +131,8 @@ public class EventActivityFragment extends Fragment {
                         EventEntry._ID + "=" + eventID,
                         null);
                 attendBtn.setText("Attended!");
+
+                /*
                 String eventQueryStr = "SELECT event._ID " +
                         "FROM event " +
                         "WHERE " +
@@ -142,7 +144,7 @@ public class EventActivityFragment extends Fragment {
                     msg += String.valueOf(cursor.getInt(Utility.COL_EVENT_ID))+"\n";
                 }
                 Toast.makeText(getActivity(),
-                        msg, Toast.LENGTH_LONG).show();
+                        msg, Toast.LENGTH_LONG).show();*/
             }
         });
     }

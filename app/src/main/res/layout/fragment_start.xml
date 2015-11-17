@@ -24,14 +24,6 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/black_cow"/>
 
-        <ProgressBar
-            android:id="@+id/address_progress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@android:style/Widget.Holo.Light.ProgressBar.Small.Inverse"
-            android:indeterminate="true"
-            android:layout_marginLeft="20dp"/>
-
     </LinearLayout>
 
     <LinearLayout
@@ -78,8 +70,7 @@
         android:layout_marginTop="5dp"
         android:layout_below="@+id/line"
         android:layout_alignRight="@+id/line"
-        android:layout_alignEnd="@+id/line"
-        android:visibility="invisible"/>
+        android:layout_alignEnd="@+id/line"/>
 
     <Button
         style="?android:attr/buttonStyleInset"
@@ -102,7 +93,6 @@
         android:indeterminate="true"
         android:layout_marginTop="30dp"
         android:layout_below="@+id/comment_view"
-        android:layout_centerHorizontal="true"
-        android:visibility="invisible" />
+        android:layout_centerHorizontal="true"/>
 
 </RelativeLayout>

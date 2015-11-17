@@ -41,7 +41,6 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
     private static final String LOG_TAG = InitiateFragment.class.getSimpleName();
     private static final String ENTER_CITY = "Location is not available, Enter the city.";
     private static final String CITY_NAME_NOT_VALID = "Please enter a valid city name.";
-    private static final String PROCESS_MESSAGE = "Finding your city...";
 
     private static final int LOCATION_AVAILABLE = 100;
     private static final int LOCATION_NOT_AVAILABLE = 101;
@@ -52,7 +51,6 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
     private View rootView;
     private LinearLayout locationFoundLayout;
     private LinearLayout addressNotFoundLayout;
-    private ProgressBar addressPI;
     private ProgressBar dataProcessPI;
     private TextView locationView;
     private TextView commentView;
@@ -90,7 +88,6 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_start, container, false);
 
-        addressPI = (ProgressBar) rootView.findViewById(R.id.address_progress);
         dataProcessPI = (ProgressBar) rootView.findViewById(R.id.parse_data_progress);
         locationFoundLayout = (LinearLayout) rootView.findViewById(R.id.locationFoundLayout);
         addressNotFoundLayout = (LinearLayout) rootView.findViewById(R.id.addressNotFoundLayout);
@@ -99,9 +96,6 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
         userEntry = (EditText) rootView.findViewById(R.id.enter_city_edit_text);
         searchCityBtn = (ImageButton) rootView.findViewById(R.id.validate_city_button);
         continueBtn = (Button) rootView.findViewById(R.id.continue_button);
-
-        addressPI.setVisibility(View.VISIBLE);
-        locationView.setText(PROCESS_MESSAGE);
 
         return rootView;
     }
@@ -138,8 +132,8 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
         if (connStat == LOCATION_NOT_AVAILABLE) {
 
             locationFoundLayout.setVisibility(View.INVISIBLE);
+            dataProcessPI.setVisibility(View.INVISIBLE);
             addressNotFoundLayout.setVisibility(View.VISIBLE);
-            commentView.setVisibility(View.VISIBLE);
             commentView.setText(ENTER_CITY);
             searchCityBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -152,13 +146,12 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
                     if (geoArr != null) {
 
                         addressNotFoundLayout.setVisibility(View.INVISIBLE);
-                        locationFoundLayout.setVisibility(View.VISIBLE);
-                        addressPI.setVisibility(View.GONE);
                         commentView.setVisibility(View.INVISIBLE);
+                        locationFoundLayout.setVisibility(View.VISIBLE);
+                        dataProcessPI.setVisibility(View.VISIBLE);
                         locationView.setText(lastKnownLocation);
 
                         // Fetching data from Thrillcall API based on Geo information
-                        dataProcessPI.setVisibility(View.VISIBLE);
                         new DataFetchService(getActivity(), rootView, geoArr).execute();
                     } else {
                         commentView.setText(CITY_NAME_NOT_VALID);
@@ -174,12 +167,11 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
             Double[] geoArr = new Double[]{geo_lat, geo_long};
 
             addressNotFoundLayout.setVisibility(View.INVISIBLE);
+            commentView.setVisibility(View.INVISIBLE);
             locationFoundLayout.setVisibility(View.VISIBLE);
-            addressPI.setVisibility(View.GONE);
             locationView.setText(lastKnownLocation);
 
             // Fetching data from Thrillcall API based on Geo information
-            dataProcessPI.setVisibility(View.VISIBLE);
             new DataFetchService(getActivity(), rootView, geoArr).execute();
         }
     }

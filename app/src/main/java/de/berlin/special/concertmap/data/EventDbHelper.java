@@ -28,7 +28,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
 
                 EventEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 // the ID of the location entry associated with this event
-                EventEntry.COLUMN_CON_THRILL_ID + " TEXT NOT NULL UNIQUE, " +
+                EventEntry.COLUMN_CON_THRILL_ID + " INTEGER NOT NULL UNIQUE, " +
                 EventEntry.COLUMN_CON_NAME + " TEXT NOT NULL, " +
                 EventEntry.COLUMN_CON_START_AT + " TEXT, " +
                 EventEntry.COLUMN_CON_IMAGE + " TEXT, " +
@@ -38,7 +38,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
         final String SQL_CREATE_VENUE_TABLE = "CREATE TABLE " + VenueEntry.TABLE_NAME + " (" +
                 VenueEntry._ID + " INTEGER PRIMARY KEY," +
                 VenueEntry.COLUMN_VEN_CON_ID + " INTEGER NOT NULL, " +
-                VenueEntry.COLUMN_VEN_THRILL_ID + " TEXT NOT NULL UNIQUE, " +
+                VenueEntry.COLUMN_VEN_THRILL_ID + " INTEGER NOT NULL UNIQUE, " +
                 VenueEntry.COLUMN_VEN_NAME + " TEXT NOT NULL, " +
                 VenueEntry.COLUMN_VEN_STREET + " TEXT, " +
                 VenueEntry.COLUMN_VEN_CITY + " TEXT, " +
@@ -53,7 +53,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
         final String SQL_CREATE_ARTISTS_TABLE = "CREATE TABLE " + ArtistEntry.TABLE_NAME + " (" +
                 ArtistEntry._ID + " INTEGER PRIMARY KEY," +
                 ArtistEntry.COLUMN_ART_CON_ID + " INTEGER NOT NULL, " +
-                ArtistEntry.COLUMN_ART_THRILL_ID + " TEXT NOT NULL UNIQUE, " +
+                ArtistEntry.COLUMN_ART_THRILL_ID + " INTEGER NOT NULL UNIQUE, " +
                 ArtistEntry.COLUMN_ART_NAME + " TEXT NOT NULL, " +
                 " FOREIGN KEY (" + ArtistEntry.COLUMN_ART_CON_ID + ") REFERENCES " +
                 EventEntry.TABLE_NAME + " (" + EventEntry._ID + ") " +

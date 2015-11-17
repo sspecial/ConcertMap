@@ -16,24 +16,25 @@ public class Utility {
     public static final String EVENT_LIMIT = "20";
     public static final String THRILLCALL_API_KEY = "d90d066add515bff";
 
-    // To decide if the event image folder should be kept ot not!
-    public static final String FRAG_GEO_TYPE = "type";
-    public static final String FRAG_GEO_ADD = "add";
-    public static final String FRAG_GEO_REPLACE = "replace";
+    // To decide if we want a list of geo or attended events
+    public static final String FRAG_EL_TYPE = "type";
+    public static final String FRAG_EL_GEO = "geo";
+    public static final String FRAG_EL_ATTENDED = "attended";
 
     public static SQLiteDatabase db;
 
     // These indices are tied to CURSOR_COLUMNS
     public static final int COL_EVENT_ID = 0;
-    public static final int COL_EVENT_NAME = 1;
-    public static final int COL_EVENT_START_AT = 2;
-    public static final int COL_EVENT_IMAGE = 3;
-    public static final int COL_EVENT_ATTEND = 4;
-    public static final int COL_VENUE_NAME = 5;
-    public static final int COL_VENUE_STREET = 6;
-    public static final int COL_VENUE_CITY = 7;
-    public static final int COL_VENUE_GEO_LAT = 8;
-    public static final int COL_VENUE_GEO_LONG = 9;
+    public static final int COL_EVENT_THRILL_ID = 1;
+    public static final int COL_EVENT_NAME = 2;
+    public static final int COL_EVENT_START_AT = 3;
+    public static final int COL_EVENT_IMAGE = 4;
+    public static final int COL_EVENT_ATTEND = 5;
+    public static final int COL_VENUE_NAME = 6;
+    public static final int COL_VENUE_STREET = 7;
+    public static final int COL_VENUE_CITY = 8;
+    public static final int COL_VENUE_GEO_LAT = 9;
+    public static final int COL_VENUE_GEO_LONG = 10;
 
     public static final int EVENT_ATTEND_YES = 1;
     public static final int EVENT_ATTEND_NO = 0;

@@ -87,14 +87,14 @@ public class ParseJSONtoDatabase {
 
             for(int i = 0; i < eventArray.length(); i++) {
 
-                String conThrillID;
+                int conThrillID;
                 String conName;
                 String conStartAt;
                 String conImage;
 
-                Hashtable<String, String> artList = new Hashtable<String, String>();
+                Hashtable<Integer, String> artList = new Hashtable<Integer, String>();
 
-                String venThrillID;
+                int venThrillID;
                 String venName;
                 String venStreet;
                 String venCity;
@@ -105,7 +105,7 @@ public class ParseJSONtoDatabase {
                 // Get the JSON object representing the event
                 JSONObject event = eventArray.getJSONObject(i);
 
-                conThrillID = event.getString(CON_Thrill_ID);
+                conThrillID = event.getInt(CON_Thrill_ID);
                 conName = event.getString(CON_NAME);
                 conStartAt = event.getString(CON_START_AT);
                 JSONObject photosJSONObject = event.getJSONObject(CON_IMAGE_JSON_KEY);
@@ -114,11 +114,11 @@ public class ParseJSONtoDatabase {
                 JSONArray artistsJSONArray = event.getJSONArray(ART_JSON_KEY);
                 for (int j = 0; j < artistsJSONArray.length(); j++) {
                     JSONObject artistObject = artistsJSONArray.getJSONObject(j);
-                    artList.put(artistObject.getString(ART_Thrill_ID), artistObject.getString(ART_NAME));
+                    artList.put(artistObject.getInt(ART_Thrill_ID), artistObject.getString(ART_NAME));
                 }
 
                 JSONObject venueJSON = event.getJSONObject(VEN_JSON_KEY);
-                venThrillID = venueJSON.getString(VEN_Thrill_ID);
+                venThrillID = venueJSON.getInt(VEN_Thrill_ID);
                 venName = venueJSON.getString(VEN_NAME);
                 venStreet = venueJSON.getString(VEN_STREET);
                 venCity = venueJSON.getString(VEN_CITY);
@@ -161,7 +161,7 @@ public class ParseJSONtoDatabase {
                         locationValues);
                 Log.d(LOG_TAG, "Location id"+String.valueOf(newRowIdVenue));
 
-                for (String key : artList.keySet()) {
+                for (int key : artList.keySet()) {
                     ContentValues artistValues = new ContentValues();
                     // Create a new map of values for artist, where column names are the keys
                     artistValues.put(ArtistEntry.COLUMN_ART_CON_ID, newRowIdEvent);

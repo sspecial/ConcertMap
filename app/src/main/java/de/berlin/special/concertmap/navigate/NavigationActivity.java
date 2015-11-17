@@ -46,11 +46,10 @@ public class NavigationActivity extends AppCompatActivity {
 
     FragmentManager manager;
 
-    Fragment geoFragment;
+    Fragment eventListFragment;
     Bundle args = new Bundle();
 
     Fragment artistListFragment = new ArtistListFragment();
-    Fragment eventListFragment = new EventListFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,11 +63,11 @@ public class NavigationActivity extends AppCompatActivity {
         // Initiating GeoFragment as default view of activity
         manager = getSupportFragmentManager();
         if (savedInstanceState == null) {
-            geoFragment = new GeoFragment();
+            eventListFragment = new EventListFragment();
             args.clear();
-            args.putString(Utility.FRAG_GEO_TYPE, Utility.FRAG_GEO_ADD);
-            geoFragment.setArguments(args);
-            manager.beginTransaction().add(R.id.content_frame, geoFragment).commit();
+            args.putString(Utility.FRAG_EL_TYPE, Utility.FRAG_EL_GEO);
+            eventListFragment.setArguments(args);
+            manager.beginTransaction().add(R.id.content_frame, eventListFragment).commit();
         }
 
         actionBar = getSupportActionBar();
@@ -104,12 +103,12 @@ public class NavigationActivity extends AppCompatActivity {
         switch (position) {
 
             case NAV_CASE_CITY:
-                geoFragment = new GeoFragment();
+                eventListFragment = new EventListFragment();
                 args.clear();
-                args.putString(Utility.FRAG_GEO_TYPE, Utility.FRAG_GEO_REPLACE);
-                geoFragment.setArguments(args);
+                args.putString(Utility.FRAG_EL_TYPE, Utility.FRAG_EL_GEO);
+                eventListFragment.setArguments(args);
                 manager.beginTransaction()
-                        .replace(R.id.content_frame, geoFragment)
+                        .replace(R.id.content_frame, eventListFragment)
                         .commit();
                 break;
 
@@ -120,10 +119,13 @@ public class NavigationActivity extends AppCompatActivity {
                 break;
 
             case NAV_CASE_ATTENDED_EVENTS:
+                eventListFragment = new EventListFragment();
+                args.clear();
+                args.putString(Utility.FRAG_EL_TYPE, Utility.FRAG_EL_ATTENDED);
+                eventListFragment.setArguments(args);
                 manager.beginTransaction()
                         .replace(R.id.content_frame, eventListFragment)
                         .commit();
-
                 break;
 
             default:
