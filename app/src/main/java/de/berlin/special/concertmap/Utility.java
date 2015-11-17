@@ -28,11 +28,12 @@ public class Utility {
     public static final int COL_EVENT_NAME = 1;
     public static final int COL_EVENT_START_AT = 2;
     public static final int COL_EVENT_IMAGE = 3;
-    public static final int COL_VENUE_NAME = 4;
-    public static final int COL_VENUE_STREET = 5;
-    public static final int COL_VENUE_CITY = 6;
-    public static final int COL_VENUE_GEO_LAT = 7;
-    public static final int COL_VENUE_GEO_LONG = 8;
+    public static final int COL_EVENT_ATTEND = 4;
+    public static final int COL_VENUE_NAME = 5;
+    public static final int COL_VENUE_STREET = 6;
+    public static final int COL_VENUE_CITY = 7;
+    public static final int COL_VENUE_GEO_LAT = 8;
+    public static final int COL_VENUE_GEO_LONG = 9;
 
     public static final int EVENT_ATTEND_YES = 1;
     public static final int EVENT_ATTEND_NO = 0;

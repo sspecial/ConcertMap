@@ -32,6 +32,8 @@ public class EventActivity extends AppCompatActivity {
                 , intent.getStringExtra(String.valueOf(Utility.COL_EVENT_START_AT)));
         args.putString(String.valueOf(Utility.COL_EVENT_IMAGE)
                 , intent.getStringExtra(String.valueOf(Utility.COL_EVENT_IMAGE)));
+        args.putInt(String.valueOf(Utility.COL_EVENT_ATTEND)
+                , intent.getIntExtra(String.valueOf(Utility.COL_EVENT_ATTEND), Utility.EVENT_ATTEND_NO));
         args.putString(String.valueOf(Utility.COL_VENUE_NAME)
                 , intent.getStringExtra(String.valueOf(Utility.COL_VENUE_NAME)));
         args.putString(String.valueOf(Utility.COL_VENUE_STREET)

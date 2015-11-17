@@ -51,7 +51,7 @@ public class GeoFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_geo, container, false);
 
         String eventQueryStr = "SELECT event._ID, " +
-                "event.event_name, event.event_start_at, event.event_image, " +
+                "event.event_name, event.event_start_at, event.event_image, event.event_attended, " +
                 "venue.venue_name, venue.venue_street, venue.venue_city, " +
                 "venue.venue_geo_lat, venue.venue_geo_long " +
                 "FROM event " +
@@ -78,6 +78,7 @@ public class GeoFragment extends Fragment {
                     String artistsName = Utility.retrieveArtistName(eventCursor.getString(Utility.COL_EVENT_NAME));
                     String startAt = eventCursor.getString(Utility.COL_EVENT_START_AT);
                     String imagePath = Utility.imageDirPath() +"/"+ String.valueOf(position);
+                    int attended = eventCursor.getInt(Utility.COL_EVENT_ATTEND);
                     String venueName = eventCursor.getString(Utility.COL_VENUE_NAME);
                     String venueStreet = eventCursor.getString(Utility.COL_VENUE_STREET);
                     String venueCity = eventCursor.getString(Utility.COL_VENUE_CITY);
@@ -89,6 +90,7 @@ public class GeoFragment extends Fragment {
                     intent.putExtra(String.valueOf(Utility.COL_EVENT_NAME), artistsName);
                     intent.putExtra(String.valueOf(Utility.COL_EVENT_START_AT), startAt);
                     intent.putExtra(String.valueOf(Utility.COL_EVENT_IMAGE), imagePath);
+                    intent.putExtra(String.valueOf(Utility.COL_EVENT_ATTEND), attended);
                     intent.putExtra(String.valueOf(Utility.COL_VENUE_NAME), venueName);
                     intent.putExtra(String.valueOf(Utility.COL_VENUE_STREET), venueStreet);
                     intent.putExtra(String.valueOf(Utility.COL_VENUE_CITY), venueCity);

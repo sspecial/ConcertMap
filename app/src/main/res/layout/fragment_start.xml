@@ -98,7 +98,7 @@
         android:id="@+id/parse_data_progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@android:style/Widget.Holo.Light.ProgressBar.Large.Inverse"
+        style="@android:style/Widget.Holo.Light.ProgressBar.Inverse"
         android:indeterminate="true"
         android:layout_marginTop="30dp"
         android:layout_below="@+id/comment_view"

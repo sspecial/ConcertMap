@@ -37,6 +37,7 @@ public class EventActivityFragment extends Fragment {
 
     private int eventID;
     private String imagePath;
+    private int attended;
     private String eventStartAt;
     private String venueName;
     private String venueAddress;
@@ -54,8 +55,9 @@ public class EventActivityFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         eventID = getArguments().getInt(String.valueOf(Utility.COL_EVENT_ID), -1);
-        imagePath = getArguments().getString(String.valueOf(Utility.COL_EVENT_IMAGE), Utility.imageDirPath());
         eventStartAt = getArguments().getString(String.valueOf(Utility.COL_EVENT_START_AT), "START_AT");
+        imagePath = getArguments().getString(String.valueOf(Utility.COL_EVENT_IMAGE), Utility.imageDirPath());
+        attended = getArguments().getInt(String.valueOf(Utility.COL_EVENT_ATTEND), Utility.EVENT_ATTEND_NO);
         venueName = getArguments().getString(String.valueOf(Utility.COL_VENUE_NAME), "VENUE_NAME");
         venueAddress = getArguments().getString(String.valueOf(Utility.COL_VENUE_STREET), "VENUE_STREET")
                 + " , " + getArguments().getString(String.valueOf(Utility.COL_VENUE_CITY), "VENUE_CITY");
@@ -73,7 +75,13 @@ public class EventActivityFragment extends Fragment {
         TextView startAtView = (TextView) rootView.findViewById(R.id.textview_event_artist_name);
         TextView venueNameView = (TextView) rootView.findViewById(R.id.textview_event_venue_name);
         TextView venueAddressView = (TextView) rootView.findViewById(R.id.textview_event_venue_street);
+
         attendBtn = (Button) rootView.findViewById(R.id.button_attend);
+        if(attended == Utility.EVENT_ATTEND_NO){
+            attendBtn.setText("Attend");
+        } else{
+            attendBtn.setText("Attended!");
+        }
 
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         map = mapFragment.getMap();
@@ -122,14 +130,14 @@ public class EventActivityFragment extends Fragment {
                         args,
                         EventEntry._ID + "=" + eventID,
                         null);
-
+                attendBtn.setText("Attended!");
                 String eventQueryStr = "SELECT event._ID " +
                         "FROM event " +
                         "WHERE " +
                         EventEntry.COLUMN_CON_ATTEND + " = " + Utility.EVENT_ATTEND_YES + ";";
 
                 Cursor cursor = Utility.db.rawQuery(eventQueryStr, null);
-                String msg = null;
+                String msg = "";
                 while (cursor.moveToNext()) {
                     msg += String.valueOf(cursor.getInt(Utility.COL_EVENT_ID))+"\n";
                 }
