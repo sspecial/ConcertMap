@@ -3,9 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="@dimen/fragment_margin"
-    tools:context="de.berlin.special.concertmap.event.EventActivityFragment"
-    android:background="@color/blue_sky">
+    android:padding="4dp"
+    tools:context="de.berlin.special.concertmap.event.EventActivityFragment">
 
     <LinearLayout
         android:id="@+id/image_linear_layout"
@@ -22,7 +21,9 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp">
 
         <Button
             android:id="@+id/button_attend"
@@ -58,7 +59,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginBottom="4dp">
+        android:paddingTop="4dp"
+        android:paddingBottom="10dp"
+        android:background="@color/blue_sky">
 
         <TextView
             android:id="@+id/textview_event_artist_name"

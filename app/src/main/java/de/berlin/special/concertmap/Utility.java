@@ -58,7 +58,7 @@ public class Utility {
         if (str.length() > 18) {
             int spaceIndex = str.indexOf(" ", 10);
             if (spaceIndex != -1)
-                str = str.substring(0, spaceIndex) + "..";
+                str = str.substring(0, spaceIndex) + " ..";
             else
                 str = str.substring(0, 18) + "..";
             return str;
@@ -71,7 +71,7 @@ public class Utility {
         if (str.length() > 28) {
             int spaceIndex = str.indexOf(" ", 20);
             if (spaceIndex != -1) {
-                str = str.substring(0, spaceIndex) + "..";
+                str = str.substring(0, spaceIndex) + " ..";
             } else {
                 str = str.substring(0, 28) + "..";
             }

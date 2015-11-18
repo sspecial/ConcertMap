@@ -32,7 +32,7 @@ import de.berlin.special.concertmap.event.EventActivity;
 public class EventListFragment extends Fragment {
 
     private View rootView;
-    private String argType;
+    public static String argType;
 
     public EventListFragment() {
         // Required empty public constructor
@@ -154,6 +154,15 @@ class EventCursorAdapter extends CursorAdapter {
         addressView = (TextView) view.findViewById(R.id.list_item_address_textview);
         dateView = (TextView) view.findViewById(R.id.list_item_date_textview);
 
+        // Setting the background and text color based on fragment type
+        if(EventListFragment.argType.equals(Utility.FRAG_EL_GEO)) {
+            view.setBackgroundColor(context.getResources().getColor(R.color.blue_sky));
+            nameView.setTextColor(context.getResources().getColor(R.color.blue));
+        } else {
+            view.setBackgroundColor(context.getResources().getColor(R.color.orange_sky));
+            nameView.setTextColor(context.getResources().getColor(R.color.orange));
+        }
+
         // Event image
         String imageName = String.valueOf(cursor.getInt(Utility.COL_EVENT_THRILL_ID));
         // Let's see if it is necessary to download the image file
@@ -178,7 +187,7 @@ class EventCursorAdapter extends CursorAdapter {
 
         // Venue Name & City
         String venueNameCity = cursor.getString(Utility.COL_VENUE_NAME)
-                + " , "
+                + ", "
                 + cursor.getString(Utility.COL_VENUE_CITY);
         addressView.setText(Utility.venueNamePartition(venueNameCity));
 
