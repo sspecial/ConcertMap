@@ -35,10 +35,56 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
         mContext = context;
         continueBtn = (Button) view.findViewById(R.id.continue_button);
         dataProcessPI = (ProgressBar) view.findViewById(R.id.parse_data_progress);
-        geoBasedURL(geoParams);
+        buildGeoEventsURL(geoParams);
     }
 
-    public void geoBasedURL(Double[] params) {
+    public DataFetchService(Context context, View view, int urlType, int artistID){
+        mContext = context;
+        continueBtn = (Button) view.findViewById(R.id.continue_button);
+        dataProcessPI = (ProgressBar) view.findViewById(R.id.parse_data_progress);
+        if(urlType == Utility.URL_ARTIST_EVENTS)
+            buildArtistEventsURL(artistID);
+        else if(urlType == Utility.URL_ARTIST_INFO)
+            buildArtistInfoURL(artistID);
+    }
+    // build artist info URL
+    public void buildArtistInfoURL(int artistID) {
+        try {
+            // Construct the URL for the api.thrillcall query
+            final String artistURL = Utility.THRILLCALL_ARTIST_BASE_URL + String.valueOf(artistID);
+            final String KEY_PARAM = "api_key";
+
+            Uri builtUri = Uri.parse(artistURL).buildUpon()
+                    .appendQueryParameter(KEY_PARAM, Utility.THRILLCALL_API_KEY)
+                    .build();
+
+            url = new URL(builtUri.toString());
+            Log.d(LOG_TAG+"------::::", url.toString());
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "Error constructing URL with Geo information: ", e);
+        }
+    }
+    // build artist events URL
+    public void buildArtistEventsURL(int artistID) {
+        try {
+
+            // Construct the URL for the api.thrillcall query
+            final String artistURL = Utility.THRILLCALL_ARTIST_BASE_URL + String.valueOf(artistID);
+            final String artistEventsURL = artistURL + "/events";
+            final String KEY_PARAM = "api_key";
+
+            Uri builtUri = Uri.parse(artistEventsURL).buildUpon()
+                    .appendQueryParameter(KEY_PARAM, Utility.THRILLCALL_API_KEY)
+                    .build();
+
+            URL url = new URL(builtUri.toString());
+            Log.d(LOG_TAG+"------::::", url.toString());
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "Error constructing URL with Geo information: ", e);
+        }
+    }
+    // build geo events URL
+    public void buildGeoEventsURL(Double[] params) {
 
         try {
             double geoLat;
@@ -54,14 +100,12 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
                 geoLong = Utility.GEO_DEFAULT_LONG;
 
             // Construct the URL for the api.thrillcall query
-            final String FORECAST_BASE_URL =
-                    "https://api.thrillcall.com/api/v3/events?";
             final String LAT_PARAM = "lat";
             final String LONG_PARAM = "long";
             final String LIMIT_PARAM = "limit";
             final String KEY_PARAM = "api_key";
 
-            Uri builtUri = Uri.parse(FORECAST_BASE_URL).buildUpon()
+            Uri builtUri = Uri.parse(Utility.THRILLCALL_GEO_BASE_URL).buildUpon()
                     .appendQueryParameter(LAT_PARAM, String.valueOf(geoLat))
                     .appendQueryParameter(LONG_PARAM, String.valueOf(geoLong))
                     .appendQueryParameter(LIMIT_PARAM, Utility.EVENT_LIMIT)

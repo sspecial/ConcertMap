@@ -55,7 +55,9 @@ public class ParseJSONtoDatabase {
                 + " WHERE " + VenueEntry.COLUMN_VEN_CON_ID + " NOT IN "
                 + "( SELECT " + EventEntry._ID + " FROM " + EventEntry.TABLE_NAME + " );");
 
-        db.execSQL("DELETE FROM " + ArtistEntry.TABLE_NAME + ";");
+        db.execSQL("DELETE FROM " + ArtistEntry.TABLE_NAME
+                + " WHERE " + ArtistEntry.COLUMN_ART_CON_ID + " NOT IN "
+                + "( SELECT " + EventEntry._ID + " FROM " + EventEntry.TABLE_NAME + " );");
     }
 
     public void parseData() {

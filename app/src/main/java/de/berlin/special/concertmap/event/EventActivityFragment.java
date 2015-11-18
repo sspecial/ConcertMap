@@ -2,6 +2,7 @@ package de.berlin.special.concertmap.event;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,6 +48,7 @@ public class EventActivityFragment extends Fragment {
     private GoogleMap map;
 
     private Button attendBtn;
+    private Button artistBtn;
 
     public EventActivityFragment() {
     }
@@ -70,7 +73,7 @@ public class EventActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_event, container, false);
-
+        LinearLayout eventInfo = (LinearLayout) rootView.findViewById(R.id.linear_event_info);
         ImageView imageView = (ImageView) rootView.findViewById(R.id.event_mobile_image);
         TextView startAtView = (TextView) rootView.findViewById(R.id.textview_event_artist_name);
         TextView venueNameView = (TextView) rootView.findViewById(R.id.textview_event_venue_name);
@@ -79,9 +82,12 @@ public class EventActivityFragment extends Fragment {
         attendBtn = (Button) rootView.findViewById(R.id.button_attend);
         if(attended == Utility.EVENT_ATTEND_NO){
             attendBtn.setText("Attend");
+            eventInfo.setBackgroundColor(getResources().getColor(R.color.blue_sky));
         } else{
             attendBtn.setText("Attended!");
+            eventInfo.setBackgroundColor(getResources().getColor(R.color.orange_sky));
         }
+        artistBtn = (Button) rootView.findViewById(R.id.button_artist);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         map = mapFragment.getMap();
@@ -145,6 +151,18 @@ public class EventActivityFragment extends Fragment {
                 }
                 Toast.makeText(getActivity(),
                         msg, Toast.LENGTH_LONG).show();*/
+            }
+        });
+
+        artistBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String eventQueryStr = "SELECT artists.artist_name, artists.artist_thrill_ID " +
+                        "FROM artists " +
+                        "WHERE artists.event_ID = " + String.valueOf(eventID) + ";";
+
+                Cursor artistsCursor = Utility.db.rawQuery(eventQueryStr, null);
+                Log.v("Artist Cursor", DatabaseUtils.dumpCursorToString(artistsCursor));
             }
         });
     }

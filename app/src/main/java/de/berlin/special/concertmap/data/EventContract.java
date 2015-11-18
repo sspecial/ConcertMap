@@ -7,6 +7,7 @@ import android.provider.BaseColumns;
  */
 public class EventContract {
 
+    /* Inner class that defines the table contents of the event table */
     public static final class EventEntry implements BaseColumns {
 
         public static final String TABLE_NAME = "event";
@@ -19,13 +20,28 @@ public class EventContract {
 
     }
 
+    /* Inner class that defines the table contents of the artist table */
     public static final class ArtistEntry implements BaseColumns {
 
+        // Table name
         public static final String TABLE_NAME = "artists";
         // Information of artists:
         public static final String COLUMN_ART_CON_ID = "event_ID";
         public static final String COLUMN_ART_THRILL_ID = "artist_thrill_ID";
         public static final String COLUMN_ART_NAME = "artist_name";
+    }
+
+    /* Inner class that defines the table contents of the favorite artist table */
+    public static final class FavArtistEntry implements BaseColumns {
+
+        // Table name
+        public static final String TABLE_NAME = "artist";
+        // Information of artists:
+        public static final String COL_FAV_ART_THRILL_ID = "artist_thrill_ID";
+        public static final String COL_FAV_ART_NAME = "artist_name";
+        public static final String COL_FAV_ART_OFFICIAL_URL = "artist_official_url";
+        public static final String COL_FAV_ART_IMAGE_LARGE = "artist_image_large";
+        public static final String COL_FAV_ART_IMAGE_MOBILE = "artist_image_mobile";
     }
 
     /* Inner class that defines the table contents of the location table */

@@ -3,7 +3,7 @@ package de.berlin.special.concertmap.data;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
+import de.berlin.special.concertmap.data.EventContract.FavArtistEntry;
 import de.berlin.special.concertmap.data.EventContract.ArtistEntry;
 import de.berlin.special.concertmap.data.EventContract.EventEntry;
 import de.berlin.special.concertmap.data.EventContract.VenueEntry;
@@ -31,7 +31,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
                 EventEntry.COLUMN_CON_THRILL_ID + " INTEGER NOT NULL UNIQUE, " +
                 EventEntry.COLUMN_CON_NAME + " TEXT NOT NULL, " +
                 EventEntry.COLUMN_CON_START_AT + " TEXT, " +
-                EventEntry.COLUMN_CON_IMAGE + " TEXT, " +
+                EventEntry.COLUMN_CON_IMAGE + " TEXT NOT NULL, " +
                 EventEntry.COLUMN_CON_ATTEND + " INTEGER NOT NULL " + ");";
 
         // Create a table to hold locations.
@@ -59,9 +59,19 @@ public class EventDbHelper extends SQLiteOpenHelper {
                 EventEntry.TABLE_NAME + " (" + EventEntry._ID + ") " +
                 ");";
 
+        // Create a table to hold artists.
+        final String SQL_CREATE_FAV_ARTIST_TABLE = "CREATE TABLE " + FavArtistEntry.TABLE_NAME + " (" +
+                FavArtistEntry._ID + " INTEGER PRIMARY KEY," +
+                FavArtistEntry.COL_FAV_ART_THRILL_ID + " INTEGER NOT NULL UNIQUE, " +
+                FavArtistEntry.COL_FAV_ART_NAME + " TEXT NOT NULL, " +
+                FavArtistEntry.COL_FAV_ART_OFFICIAL_URL + " TEXT , " +
+                FavArtistEntry.COL_FAV_ART_IMAGE_LARGE + " TEXT NOT NULL, " +
+                FavArtistEntry.COL_FAV_ART_IMAGE_MOBILE + " TEXT NOT NULL " + ");";
+
         db.execSQL(SQL_CREATE_EVENT_TABLE);
         db.execSQL(SQL_CREATE_VENUE_TABLE);
         db.execSQL(SQL_CREATE_ARTISTS_TABLE);
+        db.execSQL(SQL_CREATE_FAV_ARTIST_TABLE);
     }
 
     @Override

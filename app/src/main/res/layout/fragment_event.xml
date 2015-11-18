@@ -35,14 +35,14 @@
             android:layout_weight="1"/>
 
         <Button
-            android:id="@+id/button_maybe"
+            android:id="@+id/button_artist"
             style="?android:attr/buttonStyleInset"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/black"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Artist" />
+            android:text="Artist(s)" />
 
         <Button
             android:id="@+id/button_ticket"
@@ -56,11 +56,13 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/linear_event_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingTop="4dp"
         android:paddingBottom="10dp"
+        android:layout_marginBottom="4dp"
         android:background="@color/blue_sky">
 
         <TextView
