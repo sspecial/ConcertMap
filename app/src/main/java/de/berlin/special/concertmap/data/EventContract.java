@@ -42,6 +42,7 @@ public class EventContract {
         public static final String COL_FAV_ART_OFFICIAL_URL = "artist_official_url";
         public static final String COL_FAV_ART_IMAGE_LARGE = "artist_image_large";
         public static final String COL_FAV_ART_IMAGE_MOBILE = "artist_image_mobile";
+        public static final String COL_FAV_ART_TRACKED = "artist_tracked";
     }
 
     /* Inner class that defines the table contents of the location table */

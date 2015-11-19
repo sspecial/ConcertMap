@@ -30,21 +30,24 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
     private Button continueBtn;
     private ProgressBar dataProcessPI;
     private URL url;
+    // Deciding to fetch geo-events data, artist-events data, or artist-info data
+    private int dataFetchType;
 
-    public DataFetchService(Context context, View view, Double[] geoParams){
+    public DataFetchService(Context context, View view, Double[] geoParams, int fetchType){
         mContext = context;
         continueBtn = (Button) view.findViewById(R.id.continue_button);
         dataProcessPI = (ProgressBar) view.findViewById(R.id.parse_data_progress);
         buildGeoEventsURL(geoParams);
+        dataFetchType = fetchType;
     }
 
-    public DataFetchService(Context context, View view, int urlType, int artistID){
+    public DataFetchService(Context context, int artistID, int fetchType){
         mContext = context;
-        continueBtn = (Button) view.findViewById(R.id.continue_button);
-        dataProcessPI = (ProgressBar) view.findViewById(R.id.parse_data_progress);
-        if(urlType == Utility.URL_ARTIST_EVENTS)
+        dataFetchType = fetchType;
+
+        if(dataFetchType == Utility.URL_ARTIST_EVENTS)
             buildArtistEventsURL(artistID);
-        else if(urlType == Utility.URL_ARTIST_INFO)
+        else if(dataFetchType == Utility.URL_ARTIST_INFO)
             buildArtistInfoURL(artistID);
     }
     // build artist info URL
@@ -59,7 +62,6 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
                     .build();
 
             url = new URL(builtUri.toString());
-            Log.d(LOG_TAG+"------::::", url.toString());
         } catch (Exception e) {
             Log.e(LOG_TAG, "Error constructing URL with Geo information: ", e);
         }
@@ -77,8 +79,7 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
                     .appendQueryParameter(KEY_PARAM, Utility.THRILLCALL_API_KEY)
                     .build();
 
-            URL url = new URL(builtUri.toString());
-            Log.d(LOG_TAG+"------::::", url.toString());
+            url = new URL(builtUri.toString());
         } catch (Exception e) {
             Log.e(LOG_TAG, "Error constructing URL with Geo information: ", e);
         }
@@ -159,7 +160,7 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
             }
             concertJSONStr = buffer.toString();
             // Returning JSON data containing complete event list
-            Log.d(LOG_TAG, concertJSONStr);
+            Log.d(LOG_TAG+"-Fetched JSON data: ", concertJSONStr);
             return concertJSONStr;
 
         } catch (IOException e) {
@@ -183,15 +184,25 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
 
     }
 
-    protected void onPostExecute(String concertJSONStr) {
+    protected void onPostExecute(String JSON) {
 
         // To-Do when JSON data is available
         // Now we have a String representing the complete event list in JSON Format.
-        ParseJSONtoDatabase parseJSONtoDatabase;
-        parseJSONtoDatabase = new ParseJSONtoDatabase(mContext, concertJSONStr);
-        parseJSONtoDatabase.parseData();
-        //Displaying the 'CONTINUE' button after parsing data into database
-        dataProcessPI.setVisibility(View.GONE);
-        continueBtn.setVisibility(View.VISIBLE);
+        if(dataFetchType == Utility.URL_GEO_EVENTS) {
+            ParseJSONtoDatabase parseJSONtoDatabase;
+            parseJSONtoDatabase = new ParseJSONtoDatabase(mContext, JSON);
+            parseJSONtoDatabase.parseData();
+            //Displaying the 'CONTINUE' button after parsing data into database
+            dataProcessPI.setVisibility(View.GONE);
+            continueBtn.setVisibility(View.VISIBLE);
+        }
+        else if(dataFetchType == Utility.URL_ARTIST_INFO) {
+            ParseArtistInfo ArtistInfo;
+            ArtistInfo = new ParseArtistInfo(JSON);
+            ArtistInfo.parseArtistData();
+        }
+        else if(dataFetchType == Utility.URL_ARTIST_EVENTS) {
+
+        }
     }
 }

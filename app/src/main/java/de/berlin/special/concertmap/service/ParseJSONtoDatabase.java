@@ -16,6 +16,7 @@ import de.berlin.special.concertmap.Utility;
 import de.berlin.special.concertmap.data.EventContract.ArtistEntry;
 import de.berlin.special.concertmap.data.EventContract.EventEntry;
 import de.berlin.special.concertmap.data.EventContract.VenueEntry;
+import de.berlin.special.concertmap.data.EventContract.FavArtistEntry;
 import de.berlin.special.concertmap.data.EventDbHelper;
 
 /**
@@ -50,6 +51,9 @@ public class ParseJSONtoDatabase {
 
         db.execSQL("DELETE FROM " + EventEntry.TABLE_NAME
                 + " WHERE " + EventEntry.COLUMN_CON_ATTEND + " = " + Utility.EVENT_ATTEND_NO + ";");
+
+        db.execSQL("DELETE FROM " + FavArtistEntry.TABLE_NAME
+                + " WHERE " + FavArtistEntry.COL_FAV_ART_TRACKED + " = " + Utility.ARTIST_TRACKED_NO + ";");
 
         db.execSQL("DELETE FROM " + VenueEntry.TABLE_NAME
                 + " WHERE " + VenueEntry.COLUMN_VEN_CON_ID + " NOT IN "

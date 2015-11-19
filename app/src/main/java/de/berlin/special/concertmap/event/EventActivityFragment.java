@@ -6,6 +6,8 @@ import android.database.DatabaseUtils;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SimpleCursorAdapter;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListPopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,7 +30,9 @@ import java.io.FileInputStream;
 
 import de.berlin.special.concertmap.R;
 import de.berlin.special.concertmap.Utility;
+import de.berlin.special.concertmap.data.EventContract;
 import de.berlin.special.concertmap.data.EventContract.EventEntry;
+import de.berlin.special.concertmap.service.DataFetchService;
 
 /**
  * A placeholder fragment containing a event view.
@@ -49,6 +54,8 @@ public class EventActivityFragment extends Fragment {
 
     private Button attendBtn;
     private Button artistBtn;
+
+    private ListPopupWindow listPopupWindow;
 
     public EventActivityFragment() {
     }
@@ -157,12 +164,29 @@ public class EventActivityFragment extends Fragment {
         artistBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String eventQueryStr = "SELECT artists.artist_name, artists.artist_thrill_ID " +
+                String eventQueryStr = "SELECT artists._ID, artists.artist_name, artists.artist_thrill_ID " +
                         "FROM artists " +
                         "WHERE artists.event_ID = " + String.valueOf(eventID) + ";";
 
                 Cursor artistsCursor = Utility.db.rawQuery(eventQueryStr, null);
-                Log.v("Artist Cursor", DatabaseUtils.dumpCursorToString(artistsCursor));
+                Log.v("Artist-Cursor", DatabaseUtils.dumpCursorToString(artistsCursor));
+
+                if(artistsCursor.getCount()>1) {
+                    listPopupWindow = new ListPopupWindow(rootView.getContext());
+                    String[] fromColumns = new String[]{EventContract.ArtistEntry.COLUMN_ART_NAME};
+                    int[] toViews = new int[]{android.R.id.text1};
+                    SimpleCursorAdapter mAdapter = new SimpleCursorAdapter(rootView.getContext(),
+                            android.R.layout.simple_list_item_1, artistsCursor, fromColumns, toViews, 0);
+
+                    listPopupWindow.setAdapter(mAdapter);
+                    listPopupWindow.setAnchorView(rootView.findViewById(R.id.linear_event_buttons));
+                    listPopupWindow.setModal(true);
+                    listPopupWindow.show();
+                } else {
+                    artistsCursor.moveToFirst();
+                    Log.v("THrill-ID: ", String.valueOf(artistsCursor.getInt(2)));
+                    new DataFetchService(getContext(), artistsCursor.getInt(2), Utility.URL_ARTIST_INFO).execute();
+                }
             }
         });
     }

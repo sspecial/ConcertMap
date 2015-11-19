@@ -46,6 +46,9 @@ public class Utility {
     public static final int EVENT_ATTEND_YES = 1;
     public static final int EVENT_ATTEND_NO = 0;
 
+    public static final int ARTIST_TRACKED_YES = 1;
+    public static final int ARTIST_TRACKED_NO = 0;
+
     private static final String imageDirBase = "/sdcard/ImageDir/";
     public static String imageDirPath(){
         String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());

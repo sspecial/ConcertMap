@@ -152,7 +152,7 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
                         locationView.setText(lastKnownLocation);
 
                         // Fetching data from Thrillcall API based on Geo information
-                        new DataFetchService(getActivity(), rootView, geoArr).execute();
+                        new DataFetchService(getActivity(), rootView, geoArr, Utility.URL_GEO_EVENTS).execute();
                     } else {
                         commentView.setText(CITY_NAME_NOT_VALID);
                     }
@@ -172,7 +172,7 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
             locationView.setText(lastKnownLocation);
 
             // Fetching data from Thrillcall API based on Geo information
-            new DataFetchService(getActivity(), rootView, geoArr).execute();
+            new DataFetchService(getActivity(), rootView, geoArr, Utility.URL_GEO_EVENTS).execute();
         }
     }
 

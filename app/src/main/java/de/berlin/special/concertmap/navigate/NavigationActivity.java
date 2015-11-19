@@ -241,7 +241,7 @@ class NavigateAdapter extends BaseAdapter {
         if (view == null){
             LayoutInflater inflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            row = inflater.inflate(R.layout.custom_row, viewGroup, false);
+            row = inflater.inflate(R.layout.custom_navigate_row, viewGroup, false);
         }
         else {
             row = view;
