@@ -30,7 +30,7 @@ public class Utility {
 
     public static SQLiteDatabase db;
 
-    // These indices are tied to CURSOR_COLUMNS
+    // These indices are tied to EVENT CURSOR_COLUMNS
     public static final int COL_EVENT_ID = 0;
     public static final int COL_EVENT_THRILL_ID = 1;
     public static final int COL_EVENT_NAME = 2;
@@ -48,6 +48,24 @@ public class Utility {
 
     public static final int ARTIST_TRACKED_YES = 1;
     public static final int ARTIST_TRACKED_NO = 0;
+
+    public static final String artistQueryStr = "SELECT artists._ID, " +
+            "artists.artist_thrill_ID, artists.artist_name " +
+            "FROM artists ";
+    public static final String favArtistQueryStr = "SELECT artist._ID, " +
+            "artist.artist_thrill_ID, artist.artist_name, " +
+            "artist.artist_official_url, artist.artist_image_large, " +
+            "artist.artist_image_mobile, artist.artist_tracked " +
+            "FROM artist ";
+
+    // These indices are tied to FAV-ARTIST CURSOR_COLUMNS
+    public static final int COL_ARTIST_ID = 0;
+    public static final int COL_ARTIST_THRILL_ID = 1;
+    public static final int COL_ARTIST_NAME = 2;
+    public static final int COL_ARTIST_OFFICIAL_URL = 3;
+    public static final int COL_ARTIST_IMAGE_LARGE = 4;
+    public static final int COL_ARTIST_IMAGE_MOBILE = 5;
+    public static final int COL_ARTIST_TRACKED = 6;
 
     private static final String imageDirBase = "/sdcard/ImageDir/";
     public static String imageDirPath(){

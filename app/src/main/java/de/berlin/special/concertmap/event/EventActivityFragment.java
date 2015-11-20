@@ -1,14 +1,15 @@
 package de.berlin.special.concertmap.event;
 
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SimpleCursorAdapter;
 
+import android.app.AlertDialog;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListPopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -30,7 +30,6 @@ import java.io.FileInputStream;
 
 import de.berlin.special.concertmap.R;
 import de.berlin.special.concertmap.Utility;
-import de.berlin.special.concertmap.data.EventContract;
 import de.berlin.special.concertmap.data.EventContract.EventEntry;
 import de.berlin.special.concertmap.service.DataFetchService;
 
@@ -164,28 +163,37 @@ public class EventActivityFragment extends Fragment {
         artistBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String eventQueryStr = "SELECT artists._ID, artists.artist_name, artists.artist_thrill_ID " +
-                        "FROM artists " +
-                        "WHERE artists.event_ID = " + String.valueOf(eventID) + ";";
 
-                Cursor artistsCursor = Utility.db.rawQuery(eventQueryStr, null);
-                Log.v("Artist-Cursor", DatabaseUtils.dumpCursorToString(artistsCursor));
+                String argEventID = "WHERE artists.event_ID = " + String.valueOf(eventID) + ";";
+                String artistQueryStr = Utility.artistQueryStr + argEventID;
+                final Cursor artistsCursor = Utility.db.rawQuery(artistQueryStr, null);
 
+                // When event has multiple artists
+                // AletDialog to show artists and choose between them
                 if(artistsCursor.getCount()>1) {
-                    listPopupWindow = new ListPopupWindow(rootView.getContext());
-                    String[] fromColumns = new String[]{EventContract.ArtistEntry.COLUMN_ART_NAME};
-                    int[] toViews = new int[]{android.R.id.text1};
-                    SimpleCursorAdapter mAdapter = new SimpleCursorAdapter(rootView.getContext(),
-                            android.R.layout.simple_list_item_1, artistsCursor, fromColumns, toViews, 0);
 
-                    listPopupWindow.setAdapter(mAdapter);
-                    listPopupWindow.setAnchorView(rootView.findViewById(R.id.linear_event_buttons));
-                    listPopupWindow.setModal(true);
-                    listPopupWindow.show();
+                    String[] artArr = new String[artistsCursor.getCount()];
+                    for (int i = 0; i < artistsCursor.getCount(); i++) {
+                        artistsCursor.moveToPosition(i);
+                        artArr[i] = artistsCursor.getString(Utility.COL_ARTIST_NAME);
+                    }
+                    AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), android.R.style.Theme_Holo_Light_Dialog));
+                    builder.setTitle(R.string.pick_the_artist)
+                            .setItems(artArr, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    artistsCursor.moveToPosition(which);
+                                    int artistThrillID = artistsCursor.getInt(Utility.COL_ARTIST_THRILL_ID);
+                                    new DataFetchService(getContext(), artistThrillID, Utility.URL_ARTIST_INFO).execute();
+                                }
+                            });
+                    AlertDialog alert = builder.create();
+                    alert.show();
+
+                // When event has only one artist
                 } else {
                     artistsCursor.moveToFirst();
-                    Log.v("THrill-ID: ", String.valueOf(artistsCursor.getInt(2)));
-                    new DataFetchService(getContext(), artistsCursor.getInt(2), Utility.URL_ARTIST_INFO).execute();
+                    int artistThrillID = artistsCursor.getInt(Utility.COL_ARTIST_THRILL_ID);
+                    new DataFetchService(getContext(), artistThrillID, Utility.URL_ARTIST_INFO).execute();
                 }
             }
         });

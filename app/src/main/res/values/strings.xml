@@ -16,4 +16,6 @@
     <string name="title_activity_artist">Artist</string>
     <string name="title_activity_event">Event</string>
 
+    <string name="pick_the_artist">Pick the Artist</string>
+
 </resources>

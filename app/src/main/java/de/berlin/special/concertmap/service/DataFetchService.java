@@ -1,6 +1,7 @@
 package de.berlin.special.concertmap.service;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -17,6 +18,7 @@ import java.net.URL;
 
 import de.berlin.special.concertmap.R;
 import de.berlin.special.concertmap.Utility;
+import de.berlin.special.concertmap.artist.ArtistActivity;
 
 /**
  * Created by Saeed on 30-Mar-15.
@@ -30,6 +32,7 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
     private Button continueBtn;
     private ProgressBar dataProcessPI;
     private URL url;
+    private int artistID;
     // Deciding to fetch geo-events data, artist-events data, or artist-info data
     private int dataFetchType;
 
@@ -44,6 +47,7 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
     public DataFetchService(Context context, int artistID, int fetchType){
         mContext = context;
         dataFetchType = fetchType;
+        this.artistID = artistID;
 
         if(dataFetchType == Utility.URL_ARTIST_EVENTS)
             buildArtistEventsURL(artistID);
@@ -200,6 +204,10 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
             ParseArtistInfo ArtistInfo;
             ArtistInfo = new ParseArtistInfo(JSON);
             ArtistInfo.parseArtistData();
+
+            Intent intent = new Intent(mContext, ArtistActivity.class);
+            intent.putExtra(String.valueOf(Utility.COL_ARTIST_THRILL_ID), artistID);
+            mContext.startActivity(intent);
         }
         else if(dataFetchType == Utility.URL_ARTIST_EVENTS) {
 
