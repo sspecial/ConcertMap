@@ -1,5 +1,9 @@
 package de.berlin.special.concertmap.navigate;
 
+/**
+ * Created by Saeed on 21-Nov-15.
+ */
+
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
@@ -16,12 +20,11 @@ import de.berlin.special.concertmap.R;
 import de.berlin.special.concertmap.Utility;
 import de.berlin.special.concertmap.event.EventActivity;
 
-
-public class EventListFragment extends Fragment {
+public class GeoListFragment extends Fragment {
 
     private View rootView;
 
-    public EventListFragment() {
+    public GeoListFragment() {
         // Required empty public constructor
     }
 
@@ -38,7 +41,7 @@ public class EventListFragment extends Fragment {
 
         String eventQueryStr = Utility.eventQueryStr
                 + "WHERE event.event_attended = "
-                + Utility.EVENT_ATTEND_YES + " GROUP BY event._ID;";
+                + Utility.EVENT_ATTEND_NO + " GROUP BY event._ID;";
         try{
             final Cursor eventCursor = Utility.db.rawQuery(eventQueryStr, null);
             Log.v("Event Cursor", DatabaseUtils.dumpCursorToString(eventCursor));
@@ -46,7 +49,7 @@ public class EventListFragment extends Fragment {
             // Find ListView to populate
             ListView todayListView = (ListView) rootView.findViewById(R.id.list_view_events);
             // Setup cursor adapter
-            EventCursorAdapter eventCursorAdapter = new EventCursorAdapter(getActivity(), eventCursor, 0, Utility.FRAG_EL_ATTENDED);
+            EventCursorAdapter eventCursorAdapter = new EventCursorAdapter(getActivity(), eventCursor, 0, Utility.FRAG_EL_GEO);
             // Attach cursor adapter to the ListView
             todayListView.setAdapter(eventCursorAdapter);
             // Setup OnClickListener

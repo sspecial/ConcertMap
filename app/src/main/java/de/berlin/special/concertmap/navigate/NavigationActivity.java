@@ -45,10 +45,8 @@ public class NavigationActivity extends AppCompatActivity {
     private NavigateAdapter myAdapter;
 
     FragmentManager manager;
-
-    Fragment eventListFragment;
-    Bundle args = new Bundle();
-
+    Fragment geoListFragment = new GeoListFragment();
+    Fragment eventListFragment = new EventListFragment();
     Fragment artistListFragment = new ArtistListFragment();
 
     @Override
@@ -63,11 +61,9 @@ public class NavigationActivity extends AppCompatActivity {
         // Initiating GeoFragment as default view of activity
         manager = getSupportFragmentManager();
         if (savedInstanceState == null) {
-            eventListFragment = new EventListFragment();
-            args.clear();
-            args.putString(Utility.FRAG_EL_TYPE, Utility.FRAG_EL_GEO);
-            eventListFragment.setArguments(args);
-            manager.beginTransaction().add(R.id.content_frame, eventListFragment).commit();
+            manager.beginTransaction()
+                    .add(R.id.content_frame, geoListFragment)
+                    .commit();
         }
 
         actionBar = getSupportActionBar();
@@ -103,28 +99,22 @@ public class NavigationActivity extends AppCompatActivity {
         switch (position) {
 
             case NAV_CASE_CITY:
-                eventListFragment = new EventListFragment();
-                args.clear();
-                args.putString(Utility.FRAG_EL_TYPE, Utility.FRAG_EL_GEO);
-                eventListFragment.setArguments(args);
                 manager.beginTransaction()
-                        .replace(R.id.content_frame, eventListFragment)
+                        .replace(R.id.content_frame, geoListFragment)
                         .commit();
                 break;
 
             case NAV_CASE_TRACKED_ARTISTS:
                 manager.beginTransaction()
                         .replace(R.id.content_frame, artistListFragment)
+                        .addToBackStack(null)
                         .commit();
                 break;
 
             case NAV_CASE_ATTENDED_EVENTS:
-                eventListFragment = new EventListFragment();
-                args.clear();
-                args.putString(Utility.FRAG_EL_TYPE, Utility.FRAG_EL_ATTENDED);
-                eventListFragment.setArguments(args);
                 manager.beginTransaction()
                         .replace(R.id.content_frame, eventListFragment)
+                        .addToBackStack(null)
                         .commit();
                 break;
 
