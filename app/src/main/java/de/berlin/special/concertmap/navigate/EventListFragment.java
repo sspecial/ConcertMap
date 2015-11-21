@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import de.berlin.special.concertmap.R;
 import de.berlin.special.concertmap.Utility;
@@ -44,13 +45,18 @@ public class EventListFragment extends Fragment {
             Log.v("Event Cursor", DatabaseUtils.dumpCursorToString(eventCursor));
 
             // Find ListView to populate
-            ListView todayListView = (ListView) rootView.findViewById(R.id.list_view_events);
+            ListView attendedListView = (ListView) rootView.findViewById(R.id.list_view_events);
             // Setup cursor adapter
             EventCursorAdapter eventCursorAdapter = new EventCursorAdapter(getActivity(), eventCursor, 0, Utility.FRAG_EL_ATTENDED);
             // Attach cursor adapter to the ListView
-            todayListView.setAdapter(eventCursorAdapter);
+            attendedListView.setAdapter(eventCursorAdapter);
+
+            TextView emptyView = (TextView) rootView.findViewById(R.id.emptyTextView);
+            emptyView.setText("You didn't yet attend any event!");
+            attendedListView.setEmptyView(emptyView);
+
             // Setup OnClickListener
-            todayListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            attendedListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 

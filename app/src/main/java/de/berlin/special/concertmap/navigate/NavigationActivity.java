@@ -55,7 +55,10 @@ public class NavigationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_navigation);
 
         // Constructing array used ba navigation bar
-        navItem1 = Utility.city + " Concerts";
+        if (!Utility.city.equals(Utility.CITY_IS_UNKNOWN))
+            navItem1 = Utility.city + " Concerts";
+        else
+            navItem1 = "Concerts";
         eventNavItems = new String[]{navItem1, navItem2, navItem3};
 
         // Initiating GeoFragment as default view of activity

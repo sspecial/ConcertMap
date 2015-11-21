@@ -41,6 +41,7 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
     private static final String LOG_TAG = InitiateFragment.class.getSimpleName();
     private static final String ENTER_CITY = "Location is not available, Enter the city.";
     private static final String CITY_NAME_NOT_VALID = "Please enter a valid city name.";
+    private static final String FINDING_YOUR_LOCATION = "Finding your location...";
 
     private static final int LOCATION_AVAILABLE = 100;
     private static final int LOCATION_NOT_AVAILABLE = 101;
@@ -97,6 +98,7 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
         searchCityBtn = (ImageButton) rootView.findViewById(R.id.validate_city_button);
         continueBtn = (Button) rootView.findViewById(R.id.continue_button);
 
+        commentView.setText(FINDING_YOUR_LOCATION);
         return rootView;
     }
 
@@ -149,7 +151,10 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
                         commentView.setVisibility(View.INVISIBLE);
                         locationFoundLayout.setVisibility(View.VISIBLE);
                         dataProcessPI.setVisibility(View.VISIBLE);
-                        locationView.setText(lastKnownLocation);
+                        if (!Utility.city.equals(Utility.CITY_IS_UNKNOWN))
+                            locationView.setText(lastKnownLocation);
+                        else
+                            locationView.setText(Utility.CITY_IS_UNKNOWN);
 
                         // Fetching data from Thrillcall API based on Geo information
                         new DataFetchService(getActivity(), rootView, geoArr, Utility.URL_GEO_EVENTS).execute();
@@ -169,7 +174,10 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
             addressNotFoundLayout.setVisibility(View.INVISIBLE);
             commentView.setVisibility(View.INVISIBLE);
             locationFoundLayout.setVisibility(View.VISIBLE);
-            locationView.setText(lastKnownLocation);
+            if (!Utility.city.equals(Utility.CITY_IS_UNKNOWN))
+                locationView.setText(lastKnownLocation);
+            else
+                locationView.setText(Utility.CITY_IS_UNKNOWN);
 
             // Fetching data from Thrillcall API based on Geo information
             new DataFetchService(getActivity(), rootView, geoArr, Utility.URL_GEO_EVENTS).execute();

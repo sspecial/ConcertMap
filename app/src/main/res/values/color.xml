@@ -5,8 +5,9 @@
     <color name="grey_700">#646464</color>
     <color name="black">#000000</color>
     <color name="black_cow">#4C4646</color>
-    <color name="light_coral">#E77471</color>
+    <color name="light_coral">#fdefa7a5</color>
     <color name="brown">#C7B097</color>
+    <color name="brown_sky">#b0d7c1aa</color>
     <color name="brown_coffee">#6F4E37</color>
     <color name="blue_light">#51acf4</color>
     <color name="blue_grey">#98AFC7</color>

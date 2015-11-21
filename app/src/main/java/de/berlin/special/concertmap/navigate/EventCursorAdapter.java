@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.CursorAdapter;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -67,11 +68,11 @@ public class EventCursorAdapter extends CursorAdapter {
 
         // Setting the background and text color based on fragment type
         if (fragType.equals(Utility.FRAG_EL_GEO)) {
-            view.setBackgroundColor(context.getResources().getColor(R.color.blue_sky));
-            nameView.setTextColor(context.getResources().getColor(R.color.blue));
+            view.setBackgroundColor(ContextCompat.getColor(context, R.color.blue_sky));
+            nameView.setTextColor(ContextCompat.getColor(context, R.color.blue));
         } else {
-            view.setBackgroundColor(context.getResources().getColor(R.color.orange_sky));
-            nameView.setTextColor(context.getResources().getColor(R.color.orange));
+            view.setBackgroundColor(ContextCompat.getColor(context, R.color.orange_sky));
+            nameView.setTextColor(ContextCompat.getColor(context, R.color.orange));
         }
 
         // Event image

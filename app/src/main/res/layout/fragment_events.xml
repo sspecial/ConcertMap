@@ -8,5 +8,24 @@
         android:id="@+id/list_view_events"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:dividerHeight="5dp"/>
+        android:dividerHeight="5dp" />
+
+    <LinearLayout
+        android:id="@+id/emptyLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="20dp">
+
+        <TextView
+            android:id="@+id/emptyTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/blue_grey"
+            android:textColor="@color/black"
+            android:padding="20dp"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    </LinearLayout>
+
 </FrameLayout>

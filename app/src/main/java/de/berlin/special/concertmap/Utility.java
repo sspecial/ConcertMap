@@ -10,7 +10,9 @@ import java.util.Date;
  */
 public class Utility {
 
-    public static String city;
+    public static final String CITY_IS_UNKNOWN = "City is Unknown!";
+    public static String city = CITY_IS_UNKNOWN;
+
     public static final double GEO_DEFAULT_LAT = 52.5194;
     public static final double GEO_DEFAULT_LONG = 13.4067;
     public static final String EVENT_LIMIT = "20";

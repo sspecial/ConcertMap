@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import de.berlin.special.concertmap.R;
 import de.berlin.special.concertmap.Utility;
@@ -52,6 +53,11 @@ public class GeoListFragment extends Fragment {
             EventCursorAdapter eventCursorAdapter = new EventCursorAdapter(getActivity(), eventCursor, 0, Utility.FRAG_EL_GEO);
             // Attach cursor adapter to the ListView
             todayListView.setAdapter(eventCursorAdapter);
+
+            TextView emptyView = (TextView) rootView.findViewById(R.id.emptyTextView);
+            emptyView.setText("No data is available. Please try later!");
+            todayListView.setEmptyView(emptyView);
+
             // Setup OnClickListener
             todayListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
