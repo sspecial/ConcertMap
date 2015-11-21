@@ -1,13 +1,13 @@
 package de.berlin.special.concertmap.event;
 
+import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-
-import android.app.AlertDialog;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListPopupWindow;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -54,8 +53,6 @@ public class EventActivityFragment extends Fragment {
     private Button attendBtn;
     private Button artistBtn;
 
-    private ListPopupWindow listPopupWindow;
-
     public EventActivityFragment() {
     }
 
@@ -88,10 +85,10 @@ public class EventActivityFragment extends Fragment {
         attendBtn = (Button) rootView.findViewById(R.id.button_attend);
         if(attended == Utility.EVENT_ATTEND_NO){
             attendBtn.setText("Attend");
-            eventInfo.setBackgroundColor(getResources().getColor(R.color.blue_sky));
+            eventInfo.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_sky));
         } else{
             attendBtn.setText("Attended!");
-            eventInfo.setBackgroundColor(getResources().getColor(R.color.orange_sky));
+            eventInfo.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.orange_sky));
         }
         artistBtn = (Button) rootView.findViewById(R.id.button_artist);
 
