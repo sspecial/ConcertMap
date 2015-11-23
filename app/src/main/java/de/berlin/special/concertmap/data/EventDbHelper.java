@@ -32,7 +32,8 @@ public class EventDbHelper extends SQLiteOpenHelper {
                 EventEntry.COLUMN_CON_NAME + " TEXT NOT NULL, " +
                 EventEntry.COLUMN_CON_START_AT + " TEXT, " +
                 EventEntry.COLUMN_CON_IMAGE + " TEXT NOT NULL, " +
-                EventEntry.COLUMN_CON_ATTEND + " INTEGER NOT NULL " + ");";
+                EventEntry.COLUMN_CON_ATTEND + " INTEGER NOT NULL, " +
+                EventEntry.COLUMN_CON_BELONG_TO_ARTIST + " INTEGER NOT NULL " + ");";
 
         // Create a table to hold locations.
         final String SQL_CREATE_VENUE_TABLE = "CREATE TABLE " + VenueEntry.TABLE_NAME + " (" +

@@ -31,6 +31,8 @@ public class Utility {
 
     public static SQLiteDatabase db;
 
+    public static final int CON_BELONG_TO_ARTIST_DEFAULT = -1;
+
     public static final int EVENT_ATTEND_YES = 1;
     public static final int EVENT_ATTEND_NO = 0;
 

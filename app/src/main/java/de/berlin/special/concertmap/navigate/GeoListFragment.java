@@ -41,7 +41,10 @@ public class GeoListFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_events, container, false);
 
         String eventQueryStr = Utility.eventQueryStr
-                + "WHERE event.event_attended = "
+                + "WHERE event.event_belong_to_artist = "
+                + Utility.CON_BELONG_TO_ARTIST_DEFAULT
+                + " AND "
+                + "event.event_attended = "
                 + Utility.EVENT_ATTEND_NO + " GROUP BY event._ID;";
         try{
             final Cursor eventCursor = Utility.db.rawQuery(eventQueryStr, null);

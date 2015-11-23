@@ -17,7 +17,7 @@ public class EventContract {
         public static final String COLUMN_CON_START_AT = "event_start_at";
         public static final String COLUMN_CON_IMAGE = "event_image";
         public static final String COLUMN_CON_ATTEND = "event_attended";
-
+        public static final String COLUMN_CON_BELONG_TO_ARTIST = "event_belong_to_artist";
     }
 
     /* Inner class that defines the table contents of the artist table */

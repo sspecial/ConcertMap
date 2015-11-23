@@ -19,6 +19,7 @@ import java.net.URL;
 import de.berlin.special.concertmap.R;
 import de.berlin.special.concertmap.Utility;
 import de.berlin.special.concertmap.artist.ArtistActivity;
+import de.berlin.special.concertmap.artist.ArtistActivityFragment;
 
 /**
  * Created by Saeed on 30-Mar-15.
@@ -201,16 +202,20 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
             continueBtn.setVisibility(View.VISIBLE);
         }
         else if(dataFetchType == Utility.URL_ARTIST_INFO) {
-            ParseArtistInfo ArtistInfo;
-            ArtistInfo = new ParseArtistInfo(JSON);
-            ArtistInfo.parseArtistData();
+            ParseArtistInfo artistInfo;
+            artistInfo = new ParseArtistInfo(JSON);
+            artistInfo.parseArtistData();
+
+            new DataFetchService(mContext, artistID, Utility.URL_ARTIST_EVENTS).execute();
+        }
+        else if(dataFetchType == Utility.URL_ARTIST_EVENTS) {
+            ParseArtistEventsInfo artistEventsInfo;
+            artistEventsInfo = new ParseArtistEventsInfo(JSON, artistID);
+            artistEventsInfo.parseData();
 
             Intent intent = new Intent(mContext, ArtistActivity.class);
             intent.putExtra(String.valueOf(Utility.COL_ARTIST_THRILL_ID), artistID);
             mContext.startActivity(intent);
-        }
-        else if(dataFetchType == Utility.URL_ARTIST_EVENTS) {
-
         }
     }
 }

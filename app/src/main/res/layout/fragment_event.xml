@@ -67,7 +67,7 @@
         android:background="@color/blue_sky">
 
         <TextView
-            android:id="@+id/textview_event_artist_name"
+            android:id="@+id/textview_event_start_at"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="marquee"

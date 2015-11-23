@@ -1,67 +1,31 @@
 package de.berlin.special.concertmap.service;
 
 import android.content.ContentValues;
-import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.util.Hashtable;
 
 import de.berlin.special.concertmap.Utility;
 import de.berlin.special.concertmap.data.EventContract.ArtistEntry;
 import de.berlin.special.concertmap.data.EventContract.EventEntry;
 import de.berlin.special.concertmap.data.EventContract.VenueEntry;
-import de.berlin.special.concertmap.data.EventContract.FavArtistEntry;
-import de.berlin.special.concertmap.data.EventDbHelper;
 
 /**
- * Created by Saeed on 27-Jul-15.
+ * Created by Saeed on 23-Nov-15.
  */
-public class ParseJSONtoDatabase {
+public class ParseArtistEventsInfo {
 
-    private final String LOG_TAG = ParseJSONtoDatabase.class.getSimpleName();
-    private EventDbHelper mDbHelper;
+    private final String LOG_TAG = ParseArtistEventsInfo.class.getSimpleName();
     private String concertJsonStr;
+    private int artistID;
 
-    public ParseJSONtoDatabase(Context mContext, String json){
-        // Deleting the concert.db databases
-        // mContext.deleteDatabase(EventDbHelper.DATABASE_NAME);
-
-        // If Database exist?
-        File dbFile = mContext.getDatabasePath(EventDbHelper.DATABASE_NAME);
-        if(dbFile.exists())
-            Utility.db = mContext.openOrCreateDatabase(EventDbHelper.DATABASE_NAME, Context.MODE_PRIVATE, null);
-        else {
-            // Creating the concert.db databases
-            mDbHelper = new EventDbHelper(mContext);
-            // Gets the data repository in write mode
-            Utility.db = mDbHelper.getWritableDatabase();
-        }
-        // Deleting old records from Database
-        deleteOldDataFromDatabase(Utility.db);
+    public ParseArtistEventsInfo(String json, int artistID){
+        this.artistID = artistID;
         concertJsonStr = json;
-    }
-
-    public void deleteOldDataFromDatabase(SQLiteDatabase db){
-
-        db.execSQL("DELETE FROM " + EventEntry.TABLE_NAME
-                + " WHERE " + EventEntry.COLUMN_CON_ATTEND + " = " + Utility.EVENT_ATTEND_NO + ";");
-
-        db.execSQL("DELETE FROM " + FavArtistEntry.TABLE_NAME
-                + " WHERE " + FavArtistEntry.COL_FAV_ART_TRACKED + " = " + Utility.ARTIST_TRACKED_NO + ";");
-
-        db.execSQL("DELETE FROM " + VenueEntry.TABLE_NAME
-                + " WHERE " + VenueEntry.COLUMN_VEN_CON_ID + " NOT IN "
-                + "( SELECT " + EventEntry._ID + " FROM " + EventEntry.TABLE_NAME + " );");
-
-        db.execSQL("DELETE FROM " + ArtistEntry.TABLE_NAME
-                + " WHERE " + ArtistEntry.COLUMN_ART_CON_ID + " NOT IN "
-                + "( SELECT " + EventEntry._ID + " FROM " + EventEntry.TABLE_NAME + " );");
     }
 
     public void parseData() {
@@ -139,7 +103,7 @@ public class ParseJSONtoDatabase {
                 eventValues.put(EventEntry.COLUMN_CON_START_AT, conStartAt);
                 eventValues.put(EventEntry.COLUMN_CON_IMAGE, conImage);
                 eventValues.put(EventEntry.COLUMN_CON_ATTEND, Utility.EVENT_ATTEND_NO);
-                eventValues.put(EventEntry.COLUMN_CON_BELONG_TO_ARTIST, Utility.CON_BELONG_TO_ARTIST_DEFAULT);
+                eventValues.put(EventEntry.COLUMN_CON_BELONG_TO_ARTIST, artistID);
 
                 // Insert the new event row
                 long newRowIdEvent;

@@ -78,7 +78,7 @@ public class EventActivityFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_event, container, false);
         LinearLayout eventInfo = (LinearLayout) rootView.findViewById(R.id.linear_event_info);
         ImageView imageView = (ImageView) rootView.findViewById(R.id.event_mobile_image);
-        TextView startAtView = (TextView) rootView.findViewById(R.id.textview_event_artist_name);
+        TextView startAtView = (TextView) rootView.findViewById(R.id.textview_event_start_at);
         TextView venueNameView = (TextView) rootView.findViewById(R.id.textview_event_venue_name);
         TextView venueAddressView = (TextView) rootView.findViewById(R.id.textview_event_venue_street);
 
