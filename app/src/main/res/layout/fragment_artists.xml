@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-
-    android:id="@+id/tracked_artists_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="de.berlin.special.concertmap.navigate.ArtistListFragment"
-    android:orientation="vertical">
+    tools:context="de.berlin.special.concertmap.navigate.ArtistListFragment">
 
-</LinearLayout>
+    <LinearLayout
+        android:id="@+id/tracked_artists_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+    </LinearLayout>
+
+</ScrollView>
