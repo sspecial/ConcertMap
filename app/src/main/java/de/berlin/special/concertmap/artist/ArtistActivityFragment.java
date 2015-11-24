@@ -1,5 +1,6 @@
 package de.berlin.special.concertmap.artist;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -24,6 +25,7 @@ import java.io.FileInputStream;
 
 import de.berlin.special.concertmap.R;
 import de.berlin.special.concertmap.Utility;
+import de.berlin.special.concertmap.data.EventContract;
 import de.berlin.special.concertmap.event.EventActivity;
 import de.berlin.special.concertmap.navigate.DownloadImageTask;
 import de.berlin.special.concertmap.navigate.EventCursorAdapter;
@@ -174,6 +176,24 @@ public class ArtistActivityFragment extends Fragment {
             Log.e("error..." , e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        trackBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ContentValues args = new ContentValues();
+                args.put(EventContract.FavArtistEntry.COL_FAV_ART_TRACKED, Utility.ARTIST_TRACKED_YES);
+                int row = Utility.db.update(
+                        EventContract.FavArtistEntry.TABLE_NAME,
+                        args,
+                        EventContract.FavArtistEntry._ID + "=" + artistID,
+                        null);
+                trackBtn.setText("Tracked Artist!");
+            }
+        });
     }
 }
 
