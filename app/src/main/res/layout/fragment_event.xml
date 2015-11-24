@@ -61,20 +61,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingTop="4dp"
-        android:paddingBottom="10dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
         android:layout_marginBottom="4dp"
         android:background="@color/blue_sky">
-
-        <TextView
-            android:id="@+id/textview_event_start_at"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="marquee"
-            android:gravity="center_horizontal"
-            android:lines="1"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/black_cow" />
 
         <TextView
             android:id="@+id/textview_event_venue_name"
@@ -95,7 +85,20 @@
             android:gravity="center_horizontal"
             android:lines="1"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/black_cow" />
+            android:textColor="@color/black_cow"
+            android:layout_marginTop="4dp"/>
+
+        <TextView
+            android:id="@+id/textview_event_start_at"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="marquee"
+            android:gravity="center_horizontal"
+            android:lines="1"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/black_cow"
+            android:layout_marginTop="4dp"/>
+
     </LinearLayout>
 
     <LinearLayout

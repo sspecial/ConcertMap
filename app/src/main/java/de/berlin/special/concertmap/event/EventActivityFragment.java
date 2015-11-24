@@ -66,7 +66,7 @@ public class EventActivityFragment extends Fragment {
         attended = getArguments().getInt(String.valueOf(Utility.COL_EVENT_ATTEND), Utility.EVENT_ATTEND_NO);
         venueName = getArguments().getString(String.valueOf(Utility.COL_VENUE_NAME), "VENUE_NAME");
         venueAddress = getArguments().getString(String.valueOf(Utility.COL_VENUE_STREET), "VENUE_STREET")
-                + " , " + getArguments().getString(String.valueOf(Utility.COL_VENUE_CITY), "VENUE_CITY");
+                + ", " + getArguments().getString(String.valueOf(Utility.COL_VENUE_CITY), "VENUE_CITY");
         geoLat = getArguments().getDouble(String.valueOf(Utility.COL_VENUE_GEO_LAT), Utility.GEO_DEFAULT_LAT);
         geoLong = getArguments().getDouble(String.valueOf(Utility.COL_VENUE_GEO_LONG), Utility.GEO_DEFAULT_LONG);
 
@@ -78,9 +78,9 @@ public class EventActivityFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_event, container, false);
         LinearLayout eventInfo = (LinearLayout) rootView.findViewById(R.id.linear_event_info);
         ImageView imageView = (ImageView) rootView.findViewById(R.id.event_mobile_image);
-        TextView startAtView = (TextView) rootView.findViewById(R.id.textview_event_start_at);
         TextView venueNameView = (TextView) rootView.findViewById(R.id.textview_event_venue_name);
         TextView venueAddressView = (TextView) rootView.findViewById(R.id.textview_event_venue_street);
+        TextView startAtView = (TextView) rootView.findViewById(R.id.textview_event_start_at);
 
         attendBtn = (Button) rootView.findViewById(R.id.button_attend);
         if(attended == Utility.EVENT_ATTEND_NO){
@@ -107,10 +107,10 @@ public class EventActivityFragment extends Fragment {
                 Log.e(LOG_TAG, e.getMessage());
             }
         }
-        String dateArr[] = Utility.retrieveDateAndTime(eventStartAt);
-        startAtView.setText("On " + dateArr[0] + " , At " + dateArr[1]);
+
         venueNameView.setText(venueName);
         venueAddressView.setText(venueAddress);
+        startAtView.setText(Utility.retrieveDateAndTime(eventStartAt));
         return rootView;
     }
 

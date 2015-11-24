@@ -100,7 +100,6 @@ public class EventCursorAdapter extends CursorAdapter {
         addressView.setText(Utility.venueNamePartition(venueNameCity));
 
         // Event time
-        String dateArr[] = Utility.retrieveDateAndTime(cursor.getString(Utility.COL_EVENT_START_AT));
-        dateView.setText(dateArr[0] + "  " + dateArr[1]);
+        dateView.setText(Utility.retrieveDateAndTime(cursor.getString(Utility.COL_EVENT_START_AT)));
     }
 }

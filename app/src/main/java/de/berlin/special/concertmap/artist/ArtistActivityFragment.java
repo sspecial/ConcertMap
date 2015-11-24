@@ -117,7 +117,7 @@ public class ArtistActivityFragment extends Fragment {
         return rootView;
     }
 
-    public void fillArtistEventsList(ListView artistEventsListView, int artistID) {
+    public void fillArtistEventsList(ListView artistEventsListView, final int artistID) {
 
         String eventQueryStr = Utility.eventQueryStr
                 + "WHERE event.event_belong_to_artist = "
@@ -135,7 +135,7 @@ public class ArtistActivityFragment extends Fragment {
             artistEventsListView.setAdapter(artistCursorAdapter);
 
             TextView emptyView = (TextView) rootView.findViewById(R.id.artistEmptyTextView);
-            emptyView.setText("Apparently the artist yet has no further plan!");
+            emptyView.setText("Apparently the artist has no further plan!");
             artistEventsListView.setEmptyView(emptyView);
 
             // Setup OnClickListener
@@ -147,7 +147,7 @@ public class ArtistActivityFragment extends Fragment {
                     int eventID = eventCursor.getInt(Utility.COL_EVENT_ID);
                     String artistsName = Utility.retrieveArtistName(eventCursor.getString(Utility.COL_EVENT_NAME));
                     String startAt = eventCursor.getString(Utility.COL_EVENT_START_AT);
-                    String imagePath = Utility.imageDirPath() +"/"+ String.valueOf(eventCursor.getInt(Utility.COL_EVENT_THRILL_ID));
+                    String imagePath = Utility.imageDirPath() +"/"+ String.valueOf(artistID);
                     int attended = eventCursor.getInt(Utility.COL_EVENT_ATTEND);
                     String venueName = eventCursor.getString(Utility.COL_VENUE_NAME);
                     String venueStreet = eventCursor.getString(Utility.COL_VENUE_STREET);
@@ -209,7 +209,6 @@ class ArtistCursorAdapter extends CursorAdapter {
         addressView.setText(venueNameCity);
 
         // Event time
-        String dateArr[] = Utility.retrieveDateAndTime(cursor.getString(Utility.COL_EVENT_START_AT));
-        dateView.setText("On " + dateArr[0] + " , At " + dateArr[1]);
+        dateView.setText(Utility.retrieveDateAndTime(cursor.getString(Utility.COL_EVENT_START_AT)));
     }
 }
