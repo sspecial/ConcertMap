@@ -49,11 +49,13 @@ public class ParseJSONtoDatabase {
 
     public void deleteOldDataFromDatabase(SQLiteDatabase db){
 
-        db.execSQL("DELETE FROM " + EventEntry.TABLE_NAME
-                + " WHERE " + EventEntry.COLUMN_CON_ATTEND + " = " + Utility.EVENT_ATTEND_NO + ";");
-
         db.execSQL("DELETE FROM " + FavArtistEntry.TABLE_NAME
                 + " WHERE " + FavArtistEntry.COL_FAV_ART_TRACKED + " = " + Utility.ARTIST_TRACKED_NO + ";");
+
+        db.execSQL("DELETE FROM " + EventEntry.TABLE_NAME
+                + " WHERE " + EventEntry.COLUMN_CON_ATTEND + " = " + Utility.EVENT_ATTEND_NO
+                + " AND " + EventEntry.COLUMN_CON_BELONG_TO_ARTIST + " NOT IN "
+                + "( SELECT " + FavArtistEntry.COL_FAV_ART_THRILL_ID + " FROM " + FavArtistEntry.TABLE_NAME + " );");
 
         db.execSQL("DELETE FROM " + VenueEntry.TABLE_NAME
                 + " WHERE " + VenueEntry.COLUMN_VEN_CON_ID + " NOT IN "

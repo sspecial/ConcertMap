@@ -33,16 +33,39 @@
         android:textColor="@color/black_cow"
         android:layout_marginTop="4dp"/>
 
-    <TextView
-        android:id="@+id/textview_start_at"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_height="wrap_content"
-        android:ellipsize="marquee"
+        android:layout_width="match_parent"
         android:gravity="center_horizontal"
-        android:lines="1"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="@color/black_cow"
-        android:layout_marginTop="4dp"/>
+        android:layout_marginTop="4dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/calendar"
+            android:layout_marginRight="3dp"
+            android:layout_marginTop="2dp"/>
+        <TextView
+            android:id="@+id/artist_item_day_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/black_cow"
+            android:layout_marginRight="9dp"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/clock"
+            android:layout_marginRight="3dp"
+            android:layout_marginTop="2dp"/>
+        <TextView
+            android:id="@+id/artist_item_time_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/black_cow"/>
+    </LinearLayout>
 
 </LinearLayout>
 

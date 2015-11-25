@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="4dp"
+    android:padding="5dp"
     tools:context="de.berlin.special.concertmap.event.EventActivityFragment">
 
     <LinearLayout
@@ -16,15 +16,14 @@
         <ImageView
             android:id="@+id/event_mobile_image"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop" />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linear_event_buttons"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="5dp"
-        android:layout_marginLeft="5dp">
+        android:layout_height="wrap_content">
 
         <Button
             android:id="@+id/button_attend"
@@ -88,16 +87,39 @@
             android:textColor="@color/black_cow"
             android:layout_marginTop="4dp"/>
 
-        <TextView
-            android:id="@+id/textview_event_start_at"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_height="wrap_content"
-            android:ellipsize="marquee"
+            android:layout_width="match_parent"
             android:gravity="center_horizontal"
-            android:lines="1"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/black_cow"
-            android:layout_marginTop="4dp"/>
+            android:layout_marginTop="4dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/calendar"
+                android:layout_marginRight="3dp"
+                android:layout_marginTop="2dp"/>
+            <TextView
+                android:id="@+id/event_item_day_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/black_cow"
+                android:layout_marginRight="9dp"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/clock"
+                android:layout_marginRight="3dp"
+                android:layout_marginTop="2dp"/>
+            <TextView
+                android:id="@+id/event_item_time_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/black_cow"/>
+        </LinearLayout>
 
     </LinearLayout>
 

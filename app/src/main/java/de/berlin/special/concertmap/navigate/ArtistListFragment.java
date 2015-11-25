@@ -90,7 +90,7 @@ class ArtistGridAdapter extends CursorAdapter {
         String artistName = cursor.getString(Utility.COL_ARTIST_NAME);
         String imageURL = cursor.getString(Utility.COL_ARTIST_IMAGE_MOBILE);
 
-        nameView = (TextView) view.findViewById(R.id.artist_name_button);
+        nameView = (TextView) view.findViewById(R.id.artist_name_text);
         imageView = (ImageView) view.findViewById(R.id.artist_image_view);
 
         // Artist Name

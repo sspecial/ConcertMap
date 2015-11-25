@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -137,7 +138,7 @@ public class ArtistActivityFragment extends Fragment {
             artistEventsListView.setAdapter(artistCursorAdapter);
 
             TextView emptyView = (TextView) rootView.findViewById(R.id.artistEmptyTextView);
-            emptyView.setText("Apparently the artist has no further plan!");
+            emptyView.setText("No further plan!");
             artistEventsListView.setEmptyView(emptyView);
 
             // Setup OnClickListener
@@ -199,9 +200,10 @@ public class ArtistActivityFragment extends Fragment {
 
 class ArtistCursorAdapter extends CursorAdapter {
 
-    private TextView dateView;
     private TextView nameView;
     private TextView addressView;
+    private TextView dayView;
+    private TextView timeView;
 
     public ArtistCursorAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
@@ -214,10 +216,10 @@ class ArtistCursorAdapter extends CursorAdapter {
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-
         nameView = (TextView) view.findViewById(R.id.textview_venue_name);
         addressView = (TextView) view.findViewById(R.id.textview_venue_street);
-        dateView = (TextView) view.findViewById(R.id.textview_start_at);
+        dayView = (TextView) view.findViewById(R.id.artist_item_day_textview);
+        timeView = (TextView) view.findViewById(R.id.artist_item_time_textview);
 
         // Artists Names
         nameView.setText(cursor.getString(Utility.COL_VENUE_NAME));
@@ -229,6 +231,8 @@ class ArtistCursorAdapter extends CursorAdapter {
         addressView.setText(venueNameCity);
 
         // Event time
-        dateView.setText(Utility.retrieveDateAndTime(cursor.getString(Utility.COL_EVENT_START_AT)));
+        String[] dateArr = Utility.retrieveDateAndTime(cursor.getString(Utility.COL_EVENT_START_AT));
+        dayView.setText(dateArr[0]);
+        timeView.setText(dateArr[1]);
     }
 }

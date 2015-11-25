@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="82dp"
+    android:layout_height="95dp"
     android:gravity="center_vertical"
     android:minHeight="?android:attr/listPreferredItemHeight"
     android:background="@color/blue_sky">
@@ -17,7 +17,8 @@
         <ImageView
             android:id="@+id/list_item_imageView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"/>
     </LinearLayout>
 
     <LinearLayout
@@ -38,14 +39,42 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/black_cow"
-            android:layout_marginTop="4dp"/>
-        <TextView
-            android:id="@+id/list_item_date_textview"
-            android:layout_width="wrap_content"
+            android:layout_marginTop="5dp"/>
+
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/black_cow"
-            android:layout_marginTop="4dp"/>
+            android:layout_width="match_parent"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="5dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/calendar"
+                android:layout_marginRight="3dp"
+                android:layout_marginTop="2dp"/>
+            <TextView
+                android:id="@+id/list_item_day_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/black_cow"
+                android:layout_marginRight="9dp"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/clock"
+                android:layout_marginRight="3dp"
+                android:layout_marginTop="2dp"/>
+            <TextView
+                android:id="@+id/list_item_time_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/black_cow"/>
+        </LinearLayout>
+
     </LinearLayout>
 
 </LinearLayout>

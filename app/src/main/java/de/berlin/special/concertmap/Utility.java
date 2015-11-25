@@ -120,12 +120,12 @@ public class Utility {
         }
     }
     // To divide Date-str into Day-str and Time-str
-    public static String retrieveDateAndTime(String dateStr){
+    public static String[] retrieveDateAndTime(String dateStr){
         String dayStr = dateStr.split("T")[0];
         String timeStr = dateStr.split("T")[1];
         dayStr = dayStr.substring(0,dayStr.length());
         timeStr = timeStr.substring(0,timeStr.length()-4);
 
-        return ("On " + dayStr + ", At " + timeStr);
+        return new String[]{dayStr, timeStr};
     }
 }

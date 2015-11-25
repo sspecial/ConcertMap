@@ -26,7 +26,8 @@ public class EventCursorAdapter extends CursorAdapter {
     private ImageView imageView;
     private TextView nameView;
     private TextView addressView;
-    private TextView dateView;
+    private TextView dayView;
+    private TextView timeView;
     private final String LOG_TAG = EventCursorAdapter.class.getSimpleName();
     // To specify the color of event item when it is Geo or Attended
     private String fragType;
@@ -61,7 +62,8 @@ public class EventCursorAdapter extends CursorAdapter {
         imageView = (ImageView) view.findViewById(R.id.list_item_imageView);
         nameView = (TextView) view.findViewById(R.id.list_item_name_textview);
         addressView = (TextView) view.findViewById(R.id.list_item_address_textview);
-        dateView = (TextView) view.findViewById(R.id.list_item_date_textview);
+        dayView = (TextView) view.findViewById(R.id.list_item_day_textview);
+        timeView = (TextView) view.findViewById(R.id.list_item_time_textview);
 
         // Setting the background and text color based on fragment type
         if (fragType.equals(Utility.FRAG_EL_GEO)) {
@@ -101,6 +103,8 @@ public class EventCursorAdapter extends CursorAdapter {
         addressView.setText(Utility.venueNamePartition(venueNameCity));
 
         // Event time
-        dateView.setText(Utility.retrieveDateAndTime(cursor.getString(Utility.COL_EVENT_START_AT)));
+        String[] dateArr = Utility.retrieveDateAndTime(cursor.getString(Utility.COL_EVENT_START_AT));
+        dayView.setText(dateArr[0]);
+        timeView.setText(dateArr[1]);
     }
 }

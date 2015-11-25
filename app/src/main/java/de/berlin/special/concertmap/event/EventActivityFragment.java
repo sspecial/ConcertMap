@@ -80,7 +80,8 @@ public class EventActivityFragment extends Fragment {
         ImageView imageView = (ImageView) rootView.findViewById(R.id.event_mobile_image);
         TextView venueNameView = (TextView) rootView.findViewById(R.id.textview_event_venue_name);
         TextView venueAddressView = (TextView) rootView.findViewById(R.id.textview_event_venue_street);
-        TextView startAtView = (TextView) rootView.findViewById(R.id.textview_event_start_at);
+        TextView dayView = (TextView) rootView.findViewById(R.id.event_item_day_textview);
+        TextView timeView = (TextView) rootView.findViewById(R.id.event_item_time_textview);
 
         attendBtn = (Button) rootView.findViewById(R.id.button_attend);
         if(attended == Utility.EVENT_ATTEND_NO){
@@ -110,7 +111,9 @@ public class EventActivityFragment extends Fragment {
 
         venueNameView.setText(venueName);
         venueAddressView.setText(venueAddress);
-        startAtView.setText(Utility.retrieveDateAndTime(eventStartAt));
+        String[] dateArr = Utility.retrieveDateAndTime(eventStartAt);
+        dayView.setText(dateArr[0]);
+        timeView.setText(dateArr[1]);
         return rootView;
     }
 
