@@ -1,5 +1,6 @@
 package de.berlin.special.concertmap.navigate;
 
+import android.support.v4.app.FragmentTransaction;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -110,14 +111,12 @@ public class NavigationActivity extends AppCompatActivity {
             case NAV_CASE_TRACKED_ARTISTS:
                 manager.beginTransaction()
                         .replace(R.id.content_frame, artistListFragment)
-                        .addToBackStack(null)
                         .commit();
                 break;
 
             case NAV_CASE_ATTENDED_EVENTS:
                 manager.beginTransaction()
                         .replace(R.id.content_frame, eventListFragment)
-                        .addToBackStack(null)
                         .commit();
                 break;
 
@@ -130,6 +129,20 @@ public class NavigationActivity extends AppCompatActivity {
     public void setTitle(CharSequence title) {
         mTitle = title;
         actionBar.setTitle(mTitle);
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        Fragment currentFragment = manager.findFragmentById(R.id.content_frame);
+        if (currentFragment.toString().contains(GeoListFragment.class.getSimpleName())) {
+            finish();
+        } else {
+            manager.beginTransaction()
+                    .replace(R.id.content_frame, geoListFragment)
+                    .addToBackStack(null)
+                    .commit();
+        }
     }
 
     public void setUpDrawerToggle() {
