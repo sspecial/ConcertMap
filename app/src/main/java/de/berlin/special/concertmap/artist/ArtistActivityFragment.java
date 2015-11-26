@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.CursorAdapter;
@@ -18,6 +19,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -134,7 +136,7 @@ public class ArtistActivityFragment extends Fragment {
             artistEventsListView.setAdapter(artistCursorAdapter);
 
             TextView emptyView = (TextView) rootView.findViewById(R.id.artistEmptyTextView);
-            emptyView.setText("No further plan!");
+            emptyView.setText(Utility.NO_ARTIST_PLAN);
             artistEventsListView.setEmptyView(emptyView);
 
             // Setup OnClickListener
@@ -189,6 +191,19 @@ public class ArtistActivityFragment extends Fragment {
                         EventContract.FavArtistEntry._ID + "=" + artistID,
                         null);
                 trackBtn.setText("Tracked Artist!");
+            }
+        });
+
+        webBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!artistOfficialWebsite.equals("null")) {
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(artistOfficialWebsite));
+                    startActivity(browserIntent);
+                } else {
+                    Toast toast = Toast.makeText(getContext(), Utility.NO_OFFICIAL_WEBSITE, Toast.LENGTH_SHORT);
+                    toast.show();
+                }
             }
         });
     }

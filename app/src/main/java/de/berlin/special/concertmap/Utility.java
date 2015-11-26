@@ -77,6 +77,18 @@ public class Utility {
     public static final int COL_ARTIST_IMAGE_MOBILE = 5;
     public static final int COL_ARTIST_TRACKED = 6;
 
+    public static final String ticketQueryStr = "SELECT tickets._ID, " +
+            "tickets.ticket_name, tickets.ticket_url " +
+            "FROM tickets ";
+    // These indices are tied to TICKETS CURSOR_COLUMNS
+    public static final int COL_TICKET_ID = 0;
+    public static final int COL_TICKET_NAME = 1;
+    public static final int COL_TICKET_URL = 2;
+
+    public static final String NO_TICKET_PROVIDER = "No Ticket Provider!";
+    public static final String NO_ARTIST_PLAN = "No Further Plan!";
+    public static final String NO_OFFICIAL_WEBSITE = "No Official Website!";
+
     private static final String IMAGE_BADE_DIR = "/sdcard/ConcertMap/";
     public static final String IMAGE_DIR_ARTIST = IMAGE_BADE_DIR + "TrackedArtists";
     public static final String IMAGE_DIR_EVENT = IMAGE_BADE_DIR + "AttendedEvents";

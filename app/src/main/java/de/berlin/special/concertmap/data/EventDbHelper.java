@@ -7,6 +7,7 @@ import de.berlin.special.concertmap.data.EventContract.FavArtistEntry;
 import de.berlin.special.concertmap.data.EventContract.ArtistEntry;
 import de.berlin.special.concertmap.data.EventContract.EventEntry;
 import de.berlin.special.concertmap.data.EventContract.VenueEntry;
+import de.berlin.special.concertmap.data.EventContract.TicketEntry;
 
 /**
  * Created by Saeed on 18-Apr-15.
@@ -25,7 +26,6 @@ public class EventDbHelper extends SQLiteOpenHelper {
 
         // Create a table to hold events.
         final String SQL_CREATE_EVENT_TABLE = "CREATE TABLE " + EventEntry.TABLE_NAME + " (" +
-
                 EventEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 // the ID of the location entry associated with this event
                 EventEntry.COLUMN_CON_THRILL_ID + " INTEGER NOT NULL UNIQUE, " +
@@ -60,7 +60,17 @@ public class EventDbHelper extends SQLiteOpenHelper {
                 EventEntry.TABLE_NAME + " (" + EventEntry._ID + ") " +
                 ");";
 
-        // Create a table to hold artists.
+        // Create a table to hold tickets.
+        final String SQL_CREATE_TICKETS_TABLE = "CREATE TABLE " + TicketEntry.TABLE_NAME + " (" +
+                TicketEntry._ID + " INTEGER PRIMARY KEY," +
+                TicketEntry.COLUMN_TICKET_CON_ID + " INTEGER NOT NULL, " +
+                TicketEntry.COLUMN_TICKET_NAME + " TEXT NOT NULL, " +
+                TicketEntry.COLUMN_TICKET_URL + " TEXT NOT NULL, " +
+                " FOREIGN KEY (" + TicketEntry.COLUMN_TICKET_CON_ID + ") REFERENCES " +
+                EventEntry.TABLE_NAME + " (" + EventEntry._ID + ") " +
+                ");";
+
+        // Create a table to hold favorite artists.
         final String SQL_CREATE_FAV_ARTIST_TABLE = "CREATE TABLE " + FavArtistEntry.TABLE_NAME + " (" +
                 FavArtistEntry._ID + " INTEGER PRIMARY KEY," +
                 FavArtistEntry.COL_FAV_ART_THRILL_ID + " INTEGER NOT NULL UNIQUE, " +
@@ -73,6 +83,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
         db.execSQL(SQL_CREATE_EVENT_TABLE);
         db.execSQL(SQL_CREATE_VENUE_TABLE);
         db.execSQL(SQL_CREATE_ARTISTS_TABLE);
+        db.execSQL(SQL_CREATE_TICKETS_TABLE);
         db.execSQL(SQL_CREATE_FAV_ARTIST_TABLE);
     }
 

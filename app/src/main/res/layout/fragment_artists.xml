@@ -16,4 +16,23 @@
         android:layout_marginLeft="1dp"
         android:layout_marginRight="1dp"/>
 
+    <LinearLayout
+        android:id="@+id/artistEmptyLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:layout_margin="8dp">
+
+        <TextView
+            android:id="@+id/artistEmptyTextView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:textColor="@color/black"
+            android:gravity="center"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    </LinearLayout>
+
 </FrameLayout>

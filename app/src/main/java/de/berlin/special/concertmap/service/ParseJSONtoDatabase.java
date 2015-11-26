@@ -13,10 +13,11 @@ import java.io.File;
 import java.util.Hashtable;
 
 import de.berlin.special.concertmap.Utility;
+import de.berlin.special.concertmap.data.EventContract.TicketEntry;
 import de.berlin.special.concertmap.data.EventContract.ArtistEntry;
 import de.berlin.special.concertmap.data.EventContract.EventEntry;
-import de.berlin.special.concertmap.data.EventContract.VenueEntry;
 import de.berlin.special.concertmap.data.EventContract.FavArtistEntry;
+import de.berlin.special.concertmap.data.EventContract.VenueEntry;
 import de.berlin.special.concertmap.data.EventDbHelper;
 
 /**
@@ -64,6 +65,10 @@ public class ParseJSONtoDatabase {
         db.execSQL("DELETE FROM " + ArtistEntry.TABLE_NAME
                 + " WHERE " + ArtistEntry.COLUMN_ART_CON_ID + " NOT IN "
                 + "( SELECT " + EventEntry._ID + " FROM " + EventEntry.TABLE_NAME + " );");
+
+        db.execSQL("DELETE FROM " + TicketEntry.TABLE_NAME
+                + " WHERE " + TicketEntry.COLUMN_TICKET_CON_ID + " NOT IN "
+                + "( SELECT " + EventEntry._ID + " FROM " + EventEntry.TABLE_NAME + " );");
     }
 
     public void parseData() {
@@ -75,10 +80,13 @@ public class ParseJSONtoDatabase {
         final String CON_IMAGE_JSON_KEY = "photos";
         final String CON_IMAGE = "mobile";
 
-
         final String ART_JSON_KEY = "artists";
         final String ART_Thrill_ID = "id";
         final String ART_NAME = "name";
+
+        final String TICKET_JSON_KEY = "ticket_providers";
+        final String TICKET_NAME = "name";
+        final String TICKET_URL = "url";
 
         final String VEN_JSON_KEY = "venue";
         final String VEN_Thrill_ID = "id";
@@ -101,6 +109,7 @@ public class ParseJSONtoDatabase {
                 String conImage;
 
                 Hashtable<Integer, String> artList = new Hashtable<Integer, String>();
+                Hashtable<String, String> ticketList = new Hashtable<String, String>();
 
                 int venThrillID;
                 String venName;
@@ -133,6 +142,12 @@ public class ParseJSONtoDatabase {
                 venGeoLat = venueJSON.getDouble(VEN_GEO_LAT);
                 venGeoLong = venueJSON.getDouble(VEN_GEO_LONG);
                 venWeb = venueJSON.getString(VEN_WEB);
+
+                JSONArray ticketsJSONArray = venueJSON.getJSONArray(TICKET_JSON_KEY);
+                for (int k = 0; k < ticketsJSONArray.length(); k++) {
+                    JSONObject ticketObject = ticketsJSONArray.getJSONObject(k);
+                    ticketList.put(ticketObject.getString(TICKET_NAME), ticketObject.getString(TICKET_URL));
+                }
 
                 ContentValues eventValues = new ContentValues();
                 // Create a new map of values for event, where column names are the keys
@@ -185,7 +200,23 @@ public class ParseJSONtoDatabase {
                     Log.d(LOG_TAG, "Artist id" + String.valueOf(newRowIdArtist));
                 }
 
+                for (String key : ticketList.keySet()) {
+                    ContentValues ticketValues = new ContentValues();
+                    // Create a new map of values for ticket, where column names are the keys
+                    ticketValues.put(TicketEntry.COLUMN_TICKET_CON_ID, newRowIdEvent);
+                    ticketValues.put(TicketEntry.COLUMN_TICKET_NAME, key);
+                    ticketValues.put(TicketEntry.COLUMN_TICKET_URL, ticketList.get(key));
+                    // Insert the new venue row
+                    long newRowIdTicket;
+                    newRowIdTicket = Utility.db.insert(
+                            TicketEntry.TABLE_NAME,
+                            null,
+                            ticketValues);
+                    Log.d(LOG_TAG, "Ticket id" + String.valueOf(newRowIdTicket));
+                }
+
                 artList.clear();
+                ticketList.clear();
             }
 
         } catch (JSONException e) {

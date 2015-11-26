@@ -31,18 +31,15 @@ public class EventContract {
         public static final String COLUMN_ART_NAME = "artist_name";
     }
 
-    /* Inner class that defines the table contents of the favorite artist table */
-    public static final class FavArtistEntry implements BaseColumns {
+    /* Inner class that defines the table contents of the artist table */
+    public static final class TicketEntry implements BaseColumns {
 
         // Table name
-        public static final String TABLE_NAME = "artist";
+        public static final String TABLE_NAME = "tickets";
         // Information of artists:
-        public static final String COL_FAV_ART_THRILL_ID = "artist_thrill_ID";
-        public static final String COL_FAV_ART_NAME = "artist_name";
-        public static final String COL_FAV_ART_OFFICIAL_URL = "artist_official_url";
-        public static final String COL_FAV_ART_IMAGE_LARGE = "artist_image_large";
-        public static final String COL_FAV_ART_IMAGE_MOBILE = "artist_image_mobile";
-        public static final String COL_FAV_ART_TRACKED = "artist_tracked";
+        public static final String COLUMN_TICKET_CON_ID = "event_ID";
+        public static final String COLUMN_TICKET_NAME = "ticket_name";
+        public static final String COLUMN_TICKET_URL = "ticket_url";
     }
 
     /* Inner class that defines the table contents of the location table */
@@ -59,5 +56,19 @@ public class EventContract {
         public static final String COLUMN_VEN_GEO_LAT = "venue_geo_lat";
         public static final String COLUMN_VEN_GEO_LONG = "venue_geo_long";
         public static final String COLUMN_VEN_WEB = "venue_web";
+    }
+
+    /* Inner class that defines the table contents of the favorite artist table */
+    public static final class FavArtistEntry implements BaseColumns {
+
+        // Table name
+        public static final String TABLE_NAME = "artist";
+        // Information of artists:
+        public static final String COL_FAV_ART_THRILL_ID = "artist_thrill_ID";
+        public static final String COL_FAV_ART_NAME = "artist_name";
+        public static final String COL_FAV_ART_OFFICIAL_URL = "artist_official_url";
+        public static final String COL_FAV_ART_IMAGE_LARGE = "artist_image_large";
+        public static final String COL_FAV_ART_IMAGE_MOBILE = "artist_image_mobile";
+        public static final String COL_FAV_ART_TRACKED = "artist_tracked";
     }
 }

@@ -3,8 +3,10 @@ package de.berlin.special.concertmap.event;
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -17,6 +19,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -52,6 +55,7 @@ public class EventActivityFragment extends Fragment {
 
     private Button attendBtn;
     private Button artistBtn;
+    private Button ticketBtn;
 
     public EventActivityFragment() {
     }
@@ -92,6 +96,7 @@ public class EventActivityFragment extends Fragment {
             eventInfo.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.orange_sky));
         }
         artistBtn = (Button) rootView.findViewById(R.id.button_artist);
+        ticketBtn = (Button) rootView.findViewById(R.id.button_ticket);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         map = mapFragment.getMap();
@@ -144,19 +149,6 @@ public class EventActivityFragment extends Fragment {
                         null);
                 attendBtn.setText("Attended!");
 
-                /*
-                String eventQueryStr = "SELECT event._ID " +
-                        "FROM event " +
-                        "WHERE " +
-                        EventEntry.COLUMN_CON_ATTEND + " = " + Utility.EVENT_ATTEND_YES + ";";
-
-                Cursor cursor = Utility.db.rawQuery(eventQueryStr, null);
-                String msg = "";
-                while (cursor.moveToNext()) {
-                    msg += String.valueOf(cursor.getInt(Utility.COL_EVENT_ID))+"\n";
-                }
-                Toast.makeText(getActivity(),
-                        msg, Toast.LENGTH_LONG).show();*/
             }
         });
 
@@ -195,6 +187,50 @@ public class EventActivityFragment extends Fragment {
                     int artistThrillID = artistsCursor.getInt(Utility.COL_ARTIST_THRILL_ID);
                     new DataFetchService(getContext(), artistThrillID, Utility.URL_ARTIST_INFO).execute();
                 }
+            }
+        });
+
+        ticketBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String argEventID = "WHERE tickets.event_ID = " + String.valueOf(eventID) + ";";
+                String ticketQueryStr = Utility.ticketQueryStr + argEventID;
+                final Cursor ticketsCursor = Utility.db.rawQuery(ticketQueryStr, null);
+
+                if (ticketsCursor.getCount() == 0) {
+
+                    Toast toast = Toast.makeText(getContext(), Utility.NO_TICKET_PROVIDER, Toast.LENGTH_SHORT);
+                    toast.show();
+
+                } else if (ticketsCursor.getCount() == 1) {
+
+                    ticketsCursor.moveToFirst();
+                    String providerURL = ticketsCursor.getString(Utility.COL_TICKET_URL);
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(providerURL));
+                    startActivity(browserIntent);
+
+                } else if (ticketsCursor.getCount() > 1) {
+
+                    String[] ticketArr = new String[ticketsCursor.getCount()];
+                    for (int j = 0; j < ticketsCursor.getCount(); j++) {
+                        ticketsCursor.moveToPosition(j);
+                        ticketArr[j] = ticketsCursor.getString(Utility.COL_TICKET_NAME);
+                    }
+                    AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), android.R.style.Theme_Holo_Light_Dialog));
+                    builder.setTitle(R.string.choose_ticket_provider)
+                            .setItems(ticketArr, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    ticketsCursor.moveToPosition(which);
+                                    String providerURL = ticketsCursor.getString(Utility.COL_TICKET_URL);
+                                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(providerURL));
+                                    startActivity(browserIntent);
+                                }
+                            });
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                }
+
             }
         });
     }
