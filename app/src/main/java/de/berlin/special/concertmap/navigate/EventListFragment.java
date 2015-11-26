@@ -64,7 +64,7 @@ public class EventListFragment extends Fragment {
                     int eventID = eventCursor.getInt(Utility.COL_EVENT_ID);
                     String artistsName = Utility.retrieveArtistName(eventCursor.getString(Utility.COL_EVENT_NAME));
                     String startAt = eventCursor.getString(Utility.COL_EVENT_START_AT);
-                    String imagePath = Utility.imageDirPath() +"/"+ String.valueOf(eventCursor.getInt(Utility.COL_EVENT_THRILL_ID));
+                    String imagePath = Utility.IMAGE_DIR_EVENT + "/" + String.valueOf(eventCursor.getInt(Utility.COL_EVENT_THRILL_ID));
                     int attended = eventCursor.getInt(Utility.COL_EVENT_ATTEND);
                     String venueName = eventCursor.getString(Utility.COL_VENUE_NAME);
                     String venueStreet = eventCursor.getString(Utility.COL_VENUE_STREET);

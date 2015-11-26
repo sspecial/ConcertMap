@@ -35,19 +35,12 @@ public class EventCursorAdapter extends CursorAdapter {
 
     public EventCursorAdapter(Context context, Cursor c, int flags, String type) {
         super(context, c, flags);
-        /*
-        File dir = new File(Utility.imageDirPath());
-        if (dir.exists()) {
-            for (File imFile : dir.listFiles()) {
-                imFile.delete();
-            }
-            dir.delete();
-        }
-        */
         fragType = type;
-        imageDir = new File(Utility.imageDirPath());
-        if (!imageDir.exists()) {
-            imageDir.mkdirs();
+
+        if (fragType.equals(Utility.FRAG_EL_GEO)) {
+            imageDir = new File(Utility.imageDirToday());
+        }else {
+            imageDir = new File(Utility.IMAGE_DIR_EVENT);
         }
     }
 

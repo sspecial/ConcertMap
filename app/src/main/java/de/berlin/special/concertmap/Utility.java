@@ -77,10 +77,14 @@ public class Utility {
     public static final int COL_ARTIST_IMAGE_MOBILE = 5;
     public static final int COL_ARTIST_TRACKED = 6;
 
-    private static final String imageDirBase = "/sdcard/ImageDir/";
-    public static String imageDirPath(){
+    private static final String IMAGE_BADE_DIR = "/sdcard/ConcertMap/";
+    public static final String IMAGE_DIR_ARTIST = IMAGE_BADE_DIR + "TrackedArtists";
+    public static final String IMAGE_DIR_EVENT = IMAGE_BADE_DIR + "AttendedEvents";
+    public static final String IMAGE_DIR_DAILY = IMAGE_BADE_DIR + "DailyEvents";
+
+    public static String imageDirToday(){
         String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-        return imageDirBase + date;
+        return IMAGE_DIR_DAILY + "/" +date;
     }
 
     // To get Artist-name out of Event-name

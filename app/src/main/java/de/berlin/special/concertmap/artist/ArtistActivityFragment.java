@@ -8,7 +8,6 @@ import android.database.DatabaseUtils;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.CursorAdapter;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -29,8 +27,6 @@ import de.berlin.special.concertmap.Utility;
 import de.berlin.special.concertmap.data.EventContract;
 import de.berlin.special.concertmap.event.EventActivity;
 import de.berlin.special.concertmap.navigate.DownloadImageTask;
-import de.berlin.special.concertmap.navigate.EventCursorAdapter;
-import de.berlin.special.concertmap.service.DataFetchService;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -93,7 +89,7 @@ public class ArtistActivityFragment extends Fragment {
         // Image view
         ImageView imageView = (ImageView) rootView.findViewById(R.id.artist_mobile_image);
         // Image dir
-        File imageDir = new File(Utility.imageDirPath());
+        File imageDir = new File(Utility.imageDirToday());
         // Image name
         String imageName = String.valueOf(artistThrillID);
 
@@ -150,7 +146,7 @@ public class ArtistActivityFragment extends Fragment {
                     int eventID = eventCursor.getInt(Utility.COL_EVENT_ID);
                     String artistsName = Utility.retrieveArtistName(eventCursor.getString(Utility.COL_EVENT_NAME));
                     String startAt = eventCursor.getString(Utility.COL_EVENT_START_AT);
-                    String imagePath = Utility.imageDirPath() +"/"+ String.valueOf(artistID);
+                    String imagePath = Utility.imageDirToday() + "/" + String.valueOf(artistID);
                     int attended = eventCursor.getInt(Utility.COL_EVENT_ATTEND);
                     String venueName = eventCursor.getString(Utility.COL_VENUE_NAME);
                     String venueStreet = eventCursor.getString(Utility.COL_VENUE_STREET);

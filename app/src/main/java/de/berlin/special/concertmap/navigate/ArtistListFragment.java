@@ -5,17 +5,15 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.graphics.BitmapFactory;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.CursorAdapter;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.GridView;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -97,7 +95,7 @@ class ArtistGridAdapter extends CursorAdapter {
         nameView.setText(artistName);
 
         // Artist Image
-        File imageDir = new File(Utility.imageDirPath());
+        File imageDir = new File(Utility.IMAGE_DIR_ARTIST);
         String imageName = String.valueOf(artistThrillID);
         // Let's see if it is necessary to download the image file
         File file = new File(imageDir, imageName);
