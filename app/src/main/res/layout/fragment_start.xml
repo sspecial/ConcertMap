@@ -73,12 +73,12 @@
         android:layout_centerHorizontal="true"/>
 
     <Button
-        style="@android:style/Widget.Holo.Light.Button"
+        android:background="@drawable/mytheme_btn"
         android:layout_width="110dp"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="@string/continue_key"
-        android:textColor="@color/grey_700"
+        android:textColor="@color/black"
         android:id="@+id/continue_button"
         android:layout_marginTop="35dp"
         android:layout_below="@+id/comment_view"

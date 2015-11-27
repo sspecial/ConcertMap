@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="5dp"
-    tools:context="de.berlin.special.concertmap.event.ArtistActivityFragment">
+    tools:context="de.berlin.special.concertmap.event.ArtistActivityFragment"
+    android:background="@drawable/light_blue_background">
 
     <LinearLayout
         android:id="@+id/atist_image_layout"
@@ -25,23 +26,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <Button
+        <CheckBox
             android:id="@+id/button_favorite"
-            style="?android:attr/buttonStyleInset"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/black" />
+            style="@android:style/Widget.Holo.Light.Button"
+            android:textColor="@color/black"
+            android:backgroundTint="#a29a78" />
 
         <Button
             android:id="@+id/button_website"
-            style="?android:attr/buttonStyleInset"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Official Website"
             android:textAppearance="?android:attr/textAppearanceSmall"
+            android:background="@drawable/mytheme_btn"
             android:textColor="@color/black" />
     </LinearLayout>
 
@@ -55,7 +57,7 @@
             android:id="@+id/list_view_artist_events"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:dividerHeight="5dp" />
+            android:dividerHeight="2dp" />
 
         <LinearLayout
             android:id="@+id/artistEmptyLayout"

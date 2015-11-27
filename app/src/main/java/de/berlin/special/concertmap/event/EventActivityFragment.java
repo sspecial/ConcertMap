@@ -9,13 +9,13 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -53,7 +53,7 @@ public class EventActivityFragment extends Fragment {
     private double geoLong;
     private GoogleMap map;
 
-    private Button attendBtn;
+    private CheckBox attendBtn;
     private Button artistBtn;
     private Button ticketBtn;
 
@@ -87,13 +87,13 @@ public class EventActivityFragment extends Fragment {
         TextView dayView = (TextView) rootView.findViewById(R.id.event_item_day_textview);
         TextView timeView = (TextView) rootView.findViewById(R.id.event_item_time_textview);
 
-        attendBtn = (Button) rootView.findViewById(R.id.button_attend);
+        attendBtn = (CheckBox) rootView.findViewById(R.id.button_attend);
         if(attended == Utility.EVENT_ATTEND_NO){
-            attendBtn.setText("Attend");
-            eventInfo.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_sky));
+            attendBtn.setText(Utility.EVENT_ATTEND_TEXT_NO);
+            attendBtn.setChecked(false);
         } else{
-            attendBtn.setText("Attended!");
-            eventInfo.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.orange_sky));
+            attendBtn.setText(Utility.EVENT_ATTEND_TEXT_YES);
+            attendBtn.setChecked(true);
         }
         artistBtn = (Button) rootView.findViewById(R.id.button_artist);
         ticketBtn = (Button) rootView.findViewById(R.id.button_ticket);
@@ -141,14 +141,18 @@ public class EventActivityFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 ContentValues args = new ContentValues();
-                args.put(EventEntry.COLUMN_CON_ATTEND, Utility.EVENT_ATTEND_YES);
+                if(attendBtn.isChecked()) {
+                    args.put(EventEntry.COLUMN_CON_ATTEND, Utility.EVENT_ATTEND_YES);
+                    attendBtn.setText(Utility.EVENT_ATTEND_TEXT_YES);
+                } else {
+                    args.put(EventEntry.COLUMN_CON_ATTEND, Utility.EVENT_ATTEND_NO);
+                    attendBtn.setText(Utility.EVENT_ATTEND_TEXT_NO);
+                }
                 int row = Utility.db.update(
                         EventEntry.TABLE_NAME,
                         args,
                         EventEntry._ID + "=" + eventID,
                         null);
-                attendBtn.setText("Attended!");
-
             }
         });
 

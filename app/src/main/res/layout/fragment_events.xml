@@ -8,7 +8,7 @@
         android:id="@+id/list_view_events"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:dividerHeight="5dp" />
+        android:dividerHeight="2dp" />
 
     <LinearLayout
         android:id="@+id/emptyLayout"

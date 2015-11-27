@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -46,7 +47,7 @@ public class ArtistActivityFragment extends Fragment {
     private String artistImageMobile;
     private int artistTracked;
 
-    private Button trackBtn;
+    private CheckBox trackBtn;
     private Button webBtn;
 
     public ArtistActivityFragment() {
@@ -79,13 +80,15 @@ public class ArtistActivityFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_artist, container, false);
         getActivity().setTitle(artistName);
 
-        trackBtn = (Button) rootView.findViewById(R.id.button_favorite);
+        trackBtn = (CheckBox) rootView.findViewById(R.id.button_favorite);
         webBtn = (Button) rootView.findViewById(R.id.button_website);
 
         if(artistTracked == Utility.ARTIST_TRACKED_NO){
-            trackBtn.setText("Track Artist");
+            trackBtn.setText(Utility.ARTIST_TRACKED_TEXT_NO);
+            trackBtn.setChecked(false);
         } else{
-            trackBtn.setText("Tracked Artist!");
+            trackBtn.setText(Utility.ARTIST_TRACKED_TEXT_YES);
+            trackBtn.setChecked(true);
         }
 
         // Image view
@@ -184,13 +187,18 @@ public class ArtistActivityFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 ContentValues args = new ContentValues();
-                args.put(EventContract.FavArtistEntry.COL_FAV_ART_TRACKED, Utility.ARTIST_TRACKED_YES);
+                if(trackBtn.isChecked()) {
+                    args.put(EventContract.FavArtistEntry.COL_FAV_ART_TRACKED, Utility.ARTIST_TRACKED_YES);
+                    trackBtn.setText(Utility.ARTIST_TRACKED_TEXT_YES);
+                } else {
+                    args.put(EventContract.FavArtistEntry.COL_FAV_ART_TRACKED, Utility.ARTIST_TRACKED_NO);
+                    trackBtn.setText(Utility.ARTIST_TRACKED_TEXT_NO);
+                }
                 int row = Utility.db.update(
                         EventContract.FavArtistEntry.TABLE_NAME,
                         args,
                         EventContract.FavArtistEntry._ID + "=" + artistID,
                         null);
-                trackBtn.setText("Tracked Artist!");
             }
         });
 

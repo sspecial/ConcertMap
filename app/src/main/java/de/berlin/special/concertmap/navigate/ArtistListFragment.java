@@ -62,7 +62,7 @@ public class ArtistListFragment extends Fragment {
         trackedArtistsGrid.setAdapter(artistGridAdapter);
 
         TextView emptyView = (TextView) rootView.findViewById(R.id.artistEmptyTextView);
-        emptyView.setText("When you decide to track an artist it will be added here :)");
+        emptyView.setText("When you track an artist it will be added here :)");
         trackedArtistsGrid.setEmptyView(emptyView);
 
         return rootView;

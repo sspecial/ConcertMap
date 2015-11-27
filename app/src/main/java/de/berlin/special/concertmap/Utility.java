@@ -35,9 +35,13 @@ public class Utility {
 
     public static final int EVENT_ATTEND_YES = 1;
     public static final int EVENT_ATTEND_NO = 0;
+    public static final String EVENT_ATTEND_TEXT_NO = "Attend";
+    public static final String EVENT_ATTEND_TEXT_YES = "Attended!";
 
     public static final int ARTIST_TRACKED_YES = 1;
     public static final int ARTIST_TRACKED_NO = 0;
+    public static final String ARTIST_TRACKED_TEXT_NO = "Track Artist";
+    public static final String ARTIST_TRACKED_TEXT_YES = "Tracked Artist!";
 
     public static final String eventQueryStr = "SELECT event._ID, " +
             "event.event_thrill_ID, event.event_name, " +

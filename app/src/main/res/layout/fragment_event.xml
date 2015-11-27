@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="5dp"
-    tools:context="de.berlin.special.concertmap.event.EventActivityFragment">
+    tools:context="de.berlin.special.concertmap.event.EventActivityFragment"
+    android:background="@drawable/light_blue_background">
 
     <LinearLayout
         android:id="@+id/image_linear_layout"
@@ -25,19 +26,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <Button
+        <CheckBox
             android:id="@+id/button_attend"
-            style="?android:attr/buttonStyleInset"
             android:textAppearance="?android:attr/textAppearanceSmall"
+            style="@android:style/Widget.Holo.Light.Button"
             android:textColor="@color/black"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:checked="false"
+            android:backgroundTint="#a29a78" />
 
         <Button
             android:id="@+id/button_artist"
-            style="?android:attr/buttonStyleInset"
             android:textAppearance="?android:attr/textAppearanceSmall"
+            android:background="@drawable/mytheme_btn"
             android:textColor="@color/black"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -46,8 +49,8 @@
 
         <Button
             android:id="@+id/button_ticket"
-            style="?android:attr/buttonStyleInset"
             android:textAppearance="?android:attr/textAppearanceSmall"
+            android:background="@drawable/mytheme_btn"
             android:textColor="@color/black"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -73,7 +76,7 @@
             android:gravity="center_horizontal"
             android:lines="1"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/black_cow"
+            android:textColor="@color/black"
             android:textStyle="bold" />
 
         <TextView
@@ -84,7 +87,7 @@
             android:gravity="center_horizontal"
             android:lines="1"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/black_cow"
+            android:textColor="@color/black"
             android:layout_marginTop="4dp"/>
 
         <LinearLayout
@@ -105,7 +108,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/black_cow"
+                android:textColor="@color/black"
                 android:layout_marginRight="9dp"/>
             <ImageView
                 android:layout_width="wrap_content"
@@ -118,7 +121,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/black_cow"/>
+                android:textColor="@color/black"/>
         </LinearLayout>
 
     </LinearLayout>
