@@ -31,6 +31,7 @@
         <activity
             android:name=".artist.ArtistActivity"
             android:label="@string/title_activity_artist"
+            android:screenOrientation="portrait"
             android:parentActivityName=".navigate.NavigationActivity" >
             !-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
@@ -40,6 +41,7 @@
         <activity
             android:name=".event.EventActivity"
             android:label="@string/title_activity_event"
+            android:screenOrientation="portrait"
             android:parentActivityName=".navigate.NavigationActivity" >
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
