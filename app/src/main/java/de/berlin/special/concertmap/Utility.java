@@ -19,15 +19,17 @@ public class Utility {
     public static final String THRILLCALL_API_KEY = "d90d066add515bff";
     public static final String THRILLCALL_GEO_BASE_URL = "https://api.thrillcall.com/api/v3/events";
     public static final String THRILLCALL_ARTIST_BASE_URL = "https://api.thrillcall.com/api/v3/artist/";
-
-    // To decide if we want a list of geo or attended events
-    public static final String FRAG_EL_GEO = "geo";
-    public static final String FRAG_EL_ATTENDED = "attended";
+    public static final String THRILLCALL_SEARCH_BASE_URL = "https://api.thrillcall.com/api/v3/search/artists/";
 
     // URL to get data from ThrillCall API
     public static final int URL_GEO_EVENTS = 0;
     public static final int URL_ARTIST_EVENTS = 1;
     public static final int URL_ARTIST_INFO = 2;
+    public static final int URL_ARTIST_SEARCH = 3;
+
+    // To decide if we want a list of geo or attended events
+    public static final String FRAG_EL_GEO = "geo";
+    public static final String FRAG_EL_ATTENDED = "attended";
 
     public static SQLiteDatabase db;
 

@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/location_view"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/black_cow"/>
+            android:textColor="@color/black"/>
 
     </LinearLayout>
 
@@ -37,10 +37,14 @@
         android:visibility="invisible">
 
         <EditText
+            android:id="@+id/enter_city_edit_text"
+            android:theme="@android:style/Theme.DeviceDefault"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:id="@+id/enter_city_edit_text"
-            android:theme="@android:style/Theme.Dialog"/>
+            android:singleLine="true"
+            android:lines="1"
+            android:textColor="@color/black"
+            android:textSize="19dp"/>
 
         <ImageButton
             android:layout_width="wrap_content"

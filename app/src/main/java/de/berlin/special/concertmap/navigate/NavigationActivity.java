@@ -1,6 +1,5 @@
 package de.berlin.special.concertmap.navigate;
 
-import android.support.v4.app.FragmentTransaction;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -31,11 +30,15 @@ public class NavigationActivity extends AppCompatActivity {
     private static final int NAV_CASE_CITY = 0;
     private static final int NAV_CASE_TRACKED_ARTISTS  = 1;
     private static final int NAV_CASE_ATTENDED_EVENTS  = 2;
+    private static final int NAV_CASE_SEARCH_AN_ARTIST  = 3;
+    private static final int NAV_CASE_SETTING = 4;
 
     // Navigation bar items
     private String navItem1;
     private final String navItem2 = "Tracked Artists";
     private final String navItem3 = "Attended Events";
+    private final String navItem4 = "Search an Artist";
+    private final String navItem5 = "Setting";
 
     private String[] eventNavItems;
     private DrawerLayout mDrawerLayout;
@@ -49,6 +52,8 @@ public class NavigationActivity extends AppCompatActivity {
     Fragment geoListFragment = new GeoListFragment();
     Fragment eventListFragment = new EventListFragment();
     Fragment artistListFragment = new ArtistListFragment();
+    Fragment searchArtistFragment = new SearchArtistFragment();
+    Fragment settingFragment = new SettingFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +65,7 @@ public class NavigationActivity extends AppCompatActivity {
             navItem1 = Utility.city + " Concerts";
         else
             navItem1 = "Concerts";
-        eventNavItems = new String[]{navItem1, navItem2, navItem3};
+        eventNavItems = new String[]{navItem1, navItem2, navItem3, navItem4, navItem5};
 
         // Initiating GeoFragment as default view of activity
         manager = getSupportFragmentManager();
@@ -117,6 +122,18 @@ public class NavigationActivity extends AppCompatActivity {
             case NAV_CASE_ATTENDED_EVENTS:
                 manager.beginTransaction()
                         .replace(R.id.content_frame, eventListFragment)
+                        .commit();
+                break;
+
+            case NAV_CASE_SEARCH_AN_ARTIST:
+                manager.beginTransaction()
+                        .replace(R.id.content_frame, searchArtistFragment)
+                        .commit();
+                break;
+
+            case NAV_CASE_SETTING:
+                manager.beginTransaction()
+                        .replace(R.id.content_frame, settingFragment)
                         .commit();
                 break;
 
@@ -218,7 +235,11 @@ class NavigateAdapter extends BaseAdapter {
 
     private Context context;
     private String[] eventNavItems;
-    private int[] images = {R.drawable.cornet_ins, R.drawable.music_conductor, R.drawable.audio_wave};
+    private int[] images = {R.drawable.cornet_ins
+            , R.drawable.music_conductor
+            , R.drawable.audio_wave
+            , R.drawable.search
+            , R.drawable.settings};
 
     public NavigateAdapter(Context context, String[] eventNavItems) {
         this.context = context;

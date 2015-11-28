@@ -1,10 +1,13 @@
 package de.berlin.special.concertmap.service;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -15,11 +18,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Hashtable;
 
 import de.berlin.special.concertmap.R;
 import de.berlin.special.concertmap.Utility;
 import de.berlin.special.concertmap.artist.ArtistActivity;
-import de.berlin.special.concertmap.artist.ArtistActivityFragment;
 
 /**
  * Created by Saeed on 30-Mar-15.
@@ -39,10 +42,10 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
 
     public DataFetchService(Context context, View view, Double[] geoParams, int fetchType){
         mContext = context;
+        dataFetchType = fetchType;
         continueBtn = (Button) view.findViewById(R.id.continue_button);
         dataProcessPI = (ProgressBar) view.findViewById(R.id.parse_data_progress);
         buildGeoEventsURL(geoParams);
-        dataFetchType = fetchType;
     }
 
     public DataFetchService(Context context, int artistID, int fetchType){
@@ -55,6 +58,14 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
         else if(dataFetchType == Utility.URL_ARTIST_INFO)
             buildArtistInfoURL(artistID);
     }
+
+    public DataFetchService(Context context, String artistName, int fetchType){
+        mContext = context;
+        dataFetchType = fetchType;
+
+        buildArtistSearchURL(artistName);
+    }
+
     // build artist info URL
     public void buildArtistInfoURL(int artistID) {
         try {
@@ -68,9 +79,10 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
 
             url = new URL(builtUri.toString());
         } catch (Exception e) {
-            Log.e(LOG_TAG, "Error constructing URL with Geo information: ", e);
+            Log.e(LOG_TAG, "Error making URL: ", e);
         }
     }
+
     // build artist events URL
     public void buildArtistEventsURL(int artistID) {
         try {
@@ -86,9 +98,27 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
 
             url = new URL(builtUri.toString());
         } catch (Exception e) {
-            Log.e(LOG_TAG, "Error constructing URL with Geo information: ", e);
+            Log.e(LOG_TAG, "Error making URL: ", e);
         }
     }
+
+    // build artist search URL
+    public void buildArtistSearchURL(String artistName){
+        try {
+            // Construct the URL for the api.thrillcall query
+            final String artistSearchURL = Utility.THRILLCALL_SEARCH_BASE_URL + artistName;
+            final String KEY_PARAM = "api_key";
+
+            Uri builtUri = Uri.parse(artistSearchURL).buildUpon()
+                    .appendQueryParameter(KEY_PARAM, Utility.THRILLCALL_API_KEY)
+                    .build();
+
+            url = new URL(builtUri.toString());
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "Error making URL: ", e);
+        }
+    }
+
     // build geo events URL
     public void buildGeoEventsURL(Double[] params) {
 
@@ -120,7 +150,7 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
 
             url = new URL(builtUri.toString());
         } catch (Exception e) {
-            Log.e(LOG_TAG, "Error constructing URL with Geo information: ", e);
+            Log.e(LOG_TAG, "Error making URL: ", e);
         }
     }
 
@@ -191,9 +221,12 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
 
     protected void onPostExecute(String JSON) {
 
-        // To-Do when JSON data is available
+        // To-Do when JSON data is unavailable
         // Now we have a String representing the complete event list in JSON Format.
+
+        // Geo Events
         if(dataFetchType == Utility.URL_GEO_EVENTS) {
+
             ParseJSONtoDatabase parseJSONtoDatabase;
             parseJSONtoDatabase = new ParseJSONtoDatabase(mContext, JSON);
             parseJSONtoDatabase.parseData();
@@ -201,14 +234,46 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
             dataProcessPI.setVisibility(View.GONE);
             continueBtn.setVisibility(View.VISIBLE);
         }
+        // Artist Info based on ID
         else if(dataFetchType == Utility.URL_ARTIST_INFO) {
+
             ParseArtistInfo artistInfo;
             artistInfo = new ParseArtistInfo(JSON);
             artistInfo.parseArtistData();
 
             new DataFetchService(mContext, artistID, Utility.URL_ARTIST_EVENTS).execute();
         }
+        // Artist search based on name
+        else if(dataFetchType == Utility.URL_ARTIST_SEARCH) {
+
+            ParseArtistSearchInfo searchInfo;
+            searchInfo = new ParseArtistSearchInfo(JSON);
+            searchInfo.parseArtistData();
+
+            final Hashtable<String, Integer> artIDList = searchInfo.getArtistIDList();
+            final String[] artNameArr = artIDList.keySet().toArray(new String[artIDList.keySet().size()]);
+            // When the name user is searching returns more than one match
+            if(artNameArr.length > 1) {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(mContext, android.R.style.Theme_Holo_Light_Dialog));
+                builder.setTitle(R.string.pick_the_artist)
+                        .setItems(artNameArr, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                String artistName = artNameArr[which];
+                                new DataFetchService(mContext, artIDList.get(artistName), Utility.URL_ARTIST_EVENTS).execute();
+                            }
+                        });
+                AlertDialog alert = builder.create();
+                alert.show();
+            // When the name user is searching returns only one match
+            } else {
+                new DataFetchService(mContext, artIDList.get(artNameArr[0]), Utility.URL_ARTIST_EVENTS).execute();
+            }
+
+        }
+        // Coming events of an artist
         else if(dataFetchType == Utility.URL_ARTIST_EVENTS) {
+
             ParseArtistEventsInfo artistEventsInfo;
             artistEventsInfo = new ParseArtistEventsInfo(JSON, artistID);
             artistEventsInfo.parseData();
@@ -217,5 +282,6 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
             intent.putExtra(String.valueOf(Utility.COL_ARTIST_THRILL_ID), artistID);
             mContext.startActivity(intent);
         }
+
     }
 }

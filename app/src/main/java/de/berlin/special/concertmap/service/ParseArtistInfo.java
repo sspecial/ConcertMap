@@ -1,16 +1,13 @@
 package de.berlin.special.concertmap.service;
 
 import android.content.ContentValues;
-import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import de.berlin.special.concertmap.Utility;
-import de.berlin.special.concertmap.data.EventContract;
 import de.berlin.special.concertmap.data.EventContract.FavArtistEntry;
-import de.berlin.special.concertmap.data.EventDbHelper;
 
 /**
  * Created by Saeed on 19-Nov-15.

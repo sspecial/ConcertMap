@@ -6,17 +6,20 @@
     <string name="title_activity_navigation">Concert Map</string>
 
     <string name="continue_key">Continue</string>
+    <string name="search_key">Search</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_example">Example action</string>
 
-<!-- TODO: Remove or change this placeholder text -->
+    <!-- TODO: Remove or change this placeholder text -->
     <string name="title_activity_artist">Artist</string>
     <string name="title_activity_event">Event</string>
 
     <string name="pick_the_artist">Pick the Artist</string>
     <string name="choose_ticket_provider">Ticket Providers</string>
+
+    <string name="hello_setting_fragment">Setting fragment</string>
 
 </resources>

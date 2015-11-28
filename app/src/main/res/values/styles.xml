@@ -12,7 +12,8 @@
 
     <!-- ActionBar title text -->
     <style name="MyActionBarTitleText"
-        parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+        parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
         <item name="android:textColor">@color/action_bar_text_color</item>
+        <item name="android:textSize">20dp</item>
     </style>
 </resources>
