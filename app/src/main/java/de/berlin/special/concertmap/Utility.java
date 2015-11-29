@@ -21,6 +21,13 @@ public class Utility {
     public static final String THRILLCALL_ARTIST_BASE_URL = "https://api.thrillcall.com/api/v3/artist/";
     public static final String THRILLCALL_SEARCH_BASE_URL = "https://api.thrillcall.com/api/v3/search/artists/";
 
+    public static final String ERROR_MSG = "Error obtaining data.";
+    public static boolean ERROR_OBTAINING_DATA = false;
+    public static final String ERROR_OBTAINING_DATA_GEO = "No data is available. Please try later!";
+    public static final String ERROR_OBTAINING_DATA_ARTIST = "No data is available. Please try again!";
+    public static final String ERROR_NO_DATA_GEO = "Oops, Not so much happening here..";
+    public static final String ERROR_NO_DATA_ARTIST = "The name you entered didn't return any result.";
+
     // URL to get data from ThrillCall API
     public static final int URL_GEO_EVENTS = 0;
     public static final int URL_ARTIST_EVENTS = 1;

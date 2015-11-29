@@ -11,6 +11,7 @@ import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -31,15 +32,17 @@ import de.berlin.special.concertmap.artist.ArtistActivity;
 public class DataFetchService extends AsyncTask<Void, Void, String> {
 
     private final String LOG_TAG = DataFetchService.class.getSimpleName();
-    private final String Error_MSG = "Error obtaining data from remote server!";
+
     private Context mContext;
     private Button continueBtn;
     private ProgressBar dataProcessPI;
+    private TextView artistSearchCommentView;
     private URL url;
     private int artistID;
     // Deciding to fetch geo-events data, artist-events data, or artist-info data
     private int dataFetchType;
 
+    // Constructor - Geo events
     public DataFetchService(Context context, View view, Double[] geoParams, int fetchType){
         mContext = context;
         dataFetchType = fetchType;
@@ -48,6 +51,7 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
         buildGeoEventsURL(geoParams);
     }
 
+    // Constructor - Artist Info & Events
     public DataFetchService(Context context, int artistID, int fetchType){
         mContext = context;
         dataFetchType = fetchType;
@@ -59,10 +63,11 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
             buildArtistInfoURL(artistID);
     }
 
-    public DataFetchService(Context context, String artistName, int fetchType){
+    // Constructor - Artist search
+    public DataFetchService(Context context, View view, String artistName, int fetchType){
         mContext = context;
         dataFetchType = fetchType;
-
+        artistSearchCommentView = (TextView) view.findViewById(R.id.artist_comment_view);
         buildArtistSearchURL(artistName);
     }
 
@@ -176,7 +181,7 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
             StringBuffer buffer = new StringBuffer();
             if (inputStream == null) {
                 // Nothing to do.
-                return Error_MSG;
+                return Utility.ERROR_MSG;
             }
 
             reader = new BufferedReader(new InputStreamReader(inputStream));
@@ -191,7 +196,7 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
 
             if (buffer.length() == 0) {
                 // Stream was empty.  No point in parsing.
-                return Error_MSG;
+                return Utility.ERROR_MSG;
             }
             concertJSONStr = buffer.toString();
             // Returning JSON data containing complete event list
@@ -202,7 +207,7 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
             Log.e(LOG_TAG, "Error ", e);
             // If the code didn't successfully get the Event data, there's no point in attempting
             // to parse it.
-            return Error_MSG;
+            return Utility.ERROR_MSG;
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
@@ -226,7 +231,12 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
 
         // Geo Events
         if(dataFetchType == Utility.URL_GEO_EVENTS) {
-
+            // To decide what error message to show in GeoListFragment
+            if (!JSON.equals(Utility.ERROR_MSG)) {
+                Utility.ERROR_OBTAINING_DATA = false;
+            } else {
+                Utility.ERROR_OBTAINING_DATA = true;
+            }
             ParseJSONtoDatabase parseJSONtoDatabase;
             parseJSONtoDatabase = new ParseJSONtoDatabase(mContext, JSON);
             parseJSONtoDatabase.parseData();
@@ -246,28 +256,43 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
         // Artist search based on name
         else if(dataFetchType == Utility.URL_ARTIST_SEARCH) {
 
-            ParseArtistSearchInfo searchInfo;
-            searchInfo = new ParseArtistSearchInfo(JSON);
-            searchInfo.parseArtistData();
+            if (!JSON.equals(Utility.ERROR_MSG)) {
+                ParseArtistSearchInfo searchInfo;
+                searchInfo = new ParseArtistSearchInfo(JSON);
+                searchInfo.parseArtistData();
 
-            final Hashtable<String, Integer> artIDList = searchInfo.getArtistIDList();
-            final String[] artNameArr = artIDList.keySet().toArray(new String[artIDList.keySet().size()]);
-            // When the name user is searching returns more than one match
-            if(artNameArr.length > 1) {
+                final Hashtable<String, Integer> artIDList = searchInfo.getArtistIDList();
+                final String[] artNameArr = artIDList.keySet().toArray(new String[artIDList.keySet().size()]);
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(mContext, android.R.style.Theme_Holo_Light_Dialog));
-                builder.setTitle(R.string.pick_the_artist)
-                        .setItems(artNameArr, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                String artistName = artNameArr[which];
-                                new DataFetchService(mContext, artIDList.get(artistName), Utility.URL_ARTIST_EVENTS).execute();
-                            }
-                        });
-                AlertDialog alert = builder.create();
-                alert.show();
-            // When the name user is searching returns only one match
+                    // When the name user is searching does not return any result
+                if (artNameArr.length == 0) {
+                    artistSearchCommentView.setVisibility(View.VISIBLE);
+                    artistSearchCommentView.setText(Utility.ERROR_NO_DATA_ARTIST);
+
+                    // When it returns only one match
+                } else if (artNameArr.length == 1) {
+                    artistSearchCommentView.setVisibility(View.INVISIBLE);
+                    new DataFetchService(mContext, artIDList.get(artNameArr[0]), Utility.URL_ARTIST_EVENTS).execute();
+
+                    // When it returns more than one match
+                } else if (artNameArr.length > 1) {
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(mContext, android.R.style.Theme_Holo_Light_Dialog));
+                    builder.setTitle(R.string.pick_the_artist)
+                            .setItems(artNameArr, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    String artistName = artNameArr[which];
+                                    artistSearchCommentView.setVisibility(View.INVISIBLE);
+                                    new DataFetchService(mContext, artIDList.get(artistName), Utility.URL_ARTIST_EVENTS).execute();
+                                }
+                            });
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                }
+
             } else {
-                new DataFetchService(mContext, artIDList.get(artNameArr[0]), Utility.URL_ARTIST_EVENTS).execute();
+                artistSearchCommentView.setVisibility(View.VISIBLE);
+                artistSearchCommentView.setText(Utility.ERROR_OBTAINING_DATA_ARTIST);
             }
 
         }

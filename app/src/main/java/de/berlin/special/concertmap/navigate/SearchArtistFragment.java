@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import de.berlin.special.concertmap.R;
 import de.berlin.special.concertmap.Utility;
@@ -17,7 +16,6 @@ public class SearchArtistFragment extends Fragment {
 
     private View rootView;
     private Button searchBtn;
-    private TextView commentView;
     private EditText entryView;
 
     public SearchArtistFragment() {
@@ -37,7 +35,6 @@ public class SearchArtistFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_search_artist, container, false);
         searchBtn = (Button) rootView.findViewById(R.id.artist_search_button);
         entryView = (EditText) rootView.findViewById(R.id.enter_artist_edit_text);
-        commentView = (TextView) rootView.findViewById(R.id.artist_comment_view);
         return rootView;
     }
 
@@ -54,7 +51,7 @@ public class SearchArtistFragment extends Fragment {
                 if (entry.lastIndexOf("+") == (entry.length()-1))
                     entry = entry.substring(0, entry.length()-1);
 
-                new DataFetchService(getContext(), entry, Utility.URL_ARTIST_SEARCH).execute();
+                new DataFetchService(getContext(), rootView, entry, Utility.URL_ARTIST_SEARCH).execute();
             }
         });
     }

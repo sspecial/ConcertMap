@@ -74,7 +74,8 @@
         android:id="@+id/comment_view"
         android:layout_marginTop="5dp"
         android:layout_below="@+id/line"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"/>
 
     <Button
         android:background="@drawable/mytheme_btn"

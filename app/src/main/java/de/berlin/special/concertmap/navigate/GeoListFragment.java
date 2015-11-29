@@ -58,7 +58,10 @@ public class GeoListFragment extends Fragment {
             todayListView.setAdapter(eventCursorAdapter);
 
             TextView emptyView = (TextView) rootView.findViewById(R.id.emptyTextView);
-            emptyView.setText("No data is available. Please try later!");
+            if (Utility.ERROR_OBTAINING_DATA)
+                emptyView.setText(Utility.ERROR_OBTAINING_DATA_GEO);
+            else
+                emptyView.setText(Utility.ERROR_NO_DATA_GEO);
             todayListView.setEmptyView(emptyView);
 
             // Setup OnClickListener
