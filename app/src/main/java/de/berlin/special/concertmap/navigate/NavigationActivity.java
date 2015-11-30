@@ -38,8 +38,7 @@ public class NavigationActivity extends AppCompatActivity {
     private final String navItem2 = "Tracked Artists";
     private final String navItem3 = "Attended Events";
     private final String navItem4 = "Search an Artist";
-    private final String navItem5 = "Line";
-    private final String navItem6 = "Setting";
+    private final String navItem5 = "Setting";
 
     private String[] eventNavItems;
     private DrawerLayout mDrawerLayout;
@@ -66,7 +65,7 @@ public class NavigationActivity extends AppCompatActivity {
             navItem1 = Utility.city + " Concerts";
         else
             navItem1 = "Concerts";
-        eventNavItems = new String[]{navItem1, navItem2, navItem3, navItem4, navItem5, navItem6};
+        eventNavItems = new String[]{navItem1, navItem2, navItem3, navItem4, navItem5};
 
         // Initiating GeoFragment as default view of activity
         manager = getSupportFragmentManager();
@@ -244,7 +243,6 @@ class NavigateAdapter extends BaseAdapter {
             , R.drawable.music_conductor
             , R.drawable.audio_wave
             , R.drawable.search
-            , 0
             , R.drawable.settings};
 
     public NavigateAdapter(Context context, String[] eventNavItems) {
@@ -291,10 +289,6 @@ class NavigateAdapter extends BaseAdapter {
         switch (viewType) {
             case VIEW_TYPE_EVENT_ROW: {
                 row = inflater.inflate(R.layout.custom_navigate_row, viewGroup, false);
-                TextView titleTextView = (TextView) row.findViewById(R.id.row_textView);
-                ImageView titleImageView = (ImageView) row.findViewById(R.id.row_imageView);
-                titleTextView.setText(eventNavItems[i]);
-                titleImageView.setImageResource(images[i]);
                 break;
             }
             case VIEW_TYPE_LINE: {
@@ -302,6 +296,10 @@ class NavigateAdapter extends BaseAdapter {
                 break;
             }
         }
+        TextView titleTextView = (TextView) row.findViewById(R.id.row_textView);
+        ImageView titleImageView = (ImageView) row.findViewById(R.id.row_imageView);
+        titleTextView.setText(eventNavItems[i]);
+        titleImageView.setImageResource(images[i]);
         return row;
     }
 }
