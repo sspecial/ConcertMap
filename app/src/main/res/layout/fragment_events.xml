@@ -2,8 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="de.berlin.special.concertmap.navigate.EventListFragment"
-    android:background="@color/brown_sky">
+    tools:context="de.berlin.special.concertmap.navigate.EventListFragment">
 
     <ListView
         android:id="@+id/list_view_events"
@@ -15,13 +14,13 @@
         android:id="@+id/emptyLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center_horizontal"
-        android:layout_margin="8dp">
+        android:gravity="center_horizontal">
 
         <TextView
             android:id="@+id/emptyTextView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/brown_sky"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
             android:textColor="@color/black"
