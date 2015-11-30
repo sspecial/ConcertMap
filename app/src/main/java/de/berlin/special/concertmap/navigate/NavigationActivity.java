@@ -38,7 +38,8 @@ public class NavigationActivity extends AppCompatActivity {
     private final String navItem2 = "Tracked Artists";
     private final String navItem3 = "Attended Events";
     private final String navItem4 = "Search an Artist";
-    private final String navItem5 = "Setting";
+    private final String navItem5 = "Line";
+    private final String navItem6 = "Setting";
 
     private String[] eventNavItems;
     private DrawerLayout mDrawerLayout;
@@ -65,7 +66,7 @@ public class NavigationActivity extends AppCompatActivity {
             navItem1 = Utility.city + " Concerts";
         else
             navItem1 = "Concerts";
-        eventNavItems = new String[]{navItem1, navItem2, navItem3, navItem4, navItem5};
+        eventNavItems = new String[]{navItem1, navItem2, navItem3, navItem4, navItem5, navItem6};
 
         // Initiating GeoFragment as default view of activity
         manager = getSupportFragmentManager();
@@ -233,17 +234,36 @@ public class NavigationActivity extends AppCompatActivity {
 
 class NavigateAdapter extends BaseAdapter {
 
+    private static final int VIEW_TYPE_COUNT = 2;
+    private static final int VIEW_TYPE_LINE = 0;
+    private static final int VIEW_TYPE_EVENT_ROW = 1;
+
     private Context context;
     private String[] eventNavItems;
     private int[] images = {R.drawable.cornet_ins
             , R.drawable.music_conductor
             , R.drawable.audio_wave
             , R.drawable.search
+            , 0
             , R.drawable.settings};
 
     public NavigateAdapter(Context context, String[] eventNavItems) {
         this.context = context;
         this.eventNavItems = eventNavItems;
+    }
+
+
+    @Override
+    public int getItemViewType(int position) {
+        if (position == 4)
+            return VIEW_TYPE_LINE;
+        else
+            return VIEW_TYPE_EVENT_ROW;
+    }
+
+    @Override
+    public int getViewTypeCount() {
+        return VIEW_TYPE_COUNT;
     }
 
     @Override
@@ -264,21 +284,24 @@ class NavigateAdapter extends BaseAdapter {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
 
+        LayoutInflater inflater = (LayoutInflater) context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View row = null;
-        if (view == null){
-            LayoutInflater inflater = (LayoutInflater) context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            row = inflater.inflate(R.layout.custom_navigate_row, viewGroup, false);
+        int viewType = getItemViewType(i);
+        switch (viewType) {
+            case VIEW_TYPE_EVENT_ROW: {
+                row = inflater.inflate(R.layout.custom_navigate_row, viewGroup, false);
+                TextView titleTextView = (TextView) row.findViewById(R.id.row_textView);
+                ImageView titleImageView = (ImageView) row.findViewById(R.id.row_imageView);
+                titleTextView.setText(eventNavItems[i]);
+                titleImageView.setImageResource(images[i]);
+                break;
+            }
+            case VIEW_TYPE_LINE: {
+                row = inflater.inflate(R.layout.custom_navigate_line, viewGroup, false);
+                break;
+            }
         }
-        else {
-            row = view;
-        }
-        TextView titleTextView = (TextView) row.findViewById(R.id.row_textView);
-        ImageView titleImageView = (ImageView) row.findViewById(R.id.row_imageView);
-
-        titleTextView.setText(eventNavItems[i]);
-        titleImageView.setImageResource(images[i]);
-
         return row;
     }
 }
