@@ -4,12 +4,9 @@ import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import de.berlin.special.concertmap.R;
-import de.berlin.special.concertmap.Utility;
-import de.berlin.special.concertmap.event.EventActivityFragment;
+import de.berlin.special.concertmap.data.Query;
 
 public class ArtistActivity extends AppCompatActivity {
 
@@ -23,8 +20,8 @@ public class ArtistActivity extends AppCompatActivity {
         Intent intent = this.getIntent();
         Bundle args = new Bundle();
 
-        args.putInt(String.valueOf(Utility.COL_ARTIST_THRILL_ID)
-                , intent.getIntExtra(String.valueOf(Utility.COL_ARTIST_THRILL_ID), -1));
+        args.putInt(String.valueOf(Query.COL_ARTIST_THRILL_ID)
+                , intent.getIntExtra(String.valueOf(Query.COL_ARTIST_THRILL_ID), -1));
 
         artistActivityFragment.setArguments(args);
         getSupportFragmentManager().beginTransaction()

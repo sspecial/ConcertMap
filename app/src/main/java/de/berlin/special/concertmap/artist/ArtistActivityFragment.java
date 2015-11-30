@@ -28,6 +28,7 @@ import java.io.FileInputStream;
 import de.berlin.special.concertmap.R;
 import de.berlin.special.concertmap.Utility;
 import de.berlin.special.concertmap.data.EventContract;
+import de.berlin.special.concertmap.data.Query;
 import de.berlin.special.concertmap.event.EventActivity;
 import de.berlin.special.concertmap.navigate.DownloadImageTask;
 
@@ -56,22 +57,22 @@ public class ArtistActivityFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        artistThrillID = getArguments().getInt(String.valueOf(Utility.COL_ARTIST_THRILL_ID), -1);
+        artistThrillID = getArguments().getInt(String.valueOf(Query.COL_ARTIST_THRILL_ID), -1);
 
         // Query database for the artist info using thrill ID
         String argThrillID = "WHERE artist.artist_thrill_ID = " + artistThrillID + ";";
-        String favArtistQueryStr = Utility.favArtistQueryStr + argThrillID;
+        String favArtistQueryStr = Query.favArtistQueryStr + argThrillID;
         Cursor favArtistCursor = Utility.db.rawQuery(favArtistQueryStr, null);
         Log.v(LOG_TAG + " Fav-Artist-Cursor:", DatabaseUtils.dumpCursorToString(favArtistCursor));
 
         // setting title of activity
         favArtistCursor.moveToFirst();
-        artistID = favArtistCursor.getInt(Utility.COL_ARTIST_ID);
-        artistName = favArtistCursor.getString(Utility.COL_ARTIST_NAME);
-        artistOfficialWebsite = favArtistCursor.getString(Utility.COL_ARTIST_OFFICIAL_URL);
-        artistImageLarge = favArtistCursor.getString(Utility.COL_ARTIST_IMAGE_LARGE);
-        artistImageMobile = favArtistCursor.getString(Utility.COL_ARTIST_IMAGE_MOBILE);
-        artistTracked = favArtistCursor.getInt(Utility.COL_ARTIST_TRACKED);
+        artistID = favArtistCursor.getInt(Query.COL_ARTIST_ID);
+        artistName = favArtistCursor.getString(Query.COL_ARTIST_NAME);
+        artistOfficialWebsite = favArtistCursor.getString(Query.COL_ARTIST_OFFICIAL_URL);
+        artistImageLarge = favArtistCursor.getString(Query.COL_ARTIST_IMAGE_LARGE);
+        artistImageMobile = favArtistCursor.getString(Query.COL_ARTIST_IMAGE_MOBILE);
+        artistTracked = favArtistCursor.getInt(Query.COL_ARTIST_TRACKED);
     }
 
     @Override
@@ -123,7 +124,7 @@ public class ArtistActivityFragment extends Fragment {
 
     public void fillArtistEventsList(ListView artistEventsListView, final int artistID) {
 
-        String eventQueryStr = Utility.eventQueryStr
+        String eventQueryStr = Query.eventQueryStr
                 + "WHERE event.event_belong_to_artist = "
                 + artistID
                 + " AND "
@@ -148,28 +149,28 @@ public class ArtistActivityFragment extends Fragment {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                     eventCursor.moveToPosition(position);
-                    int eventID = eventCursor.getInt(Utility.COL_EVENT_ID);
-                    String artistsName = Utility.retrieveArtistName(eventCursor.getString(Utility.COL_EVENT_NAME));
-                    String startAt = eventCursor.getString(Utility.COL_EVENT_START_AT);
+                    int eventID = eventCursor.getInt(Query.COL_EVENT_ID);
+                    String artistsName = Utility.retrieveArtistName(eventCursor.getString(Query.COL_EVENT_NAME));
+                    String startAt = eventCursor.getString(Query.COL_EVENT_START_AT);
                     String imagePath = Utility.imageDirToday() + "/" + String.valueOf(artistID);
-                    int attended = eventCursor.getInt(Utility.COL_EVENT_ATTEND);
-                    String venueName = eventCursor.getString(Utility.COL_VENUE_NAME);
-                    String venueStreet = eventCursor.getString(Utility.COL_VENUE_STREET);
-                    String venueCity = eventCursor.getString(Utility.COL_VENUE_CITY);
-                    double venueLat = eventCursor.getDouble(Utility.COL_VENUE_GEO_LAT);
-                    double venueLong = eventCursor.getDouble(Utility.COL_VENUE_GEO_LONG);
+                    int attended = eventCursor.getInt(Query.COL_EVENT_ATTEND);
+                    String venueName = eventCursor.getString(Query.COL_VENUE_NAME);
+                    String venueStreet = eventCursor.getString(Query.COL_VENUE_STREET);
+                    String venueCity = eventCursor.getString(Query.COL_VENUE_CITY);
+                    double venueLat = eventCursor.getDouble(Query.COL_VENUE_GEO_LAT);
+                    double venueLong = eventCursor.getDouble(Query.COL_VENUE_GEO_LONG);
 
                     Intent intent = new Intent(getActivity(), EventActivity.class);
-                    intent.putExtra(String.valueOf(Utility.COL_EVENT_ID), eventID);
-                    intent.putExtra(String.valueOf(Utility.COL_EVENT_NAME), artistsName);
-                    intent.putExtra(String.valueOf(Utility.COL_EVENT_START_AT), startAt);
-                    intent.putExtra(String.valueOf(Utility.COL_EVENT_IMAGE), imagePath);
-                    intent.putExtra(String.valueOf(Utility.COL_EVENT_ATTEND), attended);
-                    intent.putExtra(String.valueOf(Utility.COL_VENUE_NAME), venueName);
-                    intent.putExtra(String.valueOf(Utility.COL_VENUE_STREET), venueStreet);
-                    intent.putExtra(String.valueOf(Utility.COL_VENUE_CITY), venueCity);
-                    intent.putExtra(String.valueOf(Utility.COL_VENUE_GEO_LAT), venueLat);
-                    intent.putExtra(String.valueOf(Utility.COL_VENUE_GEO_LONG), venueLong);
+                    intent.putExtra(String.valueOf(Query.COL_EVENT_ID), eventID);
+                    intent.putExtra(String.valueOf(Query.COL_EVENT_NAME), artistsName);
+                    intent.putExtra(String.valueOf(Query.COL_EVENT_START_AT), startAt);
+                    intent.putExtra(String.valueOf(Query.COL_EVENT_IMAGE), imagePath);
+                    intent.putExtra(String.valueOf(Query.COL_EVENT_ATTEND), attended);
+                    intent.putExtra(String.valueOf(Query.COL_VENUE_NAME), venueName);
+                    intent.putExtra(String.valueOf(Query.COL_VENUE_STREET), venueStreet);
+                    intent.putExtra(String.valueOf(Query.COL_VENUE_CITY), venueCity);
+                    intent.putExtra(String.valueOf(Query.COL_VENUE_GEO_LAT), venueLat);
+                    intent.putExtra(String.valueOf(Query.COL_VENUE_GEO_LONG), venueLong);
                     getActivity().startActivity(intent);
                 }
             });
@@ -241,16 +242,16 @@ class ArtistCursorAdapter extends CursorAdapter {
         timeView = (TextView) view.findViewById(R.id.artist_item_time_textview);
 
         // Artists Names
-        nameView.setText(cursor.getString(Utility.COL_VENUE_NAME));
+        nameView.setText(cursor.getString(Query.COL_VENUE_NAME));
 
         // Venue Name & City
-        String venueNameCity = cursor.getString(Utility.COL_VENUE_STREET)
+        String venueNameCity = cursor.getString(Query.COL_VENUE_STREET)
                 + ", "
-                + cursor.getString(Utility.COL_VENUE_CITY);
+                + cursor.getString(Query.COL_VENUE_CITY);
         addressView.setText(venueNameCity);
 
         // Event time
-        String[] dateArr = Utility.retrieveDateAndTime(cursor.getString(Utility.COL_EVENT_START_AT));
+        String[] dateArr = Utility.retrieveDateAndTime(cursor.getString(Query.COL_EVENT_START_AT));
         dayView.setText(dateArr[0]);
         timeView.setText(dateArr[1]);
     }

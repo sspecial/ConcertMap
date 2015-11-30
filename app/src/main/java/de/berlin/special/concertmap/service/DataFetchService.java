@@ -24,6 +24,7 @@ import java.util.Hashtable;
 import de.berlin.special.concertmap.R;
 import de.berlin.special.concertmap.Utility;
 import de.berlin.special.concertmap.artist.ArtistActivity;
+import de.berlin.special.concertmap.data.Query;
 
 /**
  * Created by Saeed on 30-Mar-15.
@@ -149,7 +150,7 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
             Uri builtUri = Uri.parse(Utility.THRILLCALL_GEO_BASE_URL).buildUpon()
                     .appendQueryParameter(LAT_PARAM, String.valueOf(geoLat))
                     .appendQueryParameter(LONG_PARAM, String.valueOf(geoLong))
-                    .appendQueryParameter(LIMIT_PARAM, Utility.EVENT_LIMIT)
+                    .appendQueryParameter(LIMIT_PARAM, Utility.EVENT_LIMIT_STR)
                     .appendQueryParameter(KEY_PARAM, Utility.THRILLCALL_API_KEY)
                     .build();
 
@@ -304,7 +305,7 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
             artistEventsInfo.parseData();
 
             Intent intent = new Intent(mContext, ArtistActivity.class);
-            intent.putExtra(String.valueOf(Utility.COL_ARTIST_THRILL_ID), artistID);
+            intent.putExtra(String.valueOf(Query.COL_ARTIST_THRILL_ID), artistID);
             mContext.startActivity(intent);
         }
 

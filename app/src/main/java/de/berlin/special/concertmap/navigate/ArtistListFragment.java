@@ -23,6 +23,7 @@ import java.io.FileInputStream;
 import de.berlin.special.concertmap.R;
 import de.berlin.special.concertmap.Utility;
 import de.berlin.special.concertmap.artist.ArtistActivity;
+import de.berlin.special.concertmap.data.Query;
 
 /**
  * Created by Saeed on 10-Nov-15.
@@ -53,7 +54,7 @@ public class ArtistListFragment extends Fragment {
 
         // Query database for the tracked artists
         String argTracked = "WHERE artist.artist_tracked = " + Utility.ARTIST_TRACKED_YES + ";";
-        String favArtistQueryStr = Utility.favArtistQueryStr + argTracked;
+        String favArtistQueryStr = Query.favArtistQueryStr + argTracked;
         favArtistCursor = Utility.db.rawQuery(favArtistQueryStr, null);
         Log.v(LOG_TAG + " Fav-Artist-Cursor:", DatabaseUtils.dumpCursorToString(favArtistCursor));
 
@@ -88,9 +89,9 @@ class ArtistGridAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, final Context context, Cursor cursor) {
 
-        final int artistThrillID = cursor.getInt(Utility.COL_ARTIST_THRILL_ID);
-        String artistName = cursor.getString(Utility.COL_ARTIST_NAME);
-        String imageURL = cursor.getString(Utility.COL_ARTIST_IMAGE_MOBILE);
+        final int artistThrillID = cursor.getInt(Query.COL_ARTIST_THRILL_ID);
+        String artistName = cursor.getString(Query.COL_ARTIST_NAME);
+        String imageURL = cursor.getString(Query.COL_ARTIST_IMAGE_MOBILE);
 
         nameView = (TextView) view.findViewById(R.id.artist_name_text);
         imageView = (ImageView) view.findViewById(R.id.artist_image_view);
@@ -122,7 +123,7 @@ class ArtistGridAdapter extends CursorAdapter {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, ArtistActivity.class);
-                intent.putExtra(String.valueOf(Utility.COL_ARTIST_THRILL_ID), artistThrillID);
+                intent.putExtra(String.valueOf(Query.COL_ARTIST_THRILL_ID), artistThrillID);
                 context.startActivity(intent);
             }
         });

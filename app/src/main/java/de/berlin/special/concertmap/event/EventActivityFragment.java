@@ -33,6 +33,7 @@ import java.io.FileInputStream;
 import de.berlin.special.concertmap.R;
 import de.berlin.special.concertmap.Utility;
 import de.berlin.special.concertmap.data.EventContract.EventEntry;
+import de.berlin.special.concertmap.data.Query;
 import de.berlin.special.concertmap.service.DataFetchService;
 
 /**
@@ -64,15 +65,15 @@ public class EventActivityFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        eventID = getArguments().getInt(String.valueOf(Utility.COL_EVENT_ID), -1);
-        eventStartAt = getArguments().getString(String.valueOf(Utility.COL_EVENT_START_AT), "START_AT");
-        imagePath = getArguments().getString(String.valueOf(Utility.COL_EVENT_IMAGE), Utility.imageDirToday());
-        attended = getArguments().getInt(String.valueOf(Utility.COL_EVENT_ATTEND), Utility.EVENT_ATTEND_NO);
-        venueName = getArguments().getString(String.valueOf(Utility.COL_VENUE_NAME), "VENUE_NAME");
-        venueAddress = getArguments().getString(String.valueOf(Utility.COL_VENUE_STREET), "VENUE_STREET")
-                + ", " + getArguments().getString(String.valueOf(Utility.COL_VENUE_CITY), "VENUE_CITY");
-        geoLat = getArguments().getDouble(String.valueOf(Utility.COL_VENUE_GEO_LAT), Utility.GEO_DEFAULT_LAT);
-        geoLong = getArguments().getDouble(String.valueOf(Utility.COL_VENUE_GEO_LONG), Utility.GEO_DEFAULT_LONG);
+        eventID = getArguments().getInt(String.valueOf(Query.COL_EVENT_ID), -1);
+        eventStartAt = getArguments().getString(String.valueOf(Query.COL_EVENT_START_AT), "START_AT");
+        imagePath = getArguments().getString(String.valueOf(Query.COL_EVENT_IMAGE), Utility.imageDirToday());
+        attended = getArguments().getInt(String.valueOf(Query.COL_EVENT_ATTEND), Utility.EVENT_ATTEND_NO);
+        venueName = getArguments().getString(String.valueOf(Query.COL_VENUE_NAME), "VENUE_NAME");
+        venueAddress = getArguments().getString(String.valueOf(Query.COL_VENUE_STREET), "VENUE_STREET")
+                + ", " + getArguments().getString(String.valueOf(Query.COL_VENUE_CITY), "VENUE_CITY");
+        geoLat = getArguments().getDouble(String.valueOf(Query.COL_VENUE_GEO_LAT), Utility.GEO_DEFAULT_LAT);
+        geoLong = getArguments().getDouble(String.valueOf(Query.COL_VENUE_GEO_LONG), Utility.GEO_DEFAULT_LONG);
 
     }
 
@@ -161,7 +162,7 @@ public class EventActivityFragment extends Fragment {
             public void onClick(View v) {
 
                 String argEventID = "WHERE artists.event_ID = " + String.valueOf(eventID) + ";";
-                String artistQueryStr = Utility.artistQueryStr + argEventID;
+                String artistQueryStr = Query.artistQueryStr + argEventID;
                 final Cursor artistsCursor = Utility.db.rawQuery(artistQueryStr, null);
 
                 // When event has multiple artists
@@ -171,14 +172,14 @@ public class EventActivityFragment extends Fragment {
                     String[] artArr = new String[artistsCursor.getCount()];
                     for (int i = 0; i < artistsCursor.getCount(); i++) {
                         artistsCursor.moveToPosition(i);
-                        artArr[i] = artistsCursor.getString(Utility.COL_ARTIST_NAME);
+                        artArr[i] = artistsCursor.getString(Query.COL_ARTIST_NAME);
                     }
                     AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), android.R.style.Theme_Holo_Light_Dialog));
                     builder.setTitle(R.string.pick_the_artist)
                             .setItems(artArr, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     artistsCursor.moveToPosition(which);
-                                    int artistThrillID = artistsCursor.getInt(Utility.COL_ARTIST_THRILL_ID);
+                                    int artistThrillID = artistsCursor.getInt(Query.COL_ARTIST_THRILL_ID);
                                     new DataFetchService(getContext(), artistThrillID, Utility.URL_ARTIST_INFO).execute();
                                 }
                             });
@@ -188,7 +189,7 @@ public class EventActivityFragment extends Fragment {
                 // When event has only one artist
                 } else {
                     artistsCursor.moveToFirst();
-                    int artistThrillID = artistsCursor.getInt(Utility.COL_ARTIST_THRILL_ID);
+                    int artistThrillID = artistsCursor.getInt(Query.COL_ARTIST_THRILL_ID);
                     new DataFetchService(getContext(), artistThrillID, Utility.URL_ARTIST_INFO).execute();
                 }
             }
@@ -199,7 +200,7 @@ public class EventActivityFragment extends Fragment {
             public void onClick(View v) {
 
                 String argEventID = "WHERE tickets.event_ID = " + String.valueOf(eventID) + ";";
-                String ticketQueryStr = Utility.ticketQueryStr + argEventID;
+                String ticketQueryStr = Query.ticketQueryStr + argEventID;
                 final Cursor ticketsCursor = Utility.db.rawQuery(ticketQueryStr, null);
 
                 if (ticketsCursor.getCount() == 0) {
@@ -210,7 +211,7 @@ public class EventActivityFragment extends Fragment {
                 } else if (ticketsCursor.getCount() == 1) {
 
                     ticketsCursor.moveToFirst();
-                    String providerURL = ticketsCursor.getString(Utility.COL_TICKET_URL);
+                    String providerURL = ticketsCursor.getString(Query.COL_TICKET_URL);
                     Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(providerURL));
                     startActivity(browserIntent);
 
@@ -219,14 +220,14 @@ public class EventActivityFragment extends Fragment {
                     String[] ticketArr = new String[ticketsCursor.getCount()];
                     for (int j = 0; j < ticketsCursor.getCount(); j++) {
                         ticketsCursor.moveToPosition(j);
-                        ticketArr[j] = ticketsCursor.getString(Utility.COL_TICKET_NAME);
+                        ticketArr[j] = ticketsCursor.getString(Query.COL_TICKET_NAME);
                     }
                     AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), android.R.style.Theme_Holo_Light_Dialog));
                     builder.setTitle(R.string.choose_ticket_provider)
                             .setItems(ticketArr, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     ticketsCursor.moveToPosition(which);
-                                    String providerURL = ticketsCursor.getString(Utility.COL_TICKET_URL);
+                                    String providerURL = ticketsCursor.getString(Query.COL_TICKET_URL);
                                     Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(providerURL));
                                     startActivity(browserIntent);
                                 }

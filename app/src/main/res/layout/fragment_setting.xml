@@ -4,9 +4,11 @@
     android:layout_height="match_parent"
     tools:context="de.berlin.special.concertmap.navigate.Setting">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_setting_fragment" />
+    <ListView
+        android:id="@+id/list_view_settings"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:dividerHeight="2dp"
+        android:background="@color/brown_sky" />
 
 </FrameLayout>

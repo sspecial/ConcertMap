@@ -10,12 +10,17 @@ import java.util.Date;
  */
 public class Utility {
 
+    public static final String PREFS_NAME = "CONCERT_MAP_PREFS";
+    public static final String SETTING_LOCATION = "CITY";
+    public static final String SETTING_EVENT_NUMBER = "EVENT_NUMBER";
+
     public static final String CITY_IS_UNKNOWN = "City is Unknown!";
     public static String city = CITY_IS_UNKNOWN;
 
     public static final double GEO_DEFAULT_LAT = 52.5194;
     public static final double GEO_DEFAULT_LONG = 13.4067;
-    public static final String EVENT_LIMIT = "20";
+    public static final String EVENT_LIMIT_STR = "20";
+    public static final int EVENT_LIMIT_NUMBER = 20;
     public static final String THRILLCALL_API_KEY = "d90d066add515bff";
     public static final String THRILLCALL_GEO_BASE_URL = "https://api.thrillcall.com/api/v3/events";
     public static final String THRILLCALL_ARTIST_BASE_URL = "https://api.thrillcall.com/api/v3/artist/";
@@ -51,52 +56,6 @@ public class Utility {
     public static final int ARTIST_TRACKED_NO = 0;
     public static final String ARTIST_TRACKED_TEXT_NO = "Track Artist";
     public static final String ARTIST_TRACKED_TEXT_YES = "Tracked Artist!";
-
-    public static final String eventQueryStr = "SELECT event._ID, " +
-            "event.event_thrill_ID, event.event_name, " +
-            "event.event_start_at, event.event_image, event.event_attended, " +
-            "venue.venue_name, venue.venue_street, venue.venue_city, " +
-            "venue.venue_geo_lat, venue.venue_geo_long " +
-            "FROM event " +
-            "INNER JOIN venue " +
-            "ON event._ID = venue.event_ID ";
-    // These indices are tied to EVENT CURSOR_COLUMNS
-    public static final int COL_EVENT_ID = 0;
-    public static final int COL_EVENT_THRILL_ID = 1;
-    public static final int COL_EVENT_NAME = 2;
-    public static final int COL_EVENT_START_AT = 3;
-    public static final int COL_EVENT_IMAGE = 4;
-    public static final int COL_EVENT_ATTEND = 5;
-    public static final int COL_VENUE_NAME = 6;
-    public static final int COL_VENUE_STREET = 7;
-    public static final int COL_VENUE_CITY = 8;
-    public static final int COL_VENUE_GEO_LAT = 9;
-    public static final int COL_VENUE_GEO_LONG = 10;
-
-    public static final String artistQueryStr = "SELECT artists._ID, " +
-            "artists.artist_thrill_ID, artists.artist_name " +
-            "FROM artists ";
-    public static final String favArtistQueryStr = "SELECT artist._ID, " +
-            "artist.artist_thrill_ID, artist.artist_name, " +
-            "artist.artist_official_url, artist.artist_image_large, " +
-            "artist.artist_image_mobile, artist.artist_tracked " +
-            "FROM artist ";
-    // These indices are tied to FAV-ARTIST CURSOR_COLUMNS
-    public static final int COL_ARTIST_ID = 0;
-    public static final int COL_ARTIST_THRILL_ID = 1;
-    public static final int COL_ARTIST_NAME = 2;
-    public static final int COL_ARTIST_OFFICIAL_URL = 3;
-    public static final int COL_ARTIST_IMAGE_LARGE = 4;
-    public static final int COL_ARTIST_IMAGE_MOBILE = 5;
-    public static final int COL_ARTIST_TRACKED = 6;
-
-    public static final String ticketQueryStr = "SELECT tickets._ID, " +
-            "tickets.ticket_name, tickets.ticket_url " +
-            "FROM tickets ";
-    // These indices are tied to TICKETS CURSOR_COLUMNS
-    public static final int COL_TICKET_ID = 0;
-    public static final int COL_TICKET_NAME = 1;
-    public static final int COL_TICKET_URL = 2;
 
     public static final String NO_TICKET_PROVIDER = "No Ticket Provider!";
     public static final String NO_ARTIST_PLAN = "No Further Plan!";

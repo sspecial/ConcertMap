@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import de.berlin.special.concertmap.R;
 import de.berlin.special.concertmap.Utility;
+import de.berlin.special.concertmap.data.Query;
 import de.berlin.special.concertmap.event.EventActivity;
 
 
@@ -37,7 +38,7 @@ public class EventListFragment extends Fragment {
 
         rootView = inflater.inflate(R.layout.fragment_events, container, false);
 
-        String eventQueryStr = Utility.eventQueryStr
+        String eventQueryStr = Query.eventQueryStr
                 + "WHERE event.event_attended = "
                 + Utility.EVENT_ATTEND_YES + " GROUP BY event._ID;";
         try{
@@ -61,28 +62,28 @@ public class EventListFragment extends Fragment {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                     eventCursor.moveToPosition(position);
-                    int eventID = eventCursor.getInt(Utility.COL_EVENT_ID);
-                    String artistsName = Utility.retrieveArtistName(eventCursor.getString(Utility.COL_EVENT_NAME));
-                    String startAt = eventCursor.getString(Utility.COL_EVENT_START_AT);
-                    String imagePath = Utility.IMAGE_DIR_EVENT + "/" + String.valueOf(eventCursor.getInt(Utility.COL_EVENT_THRILL_ID));
-                    int attended = eventCursor.getInt(Utility.COL_EVENT_ATTEND);
-                    String venueName = eventCursor.getString(Utility.COL_VENUE_NAME);
-                    String venueStreet = eventCursor.getString(Utility.COL_VENUE_STREET);
-                    String venueCity = eventCursor.getString(Utility.COL_VENUE_CITY);
-                    double venueLat = eventCursor.getDouble(Utility.COL_VENUE_GEO_LAT);
-                    double venueLong = eventCursor.getDouble(Utility.COL_VENUE_GEO_LONG);
+                    int eventID = eventCursor.getInt(Query.COL_EVENT_ID);
+                    String artistsName = Utility.retrieveArtistName(eventCursor.getString(Query.COL_EVENT_NAME));
+                    String startAt = eventCursor.getString(Query.COL_EVENT_START_AT);
+                    String imagePath = Utility.IMAGE_DIR_EVENT + "/" + String.valueOf(eventCursor.getInt(Query.COL_EVENT_THRILL_ID));
+                    int attended = eventCursor.getInt(Query.COL_EVENT_ATTEND);
+                    String venueName = eventCursor.getString(Query.COL_VENUE_NAME);
+                    String venueStreet = eventCursor.getString(Query.COL_VENUE_STREET);
+                    String venueCity = eventCursor.getString(Query.COL_VENUE_CITY);
+                    double venueLat = eventCursor.getDouble(Query.COL_VENUE_GEO_LAT);
+                    double venueLong = eventCursor.getDouble(Query.COL_VENUE_GEO_LONG);
 
                     Intent intent = new Intent(getActivity(), EventActivity.class);
-                    intent.putExtra(String.valueOf(Utility.COL_EVENT_ID), eventID);
-                    intent.putExtra(String.valueOf(Utility.COL_EVENT_NAME), artistsName);
-                    intent.putExtra(String.valueOf(Utility.COL_EVENT_START_AT), startAt);
-                    intent.putExtra(String.valueOf(Utility.COL_EVENT_IMAGE), imagePath);
-                    intent.putExtra(String.valueOf(Utility.COL_EVENT_ATTEND), attended);
-                    intent.putExtra(String.valueOf(Utility.COL_VENUE_NAME), venueName);
-                    intent.putExtra(String.valueOf(Utility.COL_VENUE_STREET), venueStreet);
-                    intent.putExtra(String.valueOf(Utility.COL_VENUE_CITY), venueCity);
-                    intent.putExtra(String.valueOf(Utility.COL_VENUE_GEO_LAT), venueLat);
-                    intent.putExtra(String.valueOf(Utility.COL_VENUE_GEO_LONG), venueLong);
+                    intent.putExtra(String.valueOf(Query.COL_EVENT_ID), eventID);
+                    intent.putExtra(String.valueOf(Query.COL_EVENT_NAME), artistsName);
+                    intent.putExtra(String.valueOf(Query.COL_EVENT_START_AT), startAt);
+                    intent.putExtra(String.valueOf(Query.COL_EVENT_IMAGE), imagePath);
+                    intent.putExtra(String.valueOf(Query.COL_EVENT_ATTEND), attended);
+                    intent.putExtra(String.valueOf(Query.COL_VENUE_NAME), venueName);
+                    intent.putExtra(String.valueOf(Query.COL_VENUE_STREET), venueStreet);
+                    intent.putExtra(String.valueOf(Query.COL_VENUE_CITY), venueCity);
+                    intent.putExtra(String.valueOf(Query.COL_VENUE_GEO_LAT), venueLat);
+                    intent.putExtra(String.valueOf(Query.COL_VENUE_GEO_LONG), venueLong);
                     getActivity().startActivity(intent);
                 }
             });

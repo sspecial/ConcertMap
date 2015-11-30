@@ -1,7 +1,10 @@
 package de.berlin.special.concertmap.start;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.SharedPreferences.Editor;
+import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -119,6 +122,17 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), NavigationActivity.class);
                 getActivity().startActivity(intent);
+
+                // Adding setting to shared preferences
+                SharedPreferences settings;
+                Editor editor;
+                settings = getContext().getSharedPreferences(Utility.PREFS_NAME, Context.MODE_PRIVATE);
+                editor = settings.edit();
+
+                editor.putString(Utility.SETTING_LOCATION, Utility.city);
+                editor.putInt(Utility.SETTING_EVENT_NUMBER, Utility.EVENT_LIMIT_NUMBER);
+                editor.commit();
+
                 // Finishing start activity
                 getActivity().finish();
             }

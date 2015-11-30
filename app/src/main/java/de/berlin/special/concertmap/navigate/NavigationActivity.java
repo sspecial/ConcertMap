@@ -38,7 +38,7 @@ public class NavigationActivity extends AppCompatActivity {
     private final String navItem2 = "Tracked Artists";
     private final String navItem3 = "Attended Events";
     private final String navItem4 = "Search an Artist";
-    private final String navItem5 = "Setting";
+    private final String navItem5 = "Settings";
 
     private String[] eventNavItems;
     private DrawerLayout mDrawerLayout;

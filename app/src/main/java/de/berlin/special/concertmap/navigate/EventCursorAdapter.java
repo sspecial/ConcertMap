@@ -17,6 +17,7 @@ import java.io.FileInputStream;
 
 import de.berlin.special.concertmap.R;
 import de.berlin.special.concertmap.Utility;
+import de.berlin.special.concertmap.data.Query;
 
 /**
  * Created by Saeed on 21-Nov-15.
@@ -68,7 +69,7 @@ public class EventCursorAdapter extends CursorAdapter {
         }
 
         // Event image
-        String imageName = String.valueOf(cursor.getInt(Utility.COL_EVENT_THRILL_ID));
+        String imageName = String.valueOf(cursor.getInt(Query.COL_EVENT_THRILL_ID));
         // Let's see if it is necessary to download the image file
         File file = new File(imageDir, imageName);
         if (file.exists()) {
@@ -83,20 +84,20 @@ public class EventCursorAdapter extends CursorAdapter {
         } else {
             imageView.setImageResource(R.drawable.concert2);
             new DownloadImageTask(imageView, imageDir, imageName)
-                    .execute(cursor.getString(Utility.COL_EVENT_IMAGE));
+                    .execute(cursor.getString(Query.COL_EVENT_IMAGE));
         }
         // Artists Names
-        nameView.setText(Utility.artistNamePartition(Utility.retrieveArtistName(cursor.getString(Utility.COL_EVENT_NAME))));
+        nameView.setText(Utility.artistNamePartition(Utility.retrieveArtistName(cursor.getString(Query.COL_EVENT_NAME))));
 
 
         // Venue Name & City
-        String venueNameCity = cursor.getString(Utility.COL_VENUE_NAME)
+        String venueNameCity = cursor.getString(Query.COL_VENUE_NAME)
                 + ", "
-                + cursor.getString(Utility.COL_VENUE_CITY);
+                + cursor.getString(Query.COL_VENUE_CITY);
         addressView.setText(Utility.venueNamePartition(venueNameCity));
 
         // Event time
-        String[] dateArr = Utility.retrieveDateAndTime(cursor.getString(Utility.COL_EVENT_START_AT));
+        String[] dateArr = Utility.retrieveDateAndTime(cursor.getString(Query.COL_EVENT_START_AT));
         dayView.setText(dateArr[0]);
         timeView.setText(dateArr[1]);
     }
