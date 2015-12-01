@@ -1,31 +1,38 @@
 package de.berlin.special.concertmap.start;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import java.io.File;
 
 import de.berlin.special.concertmap.R;
 import de.berlin.special.concertmap.Utility;
 
-
 public class StartActivity extends AppCompatActivity {
 
-    InitiateFragment initiateFragment = new InitiateFragment();
+    Fragment initiateFragment = new InitiateFragment();
+    Fragment startFragment = new StartFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
 
-        if (savedInstanceState == null) {
+        // Getting setting from shared preferences
+        Utility.settings = this.getSharedPreferences(Utility.PREFS_NAME, Context.MODE_PRIVATE);
+        Utility.city = Utility.settings.getString(Utility.SETTING_LOCATION, Utility.CITY_IS_UNKNOWN);
+
+        if (Utility.city.equals(Utility.CITY_IS_UNKNOWN)) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, initiateFragment)
                     .commit();
+        } else {
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.container, startFragment)
+                    .commit();
         }
-
         getSupportActionBar().hide();
     }
 

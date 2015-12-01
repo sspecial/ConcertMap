@@ -43,7 +43,6 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
 
     private static final String LOG_TAG = InitiateFragment.class.getSimpleName();
     private static final String ENTER_CITY = "Location is not available, Enter the city.";
-    private static final String CITY_NAME_NOT_VALID = "Please enter a valid city name.";
     private static final String FINDING_YOUR_LOCATION = "Finding your location...";
 
     private static final int LOCATION_AVAILABLE = 100;
@@ -53,8 +52,8 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
     private double geo_long;
 
     private View rootView;
-    private LinearLayout locationFoundLayout;
-    private LinearLayout addressNotFoundLayout;
+    private LinearLayout foundLayout;
+    private LinearLayout notFoundLayout;
     private ProgressBar dataProcessPI;
     private TextView locationView;
     private TextView commentView;
@@ -90,11 +89,11 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_start, container, false);
+        rootView = inflater.inflate(R.layout.fragment_initiate, container, false);
 
         dataProcessPI = (ProgressBar) rootView.findViewById(R.id.parse_data_progress);
-        locationFoundLayout = (LinearLayout) rootView.findViewById(R.id.locationFoundLayout);
-        addressNotFoundLayout = (LinearLayout) rootView.findViewById(R.id.addressNotFoundLayout);
+        foundLayout = (LinearLayout) rootView.findViewById(R.id.found_layout);
+        notFoundLayout = (LinearLayout) rootView.findViewById(R.id.not_found_layout);
         locationView = (TextView) rootView.findViewById(R.id.location_view);
         commentView = (TextView) rootView.findViewById(R.id.comment_view);
         userEntry = (EditText) rootView.findViewById(R.id.enter_city_edit_text);
@@ -124,11 +123,7 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
                 getActivity().startActivity(intent);
 
                 // Adding setting to shared preferences
-                SharedPreferences settings;
-                Editor editor;
-                settings = getContext().getSharedPreferences(Utility.PREFS_NAME, Context.MODE_PRIVATE);
-                editor = settings.edit();
-
+                Editor editor = Utility.settings.edit();
                 editor.putString(Utility.SETTING_LOCATION, Utility.city);
                 editor.putInt(Utility.SETTING_EVENT_NUMBER, Utility.EVENT_LIMIT_NUMBER);
                 editor.commit();
@@ -147,9 +142,9 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
         // When location is NOT available!
         if (connStat == LOCATION_NOT_AVAILABLE) {
 
-            locationFoundLayout.setVisibility(View.INVISIBLE);
+            foundLayout.setVisibility(View.INVISIBLE);
             dataProcessPI.setVisibility(View.INVISIBLE);
-            addressNotFoundLayout.setVisibility(View.VISIBLE);
+            notFoundLayout.setVisibility(View.VISIBLE);
             commentView.setText(ENTER_CITY);
             searchCityBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -161,9 +156,9 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
                     // To see if the user entry is a valid city name
                     if (geoArr != null) {
 
-                        addressNotFoundLayout.setVisibility(View.INVISIBLE);
+                        notFoundLayout.setVisibility(View.INVISIBLE);
                         commentView.setVisibility(View.INVISIBLE);
-                        locationFoundLayout.setVisibility(View.VISIBLE);
+                        foundLayout.setVisibility(View.VISIBLE);
                         dataProcessPI.setVisibility(View.VISIBLE);
                         if (!Utility.city.equals(Utility.CITY_IS_UNKNOWN))
                             locationView.setText(lastKnownLocation);
@@ -173,7 +168,7 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
                         // Fetching data from Thrillcall API based on Geo information
                         new DataFetchService(getActivity(), rootView, geoArr, Utility.URL_GEO_EVENTS).execute();
                     } else {
-                        commentView.setText(CITY_NAME_NOT_VALID);
+                        commentView.setText(Utility.CITY_NAME_NOT_VALID);
                     }
                 }
             });
@@ -185,9 +180,9 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
             geo_long = mLastLocation.getLongitude();
             Double[] geoArr = new Double[]{geo_lat, geo_long};
 
-            addressNotFoundLayout.setVisibility(View.INVISIBLE);
+            notFoundLayout.setVisibility(View.INVISIBLE);
             commentView.setVisibility(View.INVISIBLE);
-            locationFoundLayout.setVisibility(View.VISIBLE);
+            foundLayout.setVisibility(View.VISIBLE);
             if (!Utility.city.equals(Utility.CITY_IS_UNKNOWN))
                 locationView.setText(lastKnownLocation);
             else

@@ -3,6 +3,7 @@ package de.berlin.special.concertmap.navigate;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 
 import de.berlin.special.concertmap.R;
 import de.berlin.special.concertmap.Utility;
+import de.berlin.special.concertmap.city.CityActivity;
 
 public class SettingFragment extends Fragment
         implements Preference.OnPreferenceChangeListener {
@@ -94,6 +96,9 @@ public class SettingFragment extends Fragment
                         break;
                     }
                     case CASE_LOCATION_CHANGE: {
+
+                        Intent intent = new Intent(getActivity(), CityActivity.class);
+                        getActivity().startActivity(intent);
                         break;
                     }
                 }

@@ -7,7 +7,7 @@
     android:gravity="center_horizontal"
     android:orientation="vertical"
     android:padding="@dimen/fragment_margin"
-    tools:context="de.berlin.special.concertmap.navigate.StartFragment">
+    tools:context="de.berlin.special.concertmap.navigate.CityFragment">
 
     <LinearLayout
         android:id="@+id/city_view_layout"
@@ -26,11 +26,40 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/search_city_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:visibility="invisible">
+
+        <EditText
+            android:id="@+id/enter_city_edit_text"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:lines="1"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textSize="19dp"
+            android:theme="@android:style/Theme.DeviceDefault" />
+
+        <ImageButton
+            android:id="@+id/validate_city_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:src="@drawable/forward_icon" />
+
+    </LinearLayout>
+
     <View
         android:id="@+id/line"
         android:layout_width="fill_parent"
         android:layout_height="2dp"
-        android:layout_below="@+id/city_view_layout"
+        android:layout_below="@+id/search_city_layout"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
         android:layout_marginTop="5dp"
@@ -71,13 +100,6 @@
         android:layout_marginTop="30dp"
         android:indeterminate="true" />
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="200dp"
-        android:id="@+id/imageView"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/logo1"
-        android:scaleType="centerCrop"/>
-
 </RelativeLayout>
+
+

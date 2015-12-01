@@ -39,7 +39,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="25dp"
         android:background="@drawable/mytheme_btn"
-        android:text="@string/search_key"
+        android:text="@string/search_key_artist"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/black" />
 

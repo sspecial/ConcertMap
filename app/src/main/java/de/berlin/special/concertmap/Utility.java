@@ -1,5 +1,6 @@
 package de.berlin.special.concertmap;
 
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.text.SimpleDateFormat;
@@ -14,6 +15,7 @@ public class Utility {
     public static final String SETTING_LOCATION = "CITY";
     public static final String SETTING_EVENT_NUMBER = "EVENT_NUMBER";
 
+    public static final String CITY_NAME_NOT_VALID = "Please enter a valid city name.";
     public static final String CITY_IS_UNKNOWN = "City is Unknown!";
     public static String city = CITY_IS_UNKNOWN;
 
@@ -44,6 +46,7 @@ public class Utility {
     public static final String FRAG_EL_ATTENDED = "attended";
 
     public static SQLiteDatabase db;
+    public static SharedPreferences settings;
 
     public static final int CON_BELONG_TO_ARTIST_DEFAULT = -1;
 
