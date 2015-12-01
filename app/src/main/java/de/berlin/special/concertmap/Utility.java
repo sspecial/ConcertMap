@@ -21,7 +21,7 @@ public class Utility {
 
     public static final double GEO_DEFAULT_LAT = 52.5194;
     public static final double GEO_DEFAULT_LONG = 13.4067;
-    public static final String EVENT_LIMIT_STR = "20";
+    public static final String EVENT_LIMIT_STR = "40";
     public static final int EVENT_LIMIT_NUMBER = 20;
     public static final String THRILLCALL_API_KEY = "d90d066add515bff";
     public static final String THRILLCALL_GEO_BASE_URL = "https://api.thrillcall.com/api/v3/events";

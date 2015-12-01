@@ -44,9 +44,13 @@ public class GeoListFragment extends Fragment {
         String eventQueryStr = Query.eventQueryStr
                 + "WHERE event.event_belong_to_artist = "
                 + Utility.CON_BELONG_TO_ARTIST_DEFAULT
-                + " AND "
-                + "event.event_attended = "
-                + Utility.EVENT_ATTEND_NO + " GROUP BY event._ID;";
+                + " AND"
+                + " event.event_attended = "
+                + Utility.EVENT_ATTEND_NO
+                + " GROUP BY event._ID"
+                + " LIMIT "
+                + String.valueOf(Utility.settings.getInt(Utility.SETTING_EVENT_NUMBER, Utility.EVENT_LIMIT_NUMBER))
+                + ";";
         try{
             final Cursor eventCursor = Utility.db.rawQuery(eventQueryStr, null);
             Log.v("Event Cursor", DatabaseUtils.dumpCursorToString(eventCursor));

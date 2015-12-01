@@ -81,10 +81,7 @@ public class SettingFragment extends Fragment {
                                 .setPositiveButton("Set",
                                         new DialogInterface.OnClickListener() {
                                             public void onClick(DialogInterface dialog, int whichButton) {
-
                                                 settings.edit().putInt(Utility.SETTING_EVENT_NUMBER, np.getValue()).commit();
-                                                int number = settings.getInt(Utility.SETTING_EVENT_NUMBER, 0);
-                                                Toast.makeText(getContext(),"value is :" + number, Toast.LENGTH_SHORT).show();
                                             }
                                         })
                                 .setNegativeButton("Cancel",
