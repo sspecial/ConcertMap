@@ -15,24 +15,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.NumberPicker;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import de.berlin.special.concertmap.R;
 import de.berlin.special.concertmap.Utility;
 import de.berlin.special.concertmap.city.CityActivity;
 
-public class SettingFragment extends Fragment
-        implements Preference.OnPreferenceChangeListener {
+public class SettingFragment extends Fragment {
 
     private SharedPreferences settings;
     private View rootView;
     private LayoutInflater layoutInflater;
     private final int CASE_LOCATION_CHANGE = 0;
     private final int CASE_EVENT_NUMBER = 1;
-    ListView settingsList;
-    String[] items = new String[] { "Change your location", "Set number of events"};
+    private ListView settingsList;
+    private SettingAdapter myAdapter;
+    private String[] items = new String[] { "Change your location", "Set number of events"};
 
     public SettingFragment() {
         // Required empty public constructor
@@ -51,10 +54,10 @@ public class SettingFragment extends Fragment
         rootView = layoutInflater.inflate(R.layout.fragment_setting, container, false);
 
         settingsList = (ListView) rootView.findViewById(R.id.list_view_settings);
-        ArrayAdapter adapter = new ArrayAdapter(getActivity(),
-                android.R.layout.simple_expandable_list_item_1, android.R.id.text1, items);
 
-        settingsList.setAdapter(adapter);
+        myAdapter = new SettingAdapter(getContext(), items);
+
+        settingsList.setAdapter(myAdapter);
 
         settingsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -107,9 +110,46 @@ public class SettingFragment extends Fragment
 
         return rootView;
     }
+}
+
+class SettingAdapter extends BaseAdapter {
+
+    private Context context;
+    private String[] items;
+    private int[] images = {R.drawable.geo_fence, R.drawable.list};
+
+    public SettingAdapter(Context context, String[] items) {
+        this.context = context;
+        this.items = items;
+    }
 
     @Override
-    public boolean onPreferenceChange(Preference preference, Object newValue) {
-        return false;
+    public int getCount() {
+        return items.length;
+    }
+
+    @Override
+    public Object getItem(int i) {
+        return items[i];
+    }
+
+    @Override
+    public long getItemId(int i) {
+        return i;
+    }
+
+    @Override
+    public View getView(int i, View view, ViewGroup viewGroup) {
+
+        LayoutInflater inflater = (LayoutInflater) context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        View row = inflater.inflate(R.layout.custom_settings_row, viewGroup, false);
+
+        TextView titleTextView = (TextView) row.findViewById(R.id.row_textView);
+        ImageView titleImageView = (ImageView) row.findViewById(R.id.row_imageView);
+        titleTextView.setText(items[i]);
+        titleImageView.setImageResource(images[i]);
+        return row;
     }
 }

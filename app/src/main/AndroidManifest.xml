@@ -27,24 +27,24 @@
         <activity
             android:name=".navigate.NavigationActivity"
             android:label="@string/title_activity_navigation"
-            android:launchMode="singleTop"></activity>
+            android:launchMode="singleTop">
+        </activity>
+
         <activity
             android:name=".artist.ArtistActivity"
             android:label="@string/title_activity_artist"
             android:parentActivityName=".navigate.NavigationActivity"
             android:screenOrientation="portrait">
-            !-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".navigate.NavigationActivity" />
         </activity>
+
         <activity
             android:name=".event.EventActivity"
             android:label="@string/title_activity_event"
             android:parentActivityName=".navigate.NavigationActivity"
             android:screenOrientation="portrait">
-
-            <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".navigate.NavigationActivity" />
@@ -55,8 +55,6 @@
             android:label="@string/title_activity_city"
             android:parentActivityName=".navigate.NavigationActivity"
             android:screenOrientation="portrait">
-
-            <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".navigate.NavigationActivity" />
@@ -66,7 +64,6 @@
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyC11xNEZZw2tjmhwaKhuNmyVcxai7FunPw" />
-
 
     </application>
 
