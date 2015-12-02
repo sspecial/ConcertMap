@@ -14,13 +14,15 @@ public class Utility {
     public static final String PREFS_NAME = "CONCERT_MAP_PREFS";
     public static final String SETTING_LOCATION = "CITY";
     public static final String SETTING_EVENT_NUMBER = "EVENT_NUMBER";
+    public static final String SETTING_GEO_LAT = "GEO_LAT";
+    public static final String SETTING_GEO_LONG = "GEO_LONG";
+    public static final double GEO_DEFAULT_LAT = 52.5194;
+    public static final double GEO_DEFAULT_LONG = 13.4067;
 
     public static final String CITY_NAME_NOT_VALID = "Please enter a valid city name.";
     public static final String CITY_IS_UNKNOWN = "City is Unknown!";
     public static String city = CITY_IS_UNKNOWN;
 
-    public static final double GEO_DEFAULT_LAT = 52.5194;
-    public static final double GEO_DEFAULT_LONG = 13.4067;
     public static final String EVENT_LIMIT_STR = "40";
     public static final int EVENT_LIMIT_NUMBER = 20;
     public static final String THRILLCALL_API_KEY = "d90d066add515bff";

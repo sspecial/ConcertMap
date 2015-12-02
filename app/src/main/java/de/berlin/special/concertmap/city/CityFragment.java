@@ -106,7 +106,6 @@ public class CityFragment extends Fragment {
                 }
             }
         });
-
     }
 
     @Override
@@ -144,6 +143,8 @@ public class CityFragment extends Fragment {
                     geoArr = new Double[]{a.getLatitude(), a.getLongitude()};
                     // to present the city name in the navigation activity
                     Utility.city = a.getLocality();
+                    Utility.settings.edit().putFloat(Utility.SETTING_GEO_LAT, (float)a.getLatitude()).commit();
+                    Utility.settings.edit().putFloat(Utility.SETTING_GEO_LONG, (float)a.getLongitude()).commit();
                     lastKnownLocation = String.format(
                             "%s, %s",
                             // Locality is usually a city
@@ -153,7 +154,8 @@ public class CityFragment extends Fragment {
                 }
             }
         } catch (IOException e) {
-            geoArr = new Double[]{Utility.GEO_DEFAULT_LAT, Utility.GEO_DEFAULT_LONG};
+            geoArr = new Double[]{(double)Utility.settings.getFloat(Utility.SETTING_GEO_LAT, (float)Utility.GEO_DEFAULT_LAT)
+                    , (double)Utility.settings.getFloat(Utility.SETTING_GEO_LONG, (float)Utility.GEO_DEFAULT_LONG)};
             Log.e(LOG_TAG, "Geo-Coder is not available. Default values are utilized!");
         }
         return geoArr;

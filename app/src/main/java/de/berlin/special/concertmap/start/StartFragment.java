@@ -67,20 +67,16 @@ public class StartFragment extends Fragment {
         super.onStart();
         // Fetching data from Thrillcall API based on Geo information
         Double[] geoArr = getGeoInfoFromCityName(Utility.city);
-        if (geoArr != null) {
-            commentView.setVisibility(View.INVISIBLE);
-            cityViewLayout.setVisibility(View.VISIBLE);
-            dataProcessPI.setVisibility(View.VISIBLE);
-            if (!Utility.city.equals(Utility.CITY_IS_UNKNOWN))
-                locationView.setText(lastKnownLocation);
-            else
-                locationView.setText(Utility.CITY_IS_UNKNOWN);
-            // Fetching data from Thrillcall API based on Geo information
-            new DataFetchService(getActivity(), rootView, geoArr, Utility.URL_GEO_EVENTS).execute();
-        } else {
-            commentView.setText("Geo information is not available");
-            new DataFetchService(getActivity(), rootView, geoArr, Utility.URL_GEO_EVENTS).execute();
-        }
+
+        commentView.setVisibility(View.INVISIBLE);
+        cityViewLayout.setVisibility(View.VISIBLE);
+        dataProcessPI.setVisibility(View.VISIBLE);
+        if (!Utility.city.equals(Utility.CITY_IS_UNKNOWN))
+            locationView.setText(lastKnownLocation);
+        else
+            locationView.setText(Utility.CITY_IS_UNKNOWN);
+        // Fetching data from Thrillcall API based on Geo information
+        new DataFetchService(getActivity(), rootView, geoArr, Utility.URL_GEO_EVENTS).execute();
 
     }
 
@@ -119,7 +115,8 @@ public class StartFragment extends Fragment {
                 }
             }
         } catch (IOException e) {
-            geoArr = new Double[]{Utility.GEO_DEFAULT_LAT, Utility.GEO_DEFAULT_LONG};
+            geoArr = new Double[]{(double)Utility.settings.getFloat(Utility.SETTING_GEO_LAT, (float)Utility.GEO_DEFAULT_LAT)
+                    , (double)Utility.settings.getFloat(Utility.SETTING_GEO_LONG, (float)Utility.GEO_DEFAULT_LONG)};
             Log.e(LOG_TAG, "Geo-Coder is not available. Default values are utilized!");
         }
         return geoArr;

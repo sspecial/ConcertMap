@@ -133,13 +133,13 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
             if (params[0] != null)
                 geoLat = params[0];
             else
-                geoLat = Utility.GEO_DEFAULT_LAT;
+                geoLat = (double)Utility.settings.getFloat(Utility.SETTING_GEO_LAT, (float)Utility.GEO_DEFAULT_LAT);
 
             double geoLong;
             if (params[1] != null)
                 geoLong = params[1];
             else
-                geoLong = Utility.GEO_DEFAULT_LONG;
+                geoLong = (double)Utility.settings.getFloat(Utility.SETTING_GEO_LONG, (float)Utility.GEO_DEFAULT_LONG);
 
             // Construct the URL for the api.thrillcall query
             final String LAT_PARAM = "lat";
