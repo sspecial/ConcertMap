@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.Preference;
 
 import android.support.v4.app.Fragment;
 import android.view.ContextThemeWrapper;
@@ -14,16 +13,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import de.berlin.special.concertmap.R;
-import de.berlin.special.concertmap.Utility;
+import de.berlin.special.concertmap.util.Utility;
 import de.berlin.special.concertmap.city.CityActivity;
 
 public class SettingFragment extends Fragment {

@@ -22,7 +22,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import de.berlin.special.concertmap.R;
-import de.berlin.special.concertmap.Utility;
+import de.berlin.special.concertmap.util.Utility;
 
 
 public class NavigationActivity extends AppCompatActivity {
@@ -79,16 +79,16 @@ public class NavigationActivity extends AppCompatActivity {
         myAdapter = new NavigateAdapter(this, eventNavItems);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.drawer_list);
-        // View header = getLayoutInflater().inflate(R.layout.custom_navigate_header, null);
+        View header = getLayoutInflater().inflate(R.layout.custom_navigate_header, null);
         // Setting ItemClickListener for DrawerList
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView parent, View view, int position, long id) {
-                selectItem(position);
+                selectItem(position-1);
             }
         });
         // Adding Header to DrawerList
-        // mDrawerList.addHeaderView(header);
+        mDrawerList.addHeaderView(header);
         // Setting Adaptor for DrawerList
         mDrawerList.setAdapter(myAdapter);
         // Setting Listener for DrawerList
@@ -162,6 +162,7 @@ public class NavigationActivity extends AppCompatActivity {
                     .replace(R.id.content_frame, geoListFragment)
                     .addToBackStack(null)
                     .commit();
+            this.setTitle("Concert Map");
         }
     }
 

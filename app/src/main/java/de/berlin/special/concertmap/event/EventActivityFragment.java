@@ -31,7 +31,7 @@ import java.io.File;
 import java.io.FileInputStream;
 
 import de.berlin.special.concertmap.R;
-import de.berlin.special.concertmap.Utility;
+import de.berlin.special.concertmap.util.Utility;
 import de.berlin.special.concertmap.data.EventContract.EventEntry;
 import de.berlin.special.concertmap.data.Query;
 import de.berlin.special.concertmap.service.DataFetchService;

@@ -6,7 +6,7 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import de.berlin.special.concertmap.Utility;
+import de.berlin.special.concertmap.util.Utility;
 import de.berlin.special.concertmap.data.EventContract.FavArtistEntry;
 
 /**

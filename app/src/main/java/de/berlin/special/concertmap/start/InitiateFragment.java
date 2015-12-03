@@ -1,10 +1,8 @@
 package de.berlin.special.concertmap.start;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences.Editor;
-import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -32,7 +30,8 @@ import java.util.List;
 import java.util.Locale;
 
 import de.berlin.special.concertmap.R;
-import de.berlin.special.concertmap.Utility;
+import de.berlin.special.concertmap.util.GetGeoInfo;
+import de.berlin.special.concertmap.util.Utility;
 import de.berlin.special.concertmap.navigate.NavigationActivity;
 import de.berlin.special.concertmap.service.DataFetchService;
 
@@ -71,8 +70,6 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
     private int connStat;
     // Location to be retrieved
     private Location mLastLocation;
-    // City & Country presented to the user
-    private String lastKnownLocation;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -124,7 +121,8 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
 
                 // Adding setting to shared preferences
                 Editor editor = Utility.settings.edit();
-                editor.putString(Utility.SETTING_LOCATION, Utility.city);
+                if (!Utility.city.equals(Utility.CITY_IS_UNKNOWN))
+                    editor.putString(Utility.SETTING_CITY, Utility.city);
                 editor.putInt(Utility.SETTING_EVENT_NUMBER, Utility.EVENT_LIMIT_NUMBER);
                 editor.commit();
 
@@ -151,7 +149,8 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
                 public void onClick(View v) {
 
                     // Obtaining lat & long for the user entry city
-                    Double[] geoArr = getGeoInfoFromCityName(userEntry.getText().toString());
+                    GetGeoInfo getGeoInfo = new GetGeoInfo(getContext());
+                    Double[] geoArr = getGeoInfo.getGeoInfoFromCityName(userEntry.getText().toString());
 
                     // To see if the user entry is a valid city name
                     if (geoArr != null) {
@@ -161,7 +160,7 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
                         foundLayout.setVisibility(View.VISIBLE);
                         dataProcessPI.setVisibility(View.VISIBLE);
                         if (!Utility.city.equals(Utility.CITY_IS_UNKNOWN))
-                            locationView.setText(lastKnownLocation);
+                            locationView.setText(Utility.lastKnownLocation);
                         else
                             locationView.setText(Utility.CITY_IS_UNKNOWN);
                         // Fetching data from Thrillcall API based on Geo information
@@ -183,44 +182,13 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
             commentView.setVisibility(View.INVISIBLE);
             foundLayout.setVisibility(View.VISIBLE);
             if (!Utility.city.equals(Utility.CITY_IS_UNKNOWN))
-                locationView.setText(lastKnownLocation);
+                locationView.setText(Utility.lastKnownLocation);
             else
                 locationView.setText(Utility.CITY_IS_UNKNOWN);
 
             // Fetching data from Thrillcall API based on Geo information
             new DataFetchService(getActivity(), rootView, geoArr, Utility.URL_GEO_EVENTS).execute();
         }
-    }
-
-    // Obtaining lat & long for the user entry city
-    public Double[] getGeoInfoFromCityName(String location){
-
-        Double[] geoArr = null;
-        try {
-            Geocoder gc = new Geocoder(getActivity());
-            // get the found Address Objects
-            List<Address> addresses = gc.getFromLocationName(location, 1);
-            for (Address a : addresses) {
-                if (a.hasLatitude() && a.hasLongitude()) {
-                    geoArr = new Double[]{a.getLatitude(), a.getLongitude()};
-                    // to present the city name in the navigation activity
-                    Utility.city = a.getLocality();
-                    Utility.settings.edit().putFloat(Utility.SETTING_GEO_LAT, (float)a.getLatitude()).commit();
-                    Utility.settings.edit().putFloat(Utility.SETTING_GEO_LONG, (float)a.getLongitude()).commit();
-                    lastKnownLocation = String.format(
-                            "%s, %s",
-                            // Locality is usually a city
-                            a.getLocality(),
-                            // The country of the address
-                            a.getCountryName());
-                }
-            }
-        } catch (IOException e) {
-            geoArr = new Double[]{(double)Utility.settings.getFloat(Utility.SETTING_GEO_LAT, (float)Utility.GEO_DEFAULT_LAT)
-                    , (double)Utility.settings.getFloat(Utility.SETTING_GEO_LONG, (float)Utility.GEO_DEFAULT_LONG)};
-            Log.e(LOG_TAG, "Geo-Coder is not available. Default values are utilized!");
-        }
-        return geoArr;
     }
 
     @Override
@@ -262,20 +230,15 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
             Geocoder gcd = new Geocoder(getContext(), Locale.getDefault());
             addresses = gcd.getFromLocation(loc.getLatitude(), loc.getLongitude(), 1);
             if (addresses != null && addresses.size() > 0) {
-                Address address = addresses.get(0);
+                Address a = addresses.get(0);
 
-                // to present the city name in the navigation activity
-                Utility.city = address.getLocality();
-                Utility.settings.edit().putFloat(Utility.SETTING_GEO_LAT, (float)loc.getLatitude()).commit();
-                Utility.settings.edit().putFloat(Utility.SETTING_GEO_LONG, (float) loc.getLongitude()).commit();
+                String cityStr = a.getLocality();
+                String countryStr = a.getCountryName();
 
-                // Return the City + Country
-                lastKnownLocation = String.format(
-                        "%s, %s",
-                        // Locality is usually a city
-                        address.getLocality(),
-                        // The country of the address
-                        address.getCountryName());
+                Utility.settings.edit().putFloat(Utility.SETTING_GEO_LAT, (float) a.getLatitude()).commit();
+                Utility.settings.edit().putFloat(Utility.SETTING_GEO_LONG, (float) a.getLongitude()).commit();
+                Utility.city = cityStr;
+                Utility.lastKnownLocation = String.format("%s, %s", cityStr, countryStr);
 
                 connStat = LOCATION_AVAILABLE;
 

@@ -4,11 +4,9 @@ import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import de.berlin.special.concertmap.R;
-import de.berlin.special.concertmap.Utility;
+import de.berlin.special.concertmap.util.Utility;
 import de.berlin.special.concertmap.data.Query;
 
 public class EventActivity extends AppCompatActivity {

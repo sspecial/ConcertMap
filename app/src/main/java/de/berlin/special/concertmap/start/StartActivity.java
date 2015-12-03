@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import java.io.File;
 
 import de.berlin.special.concertmap.R;
-import de.berlin.special.concertmap.Utility;
+import de.berlin.special.concertmap.util.Utility;
 
 public class StartActivity extends AppCompatActivity {
 
@@ -22,7 +22,7 @@ public class StartActivity extends AppCompatActivity {
 
         // Getting setting from shared preferences
         Utility.settings = this.getSharedPreferences(Utility.PREFS_NAME, Context.MODE_PRIVATE);
-        Utility.city = Utility.settings.getString(Utility.SETTING_LOCATION, Utility.CITY_IS_UNKNOWN);
+        Utility.city = Utility.settings.getString(Utility.SETTING_CITY, Utility.CITY_IS_UNKNOWN);
 
         if (Utility.city.equals(Utility.CITY_IS_UNKNOWN)) {
             getSupportFragmentManager().beginTransaction()

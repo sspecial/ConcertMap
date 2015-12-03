@@ -9,7 +9,7 @@
         android:id="@+id/imageView"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/logo2"
+        android:src="@drawable/logo"
         android:scaleType="centerCrop"/>
 
 </LinearLayout>

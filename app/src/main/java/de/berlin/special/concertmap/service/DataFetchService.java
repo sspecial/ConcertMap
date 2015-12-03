@@ -22,7 +22,7 @@ import java.net.URL;
 import java.util.Hashtable;
 
 import de.berlin.special.concertmap.R;
-import de.berlin.special.concertmap.Utility;
+import de.berlin.special.concertmap.util.Utility;
 import de.berlin.special.concertmap.artist.ArtistActivity;
 import de.berlin.special.concertmap.data.Query;
 

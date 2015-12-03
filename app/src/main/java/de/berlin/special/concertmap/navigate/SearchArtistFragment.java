@@ -9,7 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import de.berlin.special.concertmap.R;
-import de.berlin.special.concertmap.Utility;
+import de.berlin.special.concertmap.util.Utility;
 import de.berlin.special.concertmap.service.DataFetchService;
 
 public class SearchArtistFragment extends Fragment {

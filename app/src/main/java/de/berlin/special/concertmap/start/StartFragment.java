@@ -1,13 +1,8 @@
 package de.berlin.special.concertmap.start;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,11 +11,9 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import java.io.IOException;
-import java.util.List;
-
 import de.berlin.special.concertmap.R;
-import de.berlin.special.concertmap.Utility;
+import de.berlin.special.concertmap.util.GetGeoInfo;
+import de.berlin.special.concertmap.util.Utility;
 import de.berlin.special.concertmap.navigate.NavigationActivity;
 import de.berlin.special.concertmap.service.DataFetchService;
 
@@ -32,10 +25,6 @@ public class StartFragment extends Fragment {
     private TextView locationView;
     private TextView commentView;
     private Button continueBtn;
-
-    private static final String LOG_TAG = StartFragment.class.getSimpleName();
-    // City & Country presented to the user
-    private String lastKnownLocation;
 
     public StartFragment() {
 
@@ -65,16 +54,19 @@ public class StartFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        // Fetching data from Thrillcall API based on Geo information
-        Double[] geoArr = getGeoInfoFromCityName(Utility.city);
+        // Retrieving Geo information of last know location from shared preferences
+
+        GetGeoInfo getGeoInfo = new GetGeoInfo(getContext());
+        Double[] geoArr = getGeoInfo.getGeoInfoFromCityName(Utility.city);
 
         commentView.setVisibility(View.INVISIBLE);
         cityViewLayout.setVisibility(View.VISIBLE);
         dataProcessPI.setVisibility(View.VISIBLE);
-        if (!Utility.city.equals(Utility.CITY_IS_UNKNOWN))
-            locationView.setText(lastKnownLocation);
+        if(!Utility.lastKnownLocation.equals(Utility.CITY_IS_UNKNOWN))
+            locationView.setText(Utility.lastKnownLocation);
         else
-            locationView.setText(Utility.CITY_IS_UNKNOWN);
+            locationView.setText(Utility.city);
+
         // Fetching data from Thrillcall API based on Geo information
         new DataFetchService(getActivity(), rootView, geoArr, Utility.URL_GEO_EVENTS).execute();
 
@@ -94,32 +86,4 @@ public class StartFragment extends Fragment {
             }
         });
     }
-
-    // Obtaining lat & long for the user entry city
-    public Double[] getGeoInfoFromCityName(String location){
-
-        Double[] geoArr = null;
-        try {
-            Geocoder gc = new Geocoder(getActivity());
-            // get the found Address Objects
-            List<Address> addresses = gc.getFromLocationName(location, 1);
-            for (Address a : addresses) {
-                if (a.hasLatitude() && a.hasLongitude()) {
-                    geoArr = new Double[]{a.getLatitude(), a.getLongitude()};
-                    lastKnownLocation = String.format(
-                            "%s, %s",
-                            // Locality is usually a city
-                            a.getLocality(),
-                            // The country of the address
-                            a.getCountryName());
-                }
-            }
-        } catch (IOException e) {
-            geoArr = new Double[]{(double)Utility.settings.getFloat(Utility.SETTING_GEO_LAT, (float)Utility.GEO_DEFAULT_LAT)
-                    , (double)Utility.settings.getFloat(Utility.SETTING_GEO_LONG, (float)Utility.GEO_DEFAULT_LONG)};
-            Log.e(LOG_TAG, "Geo-Coder is not available. Default values are utilized!");
-        }
-        return geoArr;
-    }
-
 }
