@@ -51,7 +51,7 @@ public class StartFragment extends Fragment {
         // Retrieving Geo information of last know location from shared preferences
 
         GetGeoInfo getGeoInfo = new GetGeoInfo(getContext());
-        Double[] geoArr = getGeoInfo.getGeoInfoFromCityName(Utility.city);
+        Double[] geoArr = getGeoInfo.getGeoInfoFromCityName(Utility.city, 1);
 
         cityViewLayout.setVisibility(View.VISIBLE);
         dataProcessPI.setVisibility(View.VISIBLE);

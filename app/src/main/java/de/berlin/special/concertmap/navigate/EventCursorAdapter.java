@@ -86,9 +86,9 @@ public class EventCursorAdapter extends CursorAdapter {
             new DownloadImageTask(imageView, imageDir, imageName)
                     .execute(cursor.getString(Query.COL_EVENT_IMAGE));
         }
+
         // Artists Names
         nameView.setText(Utility.artistNamePartition(Utility.retrieveArtistName(cursor.getString(Query.COL_EVENT_NAME))));
-
 
         // Venue Name & City
         String venueNameCity = cursor.getString(Query.COL_VENUE_NAME)

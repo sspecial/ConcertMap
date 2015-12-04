@@ -125,7 +125,12 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
 
                     // Obtaining lat & long for the user entry city
                     GetGeoInfo getGeoInfo = new GetGeoInfo(getContext());
-                    Double[] geoArr = getGeoInfo.getGeoInfoFromCityName(userEntry.getText().toString());
+
+                    String entry = userEntry.getText().toString();
+                    if (entry.lastIndexOf(" ") == (entry.length()-1))
+                        entry = entry.substring(0, entry.length()-1);
+
+                    Double[] geoArr = getGeoInfo.getGeoInfoFromCityName(entry, 1);
 
                     // To see if the user entry is a valid city name
                     if (geoArr != null) {
@@ -207,8 +212,17 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
             if (addresses != null && addresses.size() > 0) {
                 Address a = addresses.get(0);
 
-                String cityStr = a.getLocality();
-                String countryStr = a.getCountryName();
+                String cityStr;
+                if (a.getLocality() != null)
+                    cityStr = a.getLocality();
+                else
+                    cityStr = a.getAddressLine(0);
+
+                String countryStr;
+                if (a.getCountryName() != null)
+                    countryStr = a.getCountryName();
+                else
+                    countryStr = a.getAddressLine(1);
 
                 Utility.settings.edit().putFloat(Utility.SETTING_GEO_LAT, (float) a.getLatitude()).commit();
                 Utility.settings.edit().putFloat(Utility.SETTING_GEO_LONG, (float) a.getLongitude()).commit();

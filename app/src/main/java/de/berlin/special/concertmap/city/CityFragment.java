@@ -80,7 +80,12 @@ public class CityFragment extends Fragment {
 
                 // Obtaining lat & long for the user entry city
                 GetGeoInfo getGeoInfo = new GetGeoInfo(getContext());
-                Double[] geoArr = getGeoInfo.getGeoInfoFromCityName(userEntry.getText().toString());
+
+                String entry = userEntry.getText().toString();
+                if (entry.lastIndexOf(" ") == (entry.length()-1))
+                    entry = entry.substring(0, entry.length()-1);
+
+                Double[] geoArr = getGeoInfo.getGeoInfoFromCityName(entry, 5);
 
                 // To see if the user entry is a valid city name
                 if (geoArr != null) {
