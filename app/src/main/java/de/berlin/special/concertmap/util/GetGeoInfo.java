@@ -1,20 +1,10 @@
 package de.berlin.special.concertmap.util;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
-import android.net.Uri;
-import android.view.ContextThemeWrapper;
-import android.widget.Toast;
 
-import java.io.IOException;
 import java.util.List;
-
-import de.berlin.special.concertmap.R;
-import de.berlin.special.concertmap.data.Query;
 
 /**
  * Created by Saeed on 03-Dec-15.
@@ -51,6 +41,7 @@ public class GetGeoInfo {
             }
         } catch (Exception e) {
             geoArr = new Double[2];
+            Utility.city = Utility.CITY_IS_UNKNOWN;
             Utility.lastKnownLocation = Utility.CITY_IS_UNKNOWN;
         }
         return geoArr;
