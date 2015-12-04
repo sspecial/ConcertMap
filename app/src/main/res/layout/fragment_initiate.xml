@@ -3,15 +3,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    android:background="@drawable/light_blue_background"
+    android:background="@drawable/background"
     tools:context=".StartActivity$PlaceholderFragment">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="200dp"
+        android:id="@+id/imageView"
+        android:layout_marginTop="80dp"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/logo1"
+        android:scaleType="centerCrop"/>
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="125dp"
+        android:layout_below="@+id/imageView"
+        android:layout_marginTop="65dp"
         android:id="@+id/found_layout">
 
         <TextView
@@ -19,7 +29,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/location_view"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/black"/>
+            android:textColor="@color/blue_sky_hd"/>
 
     </LinearLayout>
 
@@ -28,8 +38,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
+        android:layout_below="@+id/imageView"
         android:gravity="center_vertical"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="40dp"
         android:id="@+id/not_found_layout"
         android:visibility="invisible">
 
@@ -40,7 +51,7 @@
             android:layout_height="wrap_content"
             android:singleLine="true"
             android:lines="1"
-            android:textColor="@color/black"
+            android:textColor="@color/blue_sky_hd"
             android:textSize="19dp"/>
 
         <ImageButton
@@ -56,7 +67,7 @@
         android:id="@+id/line"
         android:layout_width="fill_parent"
         android:layout_height="2dp"
-        android:background="#ffffff"
+        android:background="@color/grey"
         android:layout_below="@+id/not_found_layout"
         android:layout_marginTop="5dp"
         android:layout_marginLeft="50dp"
@@ -66,26 +77,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="@color/black_cow"
+        android:textColor="@color/blue_sky_hd"
         android:textSize="16dp"
         android:id="@+id/comment_view"
         android:layout_marginTop="5dp"
         android:layout_below="@+id/line"
         android:layout_centerHorizontal="true"
         android:gravity="center_horizontal"/>
-
-    <Button
-        android:background="@drawable/mytheme_btn"
-        android:layout_width="110dp"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/continue_key"
-        android:textColor="@color/black"
-        android:id="@+id/continue_button"
-        android:layout_marginTop="35dp"
-        android:layout_below="@+id/comment_view"
-        android:layout_centerHorizontal="true"
-        android:visibility="invisible"/>
 
     <ProgressBar
         android:id="@+id/parse_data_progress"
@@ -96,15 +94,5 @@
         android:layout_marginTop="30dp"
         android:layout_below="@+id/comment_view"
         android:layout_centerHorizontal="true"/>
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="200dp"
-        android:id="@+id/imageView"
-        android:layout_below="@+id/comment_view"
-        android:layout_marginTop="80dp"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/logo1"
-        android:scaleType="centerCrop"/>
 
 </RelativeLayout>

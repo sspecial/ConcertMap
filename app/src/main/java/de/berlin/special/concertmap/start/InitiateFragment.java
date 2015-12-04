@@ -58,7 +58,6 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
     private TextView commentView;
     private EditText userEntry;
     private ImageButton searchCityBtn;
-    private Button continueBtn;
 
     // Client to request last known location
     private GoogleApiClient mGoogleApiClient;
@@ -95,7 +94,6 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
         commentView = (TextView) rootView.findViewById(R.id.comment_view);
         userEntry = (EditText) rootView.findViewById(R.id.enter_city_edit_text);
         searchCityBtn = (ImageButton) rootView.findViewById(R.id.validate_city_button);
-        continueBtn = (Button) rootView.findViewById(R.id.continue_button);
 
         commentView.setText(FINDING_YOUR_LOCATION);
         return rootView;
@@ -107,29 +105,6 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
         if (!mResolvingError) {
             mGoogleApiClient.connect();
         }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        continueBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), NavigationActivity.class);
-                getActivity().startActivity(intent);
-
-                // Adding setting to shared preferences
-                Editor editor = Utility.settings.edit();
-                if (!Utility.city.equals(Utility.CITY_IS_UNKNOWN))
-                    editor.putString(Utility.SETTING_CITY, Utility.city);
-                editor.putInt(Utility.SETTING_EVENT_NUMBER, Utility.EVENT_LIMIT_NUMBER);
-                editor.commit();
-
-                // Finishing start activity
-                getActivity().finish();
-            }
-        });
     }
 
     @Override

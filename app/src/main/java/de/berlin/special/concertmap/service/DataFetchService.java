@@ -1,9 +1,11 @@
 package de.berlin.special.concertmap.service;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -22,6 +24,7 @@ import java.net.URL;
 import java.util.Hashtable;
 
 import de.berlin.special.concertmap.R;
+import de.berlin.special.concertmap.navigate.NavigationActivity;
 import de.berlin.special.concertmap.util.Utility;
 import de.berlin.special.concertmap.artist.ArtistActivity;
 import de.berlin.special.concertmap.data.Query;
@@ -35,7 +38,6 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
     private final String LOG_TAG = DataFetchService.class.getSimpleName();
 
     private Context mContext;
-    private Button continueBtn;
     private ProgressBar dataProcessPI;
     private TextView artistSearchCommentView;
     private URL url;
@@ -47,7 +49,6 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
     public DataFetchService(Context context, View view, Double[] geoParams, int fetchType){
         mContext = context;
         dataFetchType = fetchType;
-        continueBtn = (Button) view.findViewById(R.id.continue_button);
         dataProcessPI = (ProgressBar) view.findViewById(R.id.parse_data_progress);
         buildGeoEventsURL(geoParams);
     }
@@ -243,7 +244,17 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
             parseJSONtoDatabase.parseData();
             //Displaying the 'CONTINUE' button after parsing data into database
             dataProcessPI.setVisibility(View.GONE);
-            continueBtn.setVisibility(View.VISIBLE);
+
+            Intent intent = new Intent(mContext, NavigationActivity.class);
+            mContext.startActivity(intent);
+
+            // Adding setting to shared preferences
+            if (!Utility.city.equals(Utility.CITY_IS_UNKNOWN))
+                Utility.settings.edit().putString(Utility.SETTING_CITY, Utility.city).commit();
+
+            // Finishing start activity
+            ((Activity)mContext).finish();
+
         }
         // Artist Info based on ID
         else if(dataFetchType == Utility.URL_ARTIST_INFO) {

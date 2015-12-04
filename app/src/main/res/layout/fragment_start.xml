@@ -3,18 +3,28 @@
     style="@android:style/Widget.Holo.Light"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/light_blue_background"
+    android:background="@drawable/background"
     android:gravity="center_horizontal"
     android:orientation="vertical"
     android:padding="@dimen/fragment_margin"
     tools:context="de.berlin.special.concertmap.navigate.StartFragment">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="200dp"
+        android:id="@+id/imageView"
+        android:layout_marginTop="80dp"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/logo1"
+        android:scaleType="centerCrop"/>
 
     <LinearLayout
         android:id="@+id/city_view_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="125dp"
+        android:layout_below="@+id/imageView"
+        android:layout_marginTop="50dp"
         android:orientation="horizontal">
 
         <TextView
@@ -22,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/black" />
+            android:textColor="@color/blue_sky_hd" />
 
     </LinearLayout>
 
@@ -34,51 +44,16 @@
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
         android:layout_marginTop="5dp"
-        android:background="#ffffff" />
-
-    <TextView
-        android:id="@+id/comment_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/line"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="5dp"
-        android:gravity="center_horizontal"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="@color/black_cow"
-        android:textSize="16dp" />
-
-    <Button
-        android:id="@+id/continue_button"
-        android:layout_width="110dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/comment_view"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="35dp"
-        android:background="@drawable/mytheme_btn"
-        android:text="@string/continue_key"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@color/black"
-        android:visibility="invisible" />
+        android:background="@color/grey" />
 
     <ProgressBar
         android:id="@+id/parse_data_progress"
         style="@android:style/Widget.Holo.Light.ProgressBar.Inverse"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/comment_view"
+        android:layout_below="@+id/line"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
         android:indeterminate="true" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="200dp"
-        android:id="@+id/imageView"
-        android:layout_below="@+id/comment_view"
-        android:layout_marginTop="80dp"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/logo1"
-        android:scaleType="centerCrop"/>
 
 </RelativeLayout>

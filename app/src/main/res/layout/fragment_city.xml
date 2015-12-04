@@ -77,19 +77,6 @@
         android:textColor="@color/black_cow"
         android:textSize="16dp" />
 
-    <Button
-        android:id="@+id/continue_button"
-        android:layout_width="110dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/comment_view"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="35dp"
-        android:background="@drawable/mytheme_btn"
-        android:text="@string/continue_key"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@color/black"
-        android:visibility="invisible" />
-
     <ProgressBar
         android:id="@+id/parse_data_progress"
         style="@android:style/Widget.Holo.Light.ProgressBar.Inverse"

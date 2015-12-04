@@ -38,9 +38,6 @@ public class CityFragment extends Fragment {
     private TextView commentView;
     private EditText userEntry;
     private ImageButton searchCityBtn;
-    private Button continueBtn;
-
-    private static final String LOG_TAG = CityFragment.class.getSimpleName();
 
     public CityFragment() {
 
@@ -65,7 +62,6 @@ public class CityFragment extends Fragment {
         commentView = (TextView) rootView.findViewById(R.id.comment_view);
         userEntry = (EditText) rootView.findViewById(R.id.enter_city_edit_text);
         searchCityBtn = (ImageButton) rootView.findViewById(R.id.validate_city_button);
-        continueBtn = (Button) rootView.findViewById(R.id.continue_button);
 
         return rootView;
     }
@@ -106,26 +102,4 @@ public class CityFragment extends Fragment {
             }
         });
     }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        continueBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), NavigationActivity.class);
-                getActivity().startActivity(intent);
-
-                // Adding setting to shared preferences
-                if (!Utility.city.equals(Utility.CITY_IS_UNKNOWN)) {
-                    Utility.settings.edit().putString(Utility.SETTING_CITY, Utility.city).commit();
-                }
-
-                // Finishing start activity
-                getActivity().finish();
-            }
-        });
-    }
-
 }
