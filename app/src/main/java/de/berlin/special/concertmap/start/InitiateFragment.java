@@ -1,8 +1,6 @@
 package de.berlin.special.concertmap.start;
 
-import android.content.Intent;
 import android.content.IntentSender;
-import android.content.SharedPreferences.Editor;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -12,7 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -25,15 +22,13 @@ import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.location.LocationServices;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
 import de.berlin.special.concertmap.R;
+import de.berlin.special.concertmap.service.DataFetchService;
 import de.berlin.special.concertmap.util.GetGeoInfo;
 import de.berlin.special.concertmap.util.Utility;
-import de.berlin.special.concertmap.navigate.NavigationActivity;
-import de.berlin.special.concertmap.service.DataFetchService;
 
 /**
  * Created by Saeed on 18-Nov-14.
@@ -130,7 +125,7 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
                     if (entry.lastIndexOf(" ") == (entry.length()-1))
                         entry = entry.substring(0, entry.length()-1);
 
-                    Double[] geoArr = getGeoInfo.getGeoInfoFromCityName(entry, 1);
+                    Double[] geoArr = getGeoInfo.getGeoInfoFromCityName(entry);
 
                     // To see if the user entry is a valid city name
                     if (geoArr != null) {
@@ -224,8 +219,6 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
                 else
                     countryStr = a.getAddressLine(1);
 
-                Utility.settings.edit().putFloat(Utility.SETTING_GEO_LAT, (float) a.getLatitude()).commit();
-                Utility.settings.edit().putFloat(Utility.SETTING_GEO_LONG, (float) a.getLongitude()).commit();
                 Utility.city = cityStr;
                 Utility.lastKnownLocation = String.format("%s, %s", cityStr, countryStr);
 

@@ -5,15 +5,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import de.berlin.special.concertmap.R;
-import de.berlin.special.concertmap.util.GetGeoInfo;
-import de.berlin.special.concertmap.util.Utility;
 import de.berlin.special.concertmap.service.DataFetchService;
+import de.berlin.special.concertmap.util.Utility;
 
 public class StartFragment extends Fragment {
 
@@ -49,9 +47,9 @@ public class StartFragment extends Fragment {
     public void onStart() {
         super.onStart();
         // Retrieving Geo information of last know location from shared preferences
-
-        GetGeoInfo getGeoInfo = new GetGeoInfo(getContext());
-        Double[] geoArr = getGeoInfo.getGeoInfoFromCityName(Utility.city, 1);
+        double geoLat = (double)Utility.settings.getFloat(Utility.SETTING_GEO_LAT, (float)Utility.GEO_DEFAULT_LAT);
+        double geoLong = (double)Utility.settings.getFloat(Utility.SETTING_GEO_LONG, (float)Utility.GEO_DEFAULT_LONG);
+        Double[] geoArr = new Double[]{geoLat, geoLong};
 
         cityViewLayout.setVisibility(View.VISIBLE);
         dataProcessPI.setVisibility(View.VISIBLE);

@@ -5,13 +5,11 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -24,10 +22,10 @@ import java.net.URL;
 import java.util.Hashtable;
 
 import de.berlin.special.concertmap.R;
-import de.berlin.special.concertmap.navigate.NavigationActivity;
-import de.berlin.special.concertmap.util.Utility;
 import de.berlin.special.concertmap.artist.ArtistActivity;
 import de.berlin.special.concertmap.data.Query;
+import de.berlin.special.concertmap.navigate.NavigationActivity;
+import de.berlin.special.concertmap.util.Utility;
 
 /**
  * Created by Saeed on 30-Mar-15.
@@ -42,6 +40,8 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
     private TextView artistSearchCommentView;
     private URL url;
     private int artistID;
+    private double geoLat;
+    private double geoLong;
     // Deciding to fetch geo-events data, artist-events data, or artist-info data
     private int dataFetchType;
 
@@ -130,13 +130,11 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
     public void buildGeoEventsURL(Double[] params) {
 
         try {
-            double geoLat;
             if (params[0] != null)
                 geoLat = params[0];
             else
                 geoLat = (double)Utility.settings.getFloat(Utility.SETTING_GEO_LAT, (float)Utility.GEO_DEFAULT_LAT);
 
-            double geoLong;
             if (params[1] != null)
                 geoLong = params[1];
             else
@@ -251,6 +249,10 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
             // Adding setting to shared preferences
             if (!Utility.city.equals(Utility.CITY_IS_UNKNOWN))
                 Utility.settings.edit().putString(Utility.SETTING_CITY, Utility.city).commit();
+            if (!Utility.lastKnownLocation.equals(Utility.CITY_IS_UNKNOWN))
+                Utility.settings.edit().putString(Utility.SETTING_LOCATION, Utility.lastKnownLocation).commit();
+            Utility.settings.edit().putFloat(Utility.SETTING_GEO_LAT, (float) geoLat).commit();
+            Utility.settings.edit().putFloat(Utility.SETTING_GEO_LONG, (float) geoLong).commit();
 
             // Finishing start activity
             ((Activity)mContext).finish();

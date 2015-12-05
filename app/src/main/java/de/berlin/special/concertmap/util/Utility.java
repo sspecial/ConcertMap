@@ -1,16 +1,10 @@
 package de.berlin.special.concertmap.util;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
-import android.location.Address;
-import android.location.Geocoder;
-import android.util.Log;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by Saeed on 11-Nov-15.
@@ -19,6 +13,7 @@ public class Utility {
 
     public static final String PREFS_NAME = "CONCERT_MAP_PREFS";
     public static final String SETTING_CITY = "CITY";
+    public static final String SETTING_LOCATION = "LOCATION";
     public static final String SETTING_EVENT_NUMBER = "EVENT_NUMBER";
     public static final String SETTING_GEO_LAT = "GEO_LAT";
     public static final String SETTING_GEO_LONG = "GEO_LONG";

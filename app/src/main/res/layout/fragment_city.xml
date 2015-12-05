@@ -13,16 +13,34 @@
         android:id="@+id/city_view_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:orientation="vertical"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="125dp"
-        android:orientation="horizontal">
+        android:gravity="center_horizontal"
+        android:visibility="invisible">
 
         <TextView
             android:id="@+id/city_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            android:gravity="center_horizontal" />
+
+        <View
+            android:id="@+id/line"
+            android:layout_width="250dp"
+            android:layout_height="2dp"
+            android:layout_marginTop="5dp"
+            android:background="#ffffff" />
+
+        <ProgressBar
+            android:id="@+id/parse_data_progress"
+            style="@android:style/Widget.Holo.Light.ProgressBar.Inverse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:indeterminate="true" />
 
     </LinearLayout>
 
@@ -31,10 +49,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="100dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:visibility="invisible">
+        android:layout_marginTop="50dp"
+        android:orientation="vertical">
 
         <EditText
             android:id="@+id/enter_city_edit_text"
@@ -46,46 +62,52 @@
             android:textSize="19dp"
             android:theme="@android:style/Theme.DeviceDefault" />
 
-        <ImageButton
-            android:id="@+id/validate_city_button"
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:src="@drawable/forward_icon" />
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/black"
+            android:text="City"/>
+
+        <EditText
+            android:id="@+id/enter_country_edit_text"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:lines="1"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textSize="19dp"
+            android:theme="@android:style/Theme.DeviceDefault" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/black"
+            android:text="Country (Optional)"/>
+
+        <ImageButton
+            android:id="@+id/validate_city_button"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/forward_icon"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/mytheme_btn"/>
+
+        <TextView
+            android:id="@+id/comment_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/search_city_layout"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:gravity="center_horizontal"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/black_cow"
+            android:textSize="16dp" />
 
     </LinearLayout>
-
-    <View
-        android:id="@+id/line"
-        android:layout_width="fill_parent"
-        android:layout_height="2dp"
-        android:layout_below="@+id/search_city_layout"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
-        android:layout_marginTop="5dp"
-        android:background="#ffffff" />
-
-    <TextView
-        android:id="@+id/comment_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/line"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="5dp"
-        android:gravity="center_horizontal"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="@color/black_cow"
-        android:textSize="16dp" />
-
-    <ProgressBar
-        android:id="@+id/parse_data_progress"
-        style="@android:style/Widget.Holo.Light.ProgressBar.Inverse"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/comment_view"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
-        android:indeterminate="true" />
 
 </RelativeLayout>
 
