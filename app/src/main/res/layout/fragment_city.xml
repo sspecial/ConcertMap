@@ -3,7 +3,7 @@
     style="@android:style/Widget.Holo.Light"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/light_blue_background"
+    android:background="@drawable/background"
     android:gravity="center_horizontal"
     android:orientation="vertical"
     android:padding="@dimen/fragment_margin"
@@ -24,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/black"
+            android:textColor="@color/blue_sky_hd"
             android:gravity="center_horizontal" />
 
         <View
@@ -32,7 +32,7 @@
             android:layout_width="250dp"
             android:layout_height="2dp"
             android:layout_marginTop="5dp"
-            android:background="#ffffff" />
+            android:background="@color/grey" />
 
         <ProgressBar
             android:id="@+id/parse_data_progress"
@@ -58,33 +58,34 @@
             android:layout_height="wrap_content"
             android:lines="1"
             android:singleLine="true"
-            android:textColor="@color/black"
-            android:textSize="19dp"
+            android:textColor="@color/grey"
+            android:textSize="17dp"
             android:theme="@android:style/Theme.DeviceDefault" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/black"
+            android:textColor="@color/blue_sky_hd"
             android:text="City"/>
 
         <EditText
             android:id="@+id/enter_country_edit_text"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
             android:lines="1"
             android:singleLine="true"
-            android:textColor="@color/black"
-            android:textSize="19dp"
+            android:textColor="@color/grey"
+            android:textSize="17dp"
             android:theme="@android:style/Theme.DeviceDefault" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/black"
-            android:text="Country (Optional)"/>
+            android:textColor="@color/blue_sky_hd"
+            android:text="Country (Optional)" />
 
         <ImageButton
             android:id="@+id/validate_city_button"
@@ -92,22 +93,22 @@
             android:layout_height="wrap_content"
             android:src="@drawable/forward_icon"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="20dp"
             android:background="@drawable/mytheme_btn"/>
 
-        <TextView
-            android:id="@+id/comment_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/search_city_layout"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"
-            android:gravity="center_horizontal"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/black_cow"
-            android:textSize="16dp" />
-
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/comment_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/search_city_layout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:gravity="center_horizontal"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@color/blue_sky_hd"
+        android:textSize="16dp" />
 
 </RelativeLayout>
 

@@ -71,9 +71,10 @@ public class CityFragment extends Fragment {
                 Double[] geoArr = getGeoInfo.getGeoInfoFromCityName(entry);
 
                 // To see if the user entry is a valid city name
-                if (geoArr != null) {
+                if (geoArr[0] != null && geoArr[1] != null) {
 
                     searchCityLayout.setVisibility(View.INVISIBLE);
+                    commentView.setVisibility(View.INVISIBLE);
                     cityViewLayout.setVisibility(View.VISIBLE);
                     if (!Utility.city.equals(Utility.CITY_IS_UNKNOWN))
                         locationView.setText(Utility.lastKnownLocation);

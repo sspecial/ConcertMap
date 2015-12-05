@@ -32,6 +32,7 @@ public class NavigationActivity extends AppCompatActivity {
     private static final int NAV_CASE_ATTENDED_EVENTS  = 2;
     private static final int NAV_CASE_SEARCH_AN_ARTIST  = 3;
     private static final int NAV_CASE_SETTING = 4;
+    private static final int NAV_CASE_EXIT = 5;
 
     // Navigation bar items
     private String navItem1;
@@ -39,6 +40,7 @@ public class NavigationActivity extends AppCompatActivity {
     private final String navItem3 = "Attended Events";
     private final String navItem4 = "Search an Artist";
     private final String navItem5 = "Settings";
+    private final String navItem6 = "Exit";
 
     private String[] eventNavItems;
     private DrawerLayout mDrawerLayout;
@@ -65,7 +67,7 @@ public class NavigationActivity extends AppCompatActivity {
             navItem1 = Utility.city + " Concerts";
         else
             navItem1 = "Concerts";
-        eventNavItems = new String[]{navItem1, navItem2, navItem3, navItem4, navItem5};
+        eventNavItems = new String[]{navItem1, navItem2, navItem3, navItem4, navItem5, navItem6};
 
         // Initiating GeoFragment as default view of activity
         manager = getSupportFragmentManager();
@@ -138,6 +140,10 @@ public class NavigationActivity extends AppCompatActivity {
                 manager.beginTransaction()
                         .replace(R.id.content_frame, settingFragment)
                         .commit();
+                break;
+
+            case NAV_CASE_EXIT:
+                finish();
                 break;
 
             default:
@@ -247,7 +253,8 @@ class NavigateAdapter extends BaseAdapter {
             , R.drawable.music_conductor
             , R.drawable.audio_wave
             , R.drawable.search
-            , R.drawable.settings};
+            , R.drawable.settings
+            , R.drawable.exit};
 
     public NavigateAdapter(Context context, String[] eventNavItems) {
         this.context = context;

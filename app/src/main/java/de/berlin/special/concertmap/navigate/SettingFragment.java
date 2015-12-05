@@ -25,14 +25,16 @@ import de.berlin.special.concertmap.city.CityActivity;
 
 public class SettingFragment extends Fragment {
 
+    private final int CASE_CHANGE_LOCATION = 0;
+    private final int CASE_CHANGE_DATE = 1;
+    private final int CASE_EVENT_NUMBER = 2;
+
     private SharedPreferences settings;
     private View rootView;
     private LayoutInflater layoutInflater;
-    private final int CASE_LOCATION_CHANGE = 0;
-    private final int CASE_EVENT_NUMBER = 1;
     private ListView settingsList;
     private SettingAdapter myAdapter;
-    private String[] items = new String[] { "Change your location", "Set number of events"};
+    private String[] items = new String[] { "Change your location", "Set time duration", "Set number of events"};
 
     public SettingFragment() {
         // Required empty public constructor
@@ -92,11 +94,16 @@ public class SettingFragment extends Fragment {
                         alert.show();
                         break;
                     }
-                    case CASE_LOCATION_CHANGE: {
+
+                    case CASE_CHANGE_LOCATION: {
 
                         Intent intent = new Intent(getActivity(), CityActivity.class);
                         getActivity().startActivity(intent);
                         break;
+                    }
+
+                    case CASE_CHANGE_DATE: {
+
                     }
                 }
             }
@@ -110,7 +117,7 @@ class SettingAdapter extends BaseAdapter {
 
     private Context context;
     private String[] items;
-    private int[] images = {R.drawable.geo_fence, R.drawable.list};
+    private int[] images = {R.drawable.geo_fence, R.drawable.planner, R.drawable.list};
 
     public SettingAdapter(Context context, String[] items) {
         this.context = context;

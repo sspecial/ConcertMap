@@ -5,17 +5,17 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import de.berlin.special.concertmap.R;
-import de.berlin.special.concertmap.util.Utility;
 import de.berlin.special.concertmap.service.DataFetchService;
+import de.berlin.special.concertmap.util.Utility;
 
 public class SearchArtistFragment extends Fragment {
 
     private View rootView;
-    private Button searchBtn;
+    private ImageButton searchBtn;
     private EditText entryView;
 
     public SearchArtistFragment() {
@@ -33,7 +33,7 @@ public class SearchArtistFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_search_artist, container, false);
-        searchBtn = (Button) rootView.findViewById(R.id.artist_search_button);
+        searchBtn = (ImageButton) rootView.findViewById(R.id.artist_search_button);
         entryView = (EditText) rootView.findViewById(R.id.enter_artist_edit_text);
         return rootView;
     }
