@@ -1,4 +1,4 @@
-package de.berlin.special.concertmap.city;
+package de.berlin.special.concertmap.settings;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

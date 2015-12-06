@@ -128,7 +128,7 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
                     Double[] geoArr = getGeoInfo.getGeoInfoFromCityName(entry);
 
                     // To see if the user entry is a valid city name
-                    if (geoArr != null) {
+                    if (geoArr[0] != null && geoArr[1] != null) {
 
                         notFoundLayout.setVisibility(View.INVISIBLE);
                         commentView.setVisibility(View.INVISIBLE);

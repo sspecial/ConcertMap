@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
 import android.support.v4.app.Fragment;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
@@ -20,8 +19,9 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import de.berlin.special.concertmap.R;
+import de.berlin.special.concertmap.settings.CityActivity;
+import de.berlin.special.concertmap.settings.TimeActivity;
 import de.berlin.special.concertmap.util.Utility;
-import de.berlin.special.concertmap.city.CityActivity;
 
 public class SettingFragment extends Fragment {
 
@@ -104,6 +104,9 @@ public class SettingFragment extends Fragment {
 
                     case CASE_CHANGE_DATE: {
 
+                        Intent intent = new Intent(getActivity(), TimeActivity.class);
+                        getActivity().startActivity(intent);
+                        break;
                     }
                 }
             }

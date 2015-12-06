@@ -1,4 +1,4 @@
-package de.berlin.special.concertmap.city;
+package de.berlin.special.concertmap.settings;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,7 +18,7 @@ import de.berlin.special.concertmap.util.Utility;
 public class CityFragment extends Fragment {
 
     private View rootView;
-    private View cityViewLayout;
+    private LinearLayout cityViewLayout;
     private LinearLayout searchCityLayout;
     private TextView locationView;
     private TextView commentView;
@@ -30,7 +30,7 @@ public class CityFragment extends Fragment {
 
     }
 
-     @Override
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 

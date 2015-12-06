@@ -15,4 +15,5 @@
     <color name="orange_sky">#10ff944f</color>
     <color name="action_bar_color">#e83673cc</color>
     <color name="action_bar_text_color">#dde0e6</color>
+    <color name="edit_text_color">#291818</color>
 </resources>

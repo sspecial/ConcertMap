@@ -14,5 +14,6 @@
 
     <string name="pick_the_artist">Pick the Artist</string>
     <string name="choose_ticket_provider">Ticket Providers</string>
+    <string name="title_activity_time">Pick the date</string>
 
 </resources>
