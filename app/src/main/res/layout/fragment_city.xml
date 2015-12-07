@@ -13,19 +13,19 @@
         android:id="@+id/city_view_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="75dp"
-        android:orientation="vertical"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="75dp"
         android:gravity="center_horizontal"
+        android:orientation="vertical"
         android:visibility="invisible">
 
         <TextView
             android:id="@+id/city_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/black"
-            android:gravity="center_horizontal" />
+            android:textColor="@color/black" />
 
         <View
             android:id="@+id/line"
@@ -56,47 +56,49 @@
             android:id="@+id/enter_city_edit_text"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/edit_text_color"
             android:lines="1"
             android:singleLine="true"
             android:textColor="@color/black"
             android:textSize="17dp"
-            android:theme="@android:style/Theme.DeviceDefault"
-            android:backgroundTint="@color/edit_text_color" />
+            android:theme="@android:style/Theme.DeviceDefault" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:text="City"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/black_cow"
-            android:text="City"/>
+            android:textColor="@color/black_cow" />
 
         <EditText
             android:id="@+id/enter_country_edit_text"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
+            android:backgroundTint="@color/edit_text_color"
             android:lines="1"
             android:singleLine="true"
             android:textColor="@color/black"
             android:textSize="17dp"
-            android:theme="@android:style/Theme.DeviceDefault"
-            android:backgroundTint="@color/edit_text_color" />
+            android:theme="@android:style/Theme.DeviceDefault" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:text="Country (Optional)"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/black_cow"
-            android:text="Country (Optional)" />
+            android:textColor="@color/black_cow" />
 
         <ImageButton
             android:id="@+id/validate_city_button"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:src="@drawable/forward_icon"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"
-            android:background="@drawable/mytheme_btn"/>
+            android:background="@drawable/mytheme_btn"
+            android:src="@drawable/forward_icon" />
 
     </LinearLayout>
 

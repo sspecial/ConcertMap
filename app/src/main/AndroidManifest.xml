@@ -19,8 +19,8 @@
         android:theme="@style/MyTheme">
         <activity
             android:name=".start.StartActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,12 +30,14 @@
         <activity
             android:name=".navigate.NavigationActivity"
             android:label="@string/title_activity_navigation"
-            android:launchMode="singleTop"></activity>
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".artist.ArtistActivity"
             android:label="@string/title_activity_artist"
             android:parentActivityName=".navigate.NavigationActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".navigate.NavigationActivity" />
@@ -52,9 +54,9 @@
         <activity
             android:name=".settings.CityActivity"
             android:label="@string/title_activity_city"
-            android:windowSoftInputMode="adjustPan"
             android:parentActivityName=".navigate.NavigationActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".navigate.NavigationActivity" />

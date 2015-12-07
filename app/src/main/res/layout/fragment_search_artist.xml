@@ -14,7 +14,7 @@
         android:theme="@android:style/Theme.DeviceDefault"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="125dp"
+        android:layout_marginTop="80dp"
         android:gravity="center_horizontal"
         android:lines="1"
         android:singleLine="true"

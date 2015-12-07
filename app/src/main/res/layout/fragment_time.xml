@@ -21,38 +21,40 @@
             android:id="@+id/from_date_edit_text"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/edit_text_color"
             android:lines="1"
             android:singleLine="true"
             android:textColor="@color/black"
             android:textSize="17dp"
-            android:theme="@android:style/Theme.DeviceDefault"
-            android:backgroundTint="@color/edit_text_color" />
+            android:theme="@android:style/Theme.DeviceDefault" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:text="From Date"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/black_cow"
-            android:text="From Date"/>
+            android:textColor="@color/black_cow" />
 
         <EditText
             android:id="@+id/to_date_edit_text"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            android:backgroundTint="@color/edit_text_color"
             android:lines="1"
             android:singleLine="true"
             android:textColor="@color/black"
             android:textSize="17dp"
-            android:theme="@android:style/Theme.DeviceDefault"
-            android:backgroundTint="@color/edit_text_color" />
+            android:theme="@android:style/Theme.DeviceDefault" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:text="To Date"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/black_cow"
-            android:text="To Date" />
+            android:textColor="@color/black_cow" />
 
     </LinearLayout>
 
@@ -60,22 +62,22 @@
         android:id="@+id/set_date_button"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:src="@drawable/forward_icon"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"
         android:layout_below="@+id/set_date_layout"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/mytheme_btn"/>
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/mytheme_btn"
+        android:src="@drawable/forward_icon" />
 
     <ProgressBar
         android:id="@+id/parse_data_progress"
         style="@android:style/Widget.Holo.Light.ProgressBar.Inverse"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:indeterminate="true"
         android:layout_below="@+id/set_date_layout"
         android:layout_centerHorizontal="true"
-        android:visibility="invisible"/>
+        android:layout_marginTop="20dp"
+        android:indeterminate="true"
+        android:visibility="invisible" />
 
 </RelativeLayout>
