@@ -3,31 +3,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background"
-    android:padding="8dp"
     tools:context=".StartActivity$PlaceholderFragment">
+
+    <ImageView
+        android:id="@+id/logo_image_view"
+        android:layout_width="wrap_content"
+        android:layout_height="210dp"
+        android:layout_centerHorizontal="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/logo1" />
 
     <LinearLayout
         android:id="@+id/found_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/logo_image_view"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
-        android:orientation="vertical"
-        android:gravity="center_horizontal">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="200dp"
-            android:layout_centerHorizontal="true"
-            android:scaleType="centerCrop"
-            android:src="@drawable/logo1" />
+        android:layout_marginTop="40dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/location_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:layout_marginTop="40dp"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/blue_sky_hd" />
 
@@ -43,24 +43,17 @@
         android:id="@+id/not_found_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/logo_image_view"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
         android:gravity="center_horizontal"
         android:orientation="vertical"
         android:visibility="invisible">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="200dp"
-            android:layout_centerHorizontal="true"
-            android:scaleType="centerCrop"
-            android:src="@drawable/logo1" />
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/imageView"
-            android:layout_marginTop="10dp"
             android:layout_centerHorizontal="true"
             android:gravity="center_vertical"
             android:orientation="horizontal">
@@ -109,7 +102,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/not_found_layout"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:indeterminate="true" />
 
 </RelativeLayout>

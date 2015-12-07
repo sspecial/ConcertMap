@@ -227,7 +227,6 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
             }
 
         } catch (Exception e) {
-            Log.e(LOG_TAG, e.getMessage());
             connStat = LOCATION_NOT_AVAILABLE;
         }
     }
