@@ -15,9 +15,10 @@ import android.widget.ProgressBar;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 import de.berlin.special.concertmap.R;
+import de.berlin.special.concertmap.service.DataFetchService;
+import de.berlin.special.concertmap.util.Utility;
 
 public class TimeFragment extends Fragment {
 
@@ -51,9 +52,11 @@ public class TimeFragment extends Fragment {
         fromDateEntry = (EditText) rootView.findViewById(R.id.from_date_edit_text);
         fromDateEntry.setInputType(InputType.TYPE_NULL);
         fromDateEntry.requestFocus();
+        fromDateEntry.setText(Utility.URL_MIN_DATE);
 
         toDateEntry = (EditText) rootView.findViewById(R.id.to_date_edit_text);
         toDateEntry.setInputType(InputType.TYPE_NULL);
+        toDateEntry.setText(Utility.URL_MAX_DATE);
 
         setDateBtn = (ImageButton) rootView.findViewById(R.id.set_date_button);
         progressBar = (ProgressBar) rootView.findViewById(R.id.parse_data_progress);
@@ -68,15 +71,14 @@ public class TimeFragment extends Fragment {
         fromDateEntry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                Calendar fromCalendar = Calendar.getInstance();
+                final Calendar fromCalendar = Calendar.getInstance();
                 fromDatePickerDialog = new DatePickerDialog(getActivity(), new OnDateSetListener() {
 
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-
                         Calendar newDate = Calendar.getInstance();
-                        view.setMinDate(new Date().getTime());
                         newDate.set(year, monthOfYear, dayOfMonth);
                         fromDateEntry.setText(dateFormatter.format(newDate.getTime()));
+                        Utility.MIN_DATE = newDate;
                         toDateEntry.requestFocus();
                     }
                 }, fromCalendar.get(Calendar.YEAR), fromCalendar.get(Calendar.MONTH), fromCalendar.get(Calendar.DAY_OF_MONTH));
@@ -109,10 +111,10 @@ public class TimeFragment extends Fragment {
                 toDatePickerDialog = new DatePickerDialog(getActivity(), new OnDateSetListener() {
 
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-
                         Calendar newDate = Calendar.getInstance();
                         newDate.set(year, monthOfYear, dayOfMonth);
                         toDateEntry.setText(dateFormatter.format(newDate.getTime()));
+                        Utility.MAX_DATE = newDate;
                         toDateEntry.setFocusable(false);
                     }
                 }, year, month-1, day);
@@ -123,8 +125,13 @@ public class TimeFragment extends Fragment {
         setDateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 setDateBtn.setVisibility(View.INVISIBLE);
                 progressBar.setVisibility(View.VISIBLE);
+
+                // Fetching data from Thrillcall API based on Geo information
+                Double[] geoArr = new Double[2];
+                new DataFetchService(getActivity(), rootView, geoArr, Utility.URL_GEO_EVENTS).execute();
             }
         });
     }

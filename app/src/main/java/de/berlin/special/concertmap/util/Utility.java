@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -11,22 +12,46 @@ import java.util.Date;
  */
 public class Utility {
 
+    // Settings keys
     public static final String PREFS_NAME = "CONCERT_MAP_PREFS";
     public static final String SETTING_CITY = "CITY";
     public static final String SETTING_LOCATION = "LOCATION";
     public static final String SETTING_EVENT_NUMBER = "EVENT_NUMBER";
     public static final String SETTING_GEO_LAT = "GEO_LAT";
     public static final String SETTING_GEO_LONG = "GEO_LONG";
+
+    // Settings default values
     public static final double GEO_DEFAULT_LAT = 52.5194;
     public static final double GEO_DEFAULT_LONG = 13.4067;
+    public static final String EVENT_LIMIT_STR = "40";
+    public static final int EVENT_LIMIT_NUMBER = 20;
+
+    // Time duration
+    public static Calendar MIN_DATE = Calendar.getInstance();
+    public static Calendar MAX_DATE = Calendar.getInstance();
+    public static String URL_MIN_DATE = MIN_DATE_DEFAULT();
+    public static String URL_MAX_DATE = MAX_DATE_DEFAULT();
+    // Default Today - MIN_DATE
+    public static String MIN_DATE_DEFAULT(){
+        Calendar calendar = Calendar.getInstance();
+        Date today = calendar.getTime();
+        String date = new SimpleDateFormat("yyyy-MM-dd").format(today);
+        return date;
+    }
+    // Default Tomorrow - MAX_DATE
+    public static String MAX_DATE_DEFAULT(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_YEAR, 1);
+        Date tomorrow = calendar.getTime();
+        String date = new SimpleDateFormat("yyyy-MM-dd").format(tomorrow);
+        return date;
+    }
 
     public static final String CITY_NAME_NOT_VALID = "Please enter a valid city name.";
     public static final String CITY_IS_UNKNOWN = "City is Unknown!";
     public static String city = CITY_IS_UNKNOWN;
     public static String lastKnownLocation = CITY_IS_UNKNOWN;
 
-    public static final String EVENT_LIMIT_STR = "40";
-    public static final int EVENT_LIMIT_NUMBER = 20;
     public static final String THRILLCALL_API_KEY = "d90d066add515bff";
     public static final String THRILLCALL_GEO_BASE_URL = "https://api.thrillcall.com/api/v3/events";
     public static final String THRILLCALL_ARTIST_BASE_URL = "https://api.thrillcall.com/api/v3/artist/";
