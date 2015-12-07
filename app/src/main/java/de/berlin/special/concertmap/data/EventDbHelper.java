@@ -30,7 +30,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
                 // the ID of the location entry associated with this event
                 EventEntry.COLUMN_CON_THRILL_ID + " INTEGER NOT NULL UNIQUE, " +
                 EventEntry.COLUMN_CON_NAME + " TEXT NOT NULL, " +
-                EventEntry.COLUMN_CON_START_AT + " TEXT, " +
+                EventEntry.COLUMN_CON_START_AT + " TEXT NOT NULL, " +
                 EventEntry.COLUMN_CON_IMAGE + " TEXT NOT NULL, " +
                 EventEntry.COLUMN_CON_ATTEND + " INTEGER NOT NULL, " +
                 EventEntry.COLUMN_CON_BELONG_TO_ARTIST + " INTEGER NOT NULL " + ");";
@@ -41,8 +41,8 @@ public class EventDbHelper extends SQLiteOpenHelper {
                 VenueEntry.COLUMN_VEN_CON_ID + " INTEGER NOT NULL, " +
                 VenueEntry.COLUMN_VEN_THRILL_ID + " INTEGER NOT NULL, " +
                 VenueEntry.COLUMN_VEN_NAME + " TEXT NOT NULL, " +
-                VenueEntry.COLUMN_VEN_STREET + " TEXT, " +
-                VenueEntry.COLUMN_VEN_CITY + " TEXT, " +
+                VenueEntry.COLUMN_VEN_STREET + " TEXT NOT NULL, " +
+                VenueEntry.COLUMN_VEN_CITY + " TEXT NOT NULL, " +
                 VenueEntry.COLUMN_VEN_GEO_LAT + " REAL NOT NULL, " +
                 VenueEntry.COLUMN_VEN_GEO_LONG + " REAL NOT NULL, " +
                 VenueEntry.COLUMN_VEN_WEB+ " REAL NOT NULL, " +

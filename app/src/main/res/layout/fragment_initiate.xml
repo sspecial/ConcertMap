@@ -2,97 +2,114 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
     android:background="@drawable/background"
+    android:padding="8dp"
     tools:context=".StartActivity$PlaceholderFragment">
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="200dp"
-        android:id="@+id/imageView"
-        android:layout_marginTop="80dp"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/logo1"
-        android:scaleType="centerCrop"/>
-
     <LinearLayout
-        android:orientation="horizontal"
+        android:id="@+id/found_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/imageView"
-        android:layout_marginTop="65dp"
-        android:id="@+id/found_layout">
+        android:layout_marginTop="30dp"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"
+            android:layout_centerHorizontal="true"
+            android:scaleType="centerCrop"
+            android:src="@drawable/logo1" />
 
         <TextView
+            android:id="@+id/location_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/location_view"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="40dp"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/blue_sky_hd"/>
+            android:textColor="@color/blue_sky_hd" />
+
+        <View
+            android:layout_width="220dp"
+            android:layout_height="2dp"
+            android:layout_marginTop="5dp"
+            android:background="@color/grey" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="horizontal"
+        android:id="@+id/not_found_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/imageView"
-        android:gravity="center_vertical"
-        android:layout_marginTop="40dp"
-        android:id="@+id/not_found_layout"
+        android:layout_marginTop="20dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
         android:visibility="invisible">
 
-        <EditText
-            android:id="@+id/enter_city_edit_text"
-            android:theme="@android:style/Theme.DeviceDefault"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:lines="1"
-            android:textColor="@color/blue_sky_hd"
-            android:textSize="19dp"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"
+            android:layout_centerHorizontal="true"
+            android:scaleType="centerCrop"
+            android:src="@drawable/logo1" />
 
-        <ImageButton
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/validate_city_button"
-            android:src="@drawable/forward_icon"
-            android:layout_marginLeft="20dp"/>
+            android:layout_below="@+id/imageView"
+            android:layout_marginTop="10dp"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/enter_city_edit_text"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:lines="1"
+                android:singleLine="true"
+                android:textColor="@color/blue_sky_hd"
+                android:textSize="19dp"
+                android:theme="@android:style/Theme.DeviceDefault" />
+
+            <ImageButton
+                android:id="@+id/validate_city_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:src="@drawable/forward_icon" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="250dp"
+            android:layout_height="2dp"
+            android:layout_marginTop="5dp"
+            android:background="@color/grey" />
+
+        <TextView
+            android:id="@+id/comment_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:gravity="center_horizontal"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/blue_sky_hd"
+            android:textSize="16dp" />
 
     </LinearLayout>
-
-    <View
-        android:id="@+id/line"
-        android:layout_width="fill_parent"
-        android:layout_height="2dp"
-        android:background="@color/grey"
-        android:layout_below="@+id/not_found_layout"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="@color/blue_sky_hd"
-        android:textSize="16dp"
-        android:id="@+id/comment_view"
-        android:layout_marginTop="5dp"
-        android:layout_below="@+id/line"
-        android:layout_centerHorizontal="true"
-        android:gravity="center_horizontal"/>
 
     <ProgressBar
         android:id="@+id/parse_data_progress"
+        style="@android:style/Widget.Holo.Light.ProgressBar.Inverse"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@android:style/Widget.Holo.Light.ProgressBar.Inverse"
-        android:indeterminate="true"
-        android:layout_marginTop="30dp"
-        android:layout_below="@+id/comment_view"
-        android:layout_centerHorizontal="true"/>
+        android:layout_below="@+id/not_found_layout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:indeterminate="true" />
 
 </RelativeLayout>

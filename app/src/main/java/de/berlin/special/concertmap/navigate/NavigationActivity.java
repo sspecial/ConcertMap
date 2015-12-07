@@ -143,7 +143,7 @@ public class NavigationActivity extends AppCompatActivity {
                 break;
 
             case NAV_CASE_EXIT:
-                finish();
+                System.exit(0);
                 break;
 
             default:

@@ -17,7 +17,10 @@
         android:icon="@mipmap/blue_music_icon"
         android:label="@string/app_name"
         android:theme="@style/MyTheme">
-        <activity android:name=".start.StartActivity">
+        <activity
+            android:name=".start.StartActivity"
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -49,6 +52,7 @@
         <activity
             android:name=".settings.CityActivity"
             android:label="@string/title_activity_city"
+            android:windowSoftInputMode="adjustPan"
             android:parentActivityName=".navigate.NavigationActivity"
             android:screenOrientation="portrait">
             <meta-data

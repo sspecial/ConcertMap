@@ -131,7 +131,6 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
                     if (geoArr[0] != null && geoArr[1] != null) {
 
                         notFoundLayout.setVisibility(View.INVISIBLE);
-                        commentView.setVisibility(View.INVISIBLE);
                         foundLayout.setVisibility(View.VISIBLE);
                         dataProcessPI.setVisibility(View.VISIBLE);
                         if (!Utility.city.equals(Utility.CITY_IS_UNKNOWN))
@@ -154,7 +153,6 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
             Double[] geoArr = new Double[]{geo_lat, geo_long};
 
             notFoundLayout.setVisibility(View.INVISIBLE);
-            commentView.setVisibility(View.INVISIBLE);
             foundLayout.setVisibility(View.VISIBLE);
             if (!Utility.city.equals(Utility.CITY_IS_UNKNOWN))
                 locationView.setText(Utility.lastKnownLocation);
