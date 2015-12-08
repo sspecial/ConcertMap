@@ -71,7 +71,6 @@ public class ParseArtistSearchInfo {
                         EventContract.FavArtistEntry.TABLE_NAME,
                         null,
                         artistValues);
-                Log.d(LOG_TAG, "Fav-Artist id" + String.valueOf(newRowIdArtist));
 
                 artList.put(artName, artThrillID);
             }

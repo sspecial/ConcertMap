@@ -111,7 +111,6 @@ public class ParseArtistEventsInfo {
                         EventEntry.TABLE_NAME,
                         null,
                         eventValues);
-                Log.d(LOG_TAG, "Event id"+String.valueOf(newRowIdEvent));
 
                 ContentValues locationValues = new ContentValues();
                 // Create a new map of values for location, where column names are the keys
@@ -130,7 +129,6 @@ public class ParseArtistEventsInfo {
                         VenueEntry.TABLE_NAME,
                         null,
                         locationValues);
-                Log.d(LOG_TAG, "Location id"+String.valueOf(newRowIdVenue));
 
                 for (int key : artList.keySet()) {
                     ContentValues artistValues = new ContentValues();
@@ -144,7 +142,6 @@ public class ParseArtistEventsInfo {
                             ArtistEntry.TABLE_NAME,
                             null,
                             artistValues);
-                    Log.d(LOG_TAG, "Artist id" + String.valueOf(newRowIdArtist));
                 }
 
                 artList.clear();

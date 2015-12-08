@@ -6,7 +6,6 @@ package de.berlin.special.concertmap.navigate;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -18,9 +17,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import de.berlin.special.concertmap.R;
-import de.berlin.special.concertmap.util.Utility;
 import de.berlin.special.concertmap.data.Query;
 import de.berlin.special.concertmap.event.EventActivity;
+import de.berlin.special.concertmap.util.Utility;
 
 public class GeoListFragment extends Fragment {
 
@@ -53,7 +52,7 @@ public class GeoListFragment extends Fragment {
                 + ";";
         try{
             final Cursor eventCursor = Utility.db.rawQuery(eventQueryStr, null);
-            Log.v("Event Cursor", DatabaseUtils.dumpCursorToString(eventCursor));
+            // Log.v("Event Cursor", DatabaseUtils.dumpCursorToString(eventCursor));
 
             // Find ListView to populate
             ListView todayListView = (ListView) rootView.findViewById(R.id.list_view_events);

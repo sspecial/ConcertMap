@@ -61,7 +61,6 @@ public class ParseArtistInfo {
                     FavArtistEntry.TABLE_NAME,
                     null,
                     artistValues);
-            Log.d(LOG_TAG, "Fav-Artist id" + String.valueOf(newRowIdArtist));
 
         } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);

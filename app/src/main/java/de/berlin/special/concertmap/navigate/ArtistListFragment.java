@@ -3,7 +3,6 @@ package de.berlin.special.concertmap.navigate;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -21,9 +20,9 @@ import java.io.File;
 import java.io.FileInputStream;
 
 import de.berlin.special.concertmap.R;
-import de.berlin.special.concertmap.util.Utility;
 import de.berlin.special.concertmap.artist.ArtistActivity;
 import de.berlin.special.concertmap.data.Query;
+import de.berlin.special.concertmap.util.Utility;
 
 /**
  * Created by Saeed on 10-Nov-15.
@@ -56,7 +55,7 @@ public class ArtistListFragment extends Fragment {
         String argTracked = "WHERE artist.artist_tracked = " + Utility.ARTIST_TRACKED_YES + ";";
         String favArtistQueryStr = Query.favArtistQueryStr + argTracked;
         favArtistCursor = Utility.db.rawQuery(favArtistQueryStr, null);
-        Log.v(LOG_TAG + " Fav-Artist-Cursor:", DatabaseUtils.dumpCursorToString(favArtistCursor));
+        // Log.v(LOG_TAG + " Fav-Artist-Cursor:", DatabaseUtils.dumpCursorToString(favArtistCursor));
 
         ArtistGridAdapter artistGridAdapter = new ArtistGridAdapter(getActivity(), favArtistCursor, 0);
 

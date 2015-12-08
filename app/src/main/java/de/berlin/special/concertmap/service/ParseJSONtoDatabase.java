@@ -164,7 +164,6 @@ public class ParseJSONtoDatabase {
                         EventEntry.TABLE_NAME,
                         null,
                         eventValues);
-                Log.d(LOG_TAG, "Event id"+String.valueOf(newRowIdEvent));
 
                 ContentValues locationValues = new ContentValues();
                 // Create a new map of values for location, where column names are the keys
@@ -183,7 +182,6 @@ public class ParseJSONtoDatabase {
                         VenueEntry.TABLE_NAME,
                         null,
                         locationValues);
-                Log.d(LOG_TAG, "Location id"+String.valueOf(newRowIdVenue));
 
                 for (int key : artList.keySet()) {
                     ContentValues artistValues = new ContentValues();
@@ -197,7 +195,6 @@ public class ParseJSONtoDatabase {
                             ArtistEntry.TABLE_NAME,
                             null,
                             artistValues);
-                    Log.d(LOG_TAG, "Artist id" + String.valueOf(newRowIdArtist));
                 }
 
                 for (String key : ticketList.keySet()) {
@@ -212,7 +209,6 @@ public class ParseJSONtoDatabase {
                             TicketEntry.TABLE_NAME,
                             null,
                             ticketValues);
-                    Log.d(LOG_TAG, "Ticket id" + String.valueOf(newRowIdTicket));
                 }
 
                 artList.clear();
