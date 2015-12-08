@@ -2,10 +2,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/light_blue_background"
     android:orientation="vertical"
     android:padding="5dp"
-    tools:context="de.berlin.special.concertmap.event.ArtistActivityFragment"
-    android:background="@drawable/light_blue_background">
+    tools:context="de.berlin.special.concertmap.event.ArtistActivityFragment">
 
     <LinearLayout
         android:id="@+id/atist_image_layout"
@@ -18,7 +18,7 @@
             android:id="@+id/artist_mobile_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="centerCrop"/>
+            android:scaleType="centerCrop" />
     </LinearLayout>
 
     <LinearLayout
@@ -28,22 +28,22 @@
 
         <CheckBox
             android:id="@+id/button_favorite"
+            style="@android:style/Widget.Holo.Light.Button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:backgroundTint="#a29a78"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            style="@android:style/Widget.Holo.Light.Button"
-            android:textColor="@color/black"
-            android:backgroundTint="#a29a78" />
+            android:textColor="@color/black" />
 
         <Button
             android:id="@+id/button_website"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="@drawable/mytheme_btn"
             android:text="Official Website"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:background="@drawable/mytheme_btn"
             android:textColor="@color/black" />
     </LinearLayout>
 
@@ -70,10 +70,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/brown_sky"
-                android:textColor="@color/black"
-                android:padding="20dp"
                 android:gravity="center"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:padding="20dp"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/black" />
         </LinearLayout>
 
     </LinearLayout>

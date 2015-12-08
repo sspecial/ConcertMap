@@ -1,0 +1,83 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@android:style/Widget.Holo.Light"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/blue_sky_hd"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:padding="@dimen/fragment_margin"
+    tools:context="de.berlin.special.concertmap.navigate.TimeFragment">
+
+    <LinearLayout
+        android:id="@+id/set_date_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/from_date_edit_text"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/edit_text_color"
+            android:lines="1"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textSize="17dp"
+            android:theme="@android:style/Theme.DeviceDefault" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:text="From Date"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/black_cow" />
+
+        <EditText
+            android:id="@+id/to_date_edit_text"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="@color/edit_text_color"
+            android:lines="1"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textSize="17dp"
+            android:theme="@android:style/Theme.DeviceDefault" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:text="To Date"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/black_cow" />
+
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/set_date_button"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/set_date_layout"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/mytheme_btn"
+        android:src="@drawable/forward_icon" />
+
+    <ProgressBar
+        android:id="@+id/parse_data_progress"
+        style="@android:style/Widget.Holo.Light.ProgressBar.Inverse"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/set_date_layout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:indeterminate="true"
+        android:visibility="invisible" />
+
+</RelativeLayout>
