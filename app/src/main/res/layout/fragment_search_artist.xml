@@ -29,16 +29,15 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
         android:gravity="center_horizontal"
-        android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@color/black_cow"
-        android:textSize="16dp" />
+        android:textSize="@dimen/mobile_comment" />
 
     <ImageButton
         android:id="@+id/artist_search_button"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="15dp"
         android:background="@drawable/mytheme_btn"
         android:src="@drawable/forward_icon"
         android:textAppearance="?android:attr/textAppearanceMedium" />

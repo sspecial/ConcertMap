@@ -89,9 +89,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:gravity="center_horizontal"
-            android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/blue_sky_hd"
-            android:textSize="16dp" />
+            android:textSize="@dimen/mobile_comment" />
 
     </LinearLayout>
 

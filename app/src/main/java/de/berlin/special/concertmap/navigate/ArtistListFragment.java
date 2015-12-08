@@ -7,7 +7,6 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.CursorAdapter;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -126,25 +125,5 @@ class ArtistGridAdapter extends CursorAdapter {
                 context.startActivity(intent);
             }
         });
-    }
-}
-
-class SquareImageView extends ImageView {
-    public SquareImageView(Context context) {
-        super(context);
-    }
-
-    public SquareImageView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
-
-    public SquareImageView(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
-    }
-
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        setMeasuredDimension(getMeasuredWidth(), getMeasuredWidth()); //Snap to width
     }
 }

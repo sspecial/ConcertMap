@@ -1,32 +1,26 @@
-<?xml version="1.0" encoding="utf-8"?>
-
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/brown_sky">
+    tools:context="de.berlin.special.concertmap.navigate.EventListFragment">
 
-    <GridView
-        android:id="@+id/tracked_artists_grid"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="1dp"
-        android:layout_marginRight="1dp"
-        android:horizontalSpacing="0dp"
-        android:numColumns="3"
-        android:stretchMode="columnWidth"
-        android:verticalSpacing="0dp" />
+    <ListView
+        android:id="@+id/list_view_events"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:dividerHeight="2dp" />
 
     <LinearLayout
-        android:id="@+id/artistEmptyLayout"
+        android:id="@+id/emptyLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="8dp"
         android:gravity="center_horizontal">
 
         <TextView
-            android:id="@+id/artistEmptyTextView"
+            android:id="@+id/emptyTextView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/brown_sky"
             android:gravity="center"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
