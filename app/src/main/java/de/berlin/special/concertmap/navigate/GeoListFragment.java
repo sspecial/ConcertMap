@@ -46,6 +46,9 @@ public class GeoListFragment extends Fragment {
                 + " AND"
                 + " event.event_attended = "
                 + Utility.EVENT_ATTEND_NO
+                + " AND"
+                + " venue.venue_city LIKE"
+                + " '%" + Utility.city + "%' COLLATE NOCASE"
                 + " GROUP BY event._ID"
                 + " LIMIT "
                 + String.valueOf(Utility.settings.getInt(Utility.SETTING_EVENT_NUMBER, Utility.EVENT_LIMIT_NUMBER))
