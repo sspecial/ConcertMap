@@ -79,7 +79,11 @@ public class TimeFragment extends Fragment {
                         newDate.set(year, monthOfYear, dayOfMonth);
                         fromDateEntry.setText(dateFormatter.format(newDate.getTime()));
                         Utility.MIN_DATE = newDate;
+
+                        newDate.add(Calendar.DAY_OF_YEAR, 1);
+                        toDateEntry.setText(dateFormatter.format(newDate.getTime()));
                         toDateEntry.requestFocus();
+
                     }
                 }, fromCalendar.get(Calendar.YEAR), fromCalendar.get(Calendar.MONTH), fromCalendar.get(Calendar.DAY_OF_MONTH));
                 fromDatePickerDialog.show();
@@ -90,24 +94,16 @@ public class TimeFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                int year;
-                int month;
-                int day;
                 Calendar toCalendar = Calendar.getInstance();
-                String fromDate = fromDateEntry.getText().toString();
+                String toDate = toDateEntry.getText().toString();
 
-
-                if(!fromDate.equals("")) {
+                if(!toDate.equals("")) {
                     String[] fromDateArr = fromDateEntry.getText().toString().split("-");
-                    year = Integer.valueOf(fromDateArr[0]);
-                    month = Integer.valueOf(fromDateArr[1]);
-                    day = Integer.valueOf(fromDateArr[2]);
-                }else {
-                    year = toCalendar.get(Calendar.YEAR);
-                    month = toCalendar.get(Calendar.MONTH);
-                    day = toCalendar.get(Calendar.DAY_OF_MONTH);
+                    toCalendar.set(Integer.valueOf(fromDateArr[0])
+                            , Integer.valueOf(fromDateArr[1])-1
+                            , Integer.valueOf(fromDateArr[2]));
                 }
-
+                toCalendar.add(Calendar.DAY_OF_YEAR, 1);
                 toDatePickerDialog = new DatePickerDialog(getActivity(), new OnDateSetListener() {
 
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -117,7 +113,7 @@ public class TimeFragment extends Fragment {
                         Utility.MAX_DATE = newDate;
                         toDateEntry.setFocusable(false);
                     }
-                }, year, month-1, day);
+                }, toCalendar.get(Calendar.YEAR), toCalendar.get(Calendar.MONTH), toCalendar.get(Calendar.DAY_OF_MONTH));
                 toDatePickerDialog.show();
             }
         });
