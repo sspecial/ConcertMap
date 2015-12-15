@@ -29,6 +29,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
         android:gravity="center_horizontal"
+        android:text="Artist Name"
         android:textColor="@color/black_cow"
         android:textSize="@dimen/mobile_comment" />
 

@@ -36,7 +36,7 @@
 
     <View
         android:id="@+id/line"
-        android:layout_width="220dp"
+        android:layout_width="210dp"
         android:layout_height="2dp"
         android:layout_below="@+id/city_view_layout"
         android:layout_centerHorizontal="true"
