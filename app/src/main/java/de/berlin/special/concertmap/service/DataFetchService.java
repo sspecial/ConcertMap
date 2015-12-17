@@ -20,7 +20,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Hashtable;
 
@@ -146,17 +145,12 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
                 geoLong = (double)Utility.settings.getFloat(Utility.SETTING_GEO_LONG, (float)Utility.GEO_DEFAULT_LONG);
 
             // Checking date parameters
-            Calendar today = Calendar.getInstance();
-            Calendar nextYear = Calendar.getInstance();
-            nextYear.add(Calendar.YEAR, 1);
-
-            if (Utility.MIN_DATE.compareTo(today) != -1
-                    && Utility.MAX_DATE.compareTo(Utility.MIN_DATE) == 1
-                    && Utility.MAX_DATE.compareTo(nextYear) == -1){
+            if (Utility.MIN_DATE != null && Utility.MAX_DATE != null) {
                 Date min = Utility.MIN_DATE.getTime();
                 Date max = Utility.MAX_DATE.getTime();
                 Utility.URL_MIN_DATE = new SimpleDateFormat("yyyy-MM-dd").format(min);
                 Utility.URL_MAX_DATE = new SimpleDateFormat("yyyy-MM-dd").format(max);
+
             } else {
                 Utility.URL_MIN_DATE = Utility.MIN_DATE_DEFAULT();
                 Utility.URL_MAX_DATE = Utility.MAX_DATE_DEFAULT();

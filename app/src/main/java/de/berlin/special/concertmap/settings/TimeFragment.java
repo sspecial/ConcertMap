@@ -68,52 +68,66 @@ public class TimeFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
+        // from Date
         fromDateEntry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                final Calendar fromCalendar = Calendar.getInstance();
+
                 fromDatePickerDialog = new DatePickerDialog(getActivity(), new OnDateSetListener() {
 
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+
+                        Calendar today = Calendar.getInstance();
+                        Calendar nextYear = Calendar.getInstance();
+                        nextYear.add(Calendar.YEAR, 1);
+
                         Calendar newDate = Calendar.getInstance();
                         newDate.set(year, monthOfYear, dayOfMonth);
-                        fromDateEntry.setText(dateFormatter.format(newDate.getTime()));
-                        Utility.MIN_DATE = newDate;
 
-                        newDate.add(Calendar.DAY_OF_YEAR, 1);
-                        toDateEntry.setText(dateFormatter.format(newDate.getTime()));
+                        // If the picked day is between today till next year
+                        if (newDate.compareTo(today) != -1 && newDate.compareTo(nextYear) == -1) {
+
+                            fromDateEntry.setText(dateFormatter.format(newDate.getTime()));
+                            Utility.MIN_DATE.setTime(newDate.getTime());
+
+                            if (Utility.MAX_DATE.compareTo(Utility.MIN_DATE) != 1) {
+                                newDate.add(Calendar.DAY_OF_YEAR, 1);
+                                toDateEntry.setText(dateFormatter.format(newDate.getTime()));
+                                Utility.MAX_DATE.setTime(newDate.getTime());
+                            }
+                        }
                         toDateEntry.requestFocus();
-
                     }
-                }, fromCalendar.get(Calendar.YEAR), fromCalendar.get(Calendar.MONTH), fromCalendar.get(Calendar.DAY_OF_MONTH));
+                }, Utility.MIN_DATE.get(Calendar.YEAR), Utility.MIN_DATE.get(Calendar.MONTH), Utility.MIN_DATE.get(Calendar.DAY_OF_MONTH));
                 fromDatePickerDialog.show();
             }
         });
 
+        // to Date
         toDateEntry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                Calendar toCalendar = Calendar.getInstance();
-                String toDate = toDateEntry.getText().toString();
-
-                if(!toDate.equals("")) {
-                    String[] fromDateArr = fromDateEntry.getText().toString().split("-");
-                    toCalendar.set(Integer.valueOf(fromDateArr[0])
-                            , Integer.valueOf(fromDateArr[1])-1
-                            , Integer.valueOf(fromDateArr[2]));
-                }
-                toCalendar.add(Calendar.DAY_OF_YEAR, 1);
                 toDatePickerDialog = new DatePickerDialog(getActivity(), new OnDateSetListener() {
 
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+
+                        Calendar nextYear = Calendar.getInstance();
+                        nextYear.add(Calendar.YEAR, 1);
+
                         Calendar newDate = Calendar.getInstance();
                         newDate.set(year, monthOfYear, dayOfMonth);
-                        toDateEntry.setText(dateFormatter.format(newDate.getTime()));
-                        Utility.MAX_DATE = newDate;
+
+                        if(newDate.compareTo(Utility.MIN_DATE) == 1
+                                && newDate.get(Calendar.DAY_OF_YEAR) != Utility.MIN_DATE.get(Calendar.DAY_OF_YEAR)
+                                && newDate.compareTo(nextYear) == -1) {
+                            toDateEntry.setText(dateFormatter.format(newDate.getTime()));
+                            Utility.MAX_DATE.setTime(newDate.getTime());
+                        }
                         toDateEntry.setFocusable(false);
+
                     }
-                }, toCalendar.get(Calendar.YEAR), toCalendar.get(Calendar.MONTH), toCalendar.get(Calendar.DAY_OF_MONTH));
+                }, Utility.MAX_DATE.get(Calendar.YEAR), Utility.MAX_DATE.get(Calendar.MONTH), Utility.MAX_DATE.get(Calendar.DAY_OF_MONTH));
                 toDatePickerDialog.show();
             }
         });

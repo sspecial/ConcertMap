@@ -27,13 +27,14 @@ public class Utility {
     public static final int EVENT_LIMIT_NUMBER = 20;
 
     // Time duration
-    public static Calendar MIN_DATE = Calendar.getInstance();
-    public static Calendar MAX_DATE = Calendar.getInstance();
+    public static Calendar MIN_DATE;
+    public static Calendar MAX_DATE;
     public static String URL_MIN_DATE = MIN_DATE_DEFAULT();
     public static String URL_MAX_DATE = MAX_DATE_DEFAULT();
     // Default Today - MIN_DATE
     public static String MIN_DATE_DEFAULT(){
         Calendar calendar = Calendar.getInstance();
+        MIN_DATE = calendar;
         Date today = calendar.getTime();
         String date = new SimpleDateFormat("yyyy-MM-dd").format(today);
         return date;
@@ -42,6 +43,7 @@ public class Utility {
     public static String MAX_DATE_DEFAULT(){
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_YEAR, 1);
+        MAX_DATE = calendar;
         Date tomorrow = calendar.getTime();
         String date = new SimpleDateFormat("yyyy-MM-dd").format(tomorrow);
         return date;
