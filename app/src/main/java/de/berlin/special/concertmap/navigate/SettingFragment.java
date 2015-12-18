@@ -99,6 +99,8 @@ public class SettingFragment extends Fragment {
 
                         Intent intent = new Intent(getActivity(), CityActivity.class);
                         getActivity().startActivity(intent);
+                        // To not have multiple instances of Navigation Activity
+                        getActivity().finish();
                         break;
                     }
 
@@ -106,6 +108,8 @@ public class SettingFragment extends Fragment {
 
                         Intent intent = new Intent(getActivity(), TimeActivity.class);
                         getActivity().startActivity(intent);
+                        // To not have multiple instances of Navigation Activity
+                        getActivity().finish();
                         break;
                     }
                 }
