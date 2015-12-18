@@ -1,5 +1,6 @@
 package de.berlin.special.concertmap.util;
 
+import android.app.Activity;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 
@@ -11,6 +12,9 @@ import java.util.Date;
  * Created by Saeed on 11-Nov-15.
  */
 public class Utility {
+
+    // Used to finish past instances of Navigation Activity
+    public static Activity formerNavigateActivity;
 
     // Settings keys
     public static final String PREFS_NAME = "CONCERT_MAP_PREFS";

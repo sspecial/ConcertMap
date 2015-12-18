@@ -62,6 +62,11 @@ public class NavigationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
 
+        // To not have multiple instances of Navigation Activity
+        if (Utility.formerNavigateActivity != null){
+            Utility.formerNavigateActivity.finish();
+        }
+
         // Constructing array used ba navigation bar
         if (!Utility.city.equals(Utility.CITY_IS_UNKNOWN))
             navItem1 = Utility.city + " Concerts";
