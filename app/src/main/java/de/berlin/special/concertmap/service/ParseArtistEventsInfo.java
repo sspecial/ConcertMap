@@ -47,6 +47,7 @@ public class ParseArtistEventsInfo {
         final String VEN_NAME = "name";
         final String VEN_STREET = "address1";
         final String VEN_CITY = "city";
+        final String VEN_COUNTRY_CODE = "country_code";
         final String VEN_GEO_LAT = "latitude";
         final String VEN_GEO_LONG = "longitude";
         final String VEN_WEB = "official_url";
@@ -68,6 +69,7 @@ public class ParseArtistEventsInfo {
                 String venName;
                 String venStreet;
                 String venCity;
+                String venCountryCode;
                 double venGeoLat;
                 double venGeoLong;
                 String venWeb;
@@ -92,6 +94,7 @@ public class ParseArtistEventsInfo {
                 venName = venueJSON.getString(VEN_NAME);
                 venStreet = venueJSON.getString(VEN_STREET);
                 venCity = venueJSON.getString(VEN_CITY);
+                venCountryCode = venueJSON.getString(VEN_COUNTRY_CODE);
                 venGeoLat = venueJSON.getDouble(VEN_GEO_LAT);
                 venGeoLong = venueJSON.getDouble(VEN_GEO_LONG);
                 venWeb = venueJSON.getString(VEN_WEB);
@@ -119,6 +122,7 @@ public class ParseArtistEventsInfo {
                 locationValues.put(VenueEntry.COLUMN_VEN_NAME, venName);
                 locationValues.put(VenueEntry.COLUMN_VEN_STREET, venStreet);
                 locationValues.put(VenueEntry.COLUMN_VEN_CITY, venCity);
+                locationValues.put(VenueEntry.COLUMN_VEN_COUNTRY_CODE, venCountryCode);
                 locationValues.put(VenueEntry.COLUMN_VEN_GEO_LAT, venGeoLat);
                 locationValues.put(VenueEntry.COLUMN_VEN_GEO_LONG, venGeoLong);
                 locationValues.put(VenueEntry.COLUMN_VEN_WEB, venWeb);

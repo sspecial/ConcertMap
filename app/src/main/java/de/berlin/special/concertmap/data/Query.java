@@ -8,7 +8,8 @@ public class Query {
     public static final String eventQueryStr = "SELECT event._ID, " +
             "event.event_thrill_ID, event.event_name, " +
             "event.event_start_at, event.event_image, event.event_attended, " +
-            "venue.venue_name, venue.venue_street, venue.venue_city, " +
+            "venue.venue_name, venue.venue_street, " +
+            "venue.venue_city, venue.venue_country_code, " +
             "venue.venue_geo_lat, venue.venue_geo_long " +
             "FROM event " +
             "INNER JOIN venue " +
@@ -23,8 +24,9 @@ public class Query {
     public static final int COL_VENUE_NAME = 6;
     public static final int COL_VENUE_STREET = 7;
     public static final int COL_VENUE_CITY = 8;
-    public static final int COL_VENUE_GEO_LAT = 9;
-    public static final int COL_VENUE_GEO_LONG = 10;
+    public static final int COL_VENUE_COUNTRY_CODE = 9;
+    public static final int COL_VENUE_GEO_LAT = 10;
+    public static final int COL_VENUE_GEO_LONG = 11;
 
     public static final String artistQueryStr = "SELECT artists._ID, " +
             "artists.artist_thrill_ID, artists.artist_name " +

@@ -245,9 +245,9 @@ class ArtistCursorAdapter extends CursorAdapter {
         nameView.setText(cursor.getString(Query.COL_VENUE_NAME));
 
         // Venue Name & City
-        String venueNameCity = cursor.getString(Query.COL_VENUE_STREET)
+        String venueNameCity = cursor.getString(Query.COL_VENUE_CITY)
                 + ", "
-                + cursor.getString(Query.COL_VENUE_CITY);
+                + cursor.getString(Query.COL_VENUE_COUNTRY_CODE);
         addressView.setText(venueNameCity);
 
         // Event time

@@ -43,6 +43,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
                 VenueEntry.COLUMN_VEN_NAME + " TEXT NOT NULL, " +
                 VenueEntry.COLUMN_VEN_STREET + " TEXT NOT NULL, " +
                 VenueEntry.COLUMN_VEN_CITY + " TEXT NOT NULL, " +
+                VenueEntry.COLUMN_VEN_COUNTRY_CODE + " TEXT NOT NULL, " +
                 VenueEntry.COLUMN_VEN_GEO_LAT + " REAL NOT NULL, " +
                 VenueEntry.COLUMN_VEN_GEO_LONG + " REAL NOT NULL, " +
                 VenueEntry.COLUMN_VEN_WEB+ " REAL NOT NULL, " +

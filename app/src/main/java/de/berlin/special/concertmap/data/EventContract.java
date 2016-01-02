@@ -53,6 +53,7 @@ public class EventContract {
         public static final String COLUMN_VEN_NAME = "venue_name";
         public static final String COLUMN_VEN_STREET = "venue_street";
         public static final String COLUMN_VEN_CITY = "venue_city";
+        public static final String COLUMN_VEN_COUNTRY_CODE = "venue_country_code";
         public static final String COLUMN_VEN_GEO_LAT = "venue_geo_lat";
         public static final String COLUMN_VEN_GEO_LONG = "venue_geo_long";
         public static final String COLUMN_VEN_WEB = "venue_web";
