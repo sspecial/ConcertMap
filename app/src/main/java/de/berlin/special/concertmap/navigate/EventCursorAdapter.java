@@ -39,7 +39,7 @@ public class EventCursorAdapter extends CursorAdapter {
         fragType = type;
 
         if (fragType.equals(Utility.FRAG_EL_GEO)) {
-            imageDir = new File(Utility.imageDirToday());
+            imageDir = new File(Utility.IMAGE_DIR_TODAY);
         }else {
             imageDir = new File(Utility.IMAGE_DIR_EVENT);
         }

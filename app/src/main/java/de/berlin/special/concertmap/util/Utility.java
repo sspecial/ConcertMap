@@ -103,6 +103,7 @@ public class Utility {
     public static final String IMAGE_DIR_ARTIST = IMAGE_BADE_DIR + "TrackedArtists";
     public static final String IMAGE_DIR_EVENT = IMAGE_BADE_DIR + "AttendedEvents";
     public static final String IMAGE_DIR_DAILY = IMAGE_BADE_DIR + "DailyEvents";
+    public static final String IMAGE_DIR_TODAY = imageDirToday();
 
     public static String imageDirToday(){
         String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());

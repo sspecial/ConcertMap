@@ -95,7 +95,7 @@ public class ArtistActivityFragment extends Fragment {
         // Image view
         ImageView imageView = (ImageView) rootView.findViewById(R.id.artist_mobile_image);
         // Image dir
-        File imageDir = new File(Utility.imageDirToday());
+        File imageDir = new File(Utility.IMAGE_DIR_TODAY);
         // Image name
         String imageName = String.valueOf(artistThrillID);
 
@@ -152,7 +152,7 @@ public class ArtistActivityFragment extends Fragment {
                     int eventID = eventCursor.getInt(Query.COL_EVENT_ID);
                     String artistsName = Utility.retrieveArtistName(eventCursor.getString(Query.COL_EVENT_NAME));
                     String startAt = eventCursor.getString(Query.COL_EVENT_START_AT);
-                    String imagePath = Utility.imageDirToday() + "/" + String.valueOf(artistID);
+                    String imagePath = Utility.IMAGE_DIR_TODAY + "/" + String.valueOf(artistID);
                     int attended = eventCursor.getInt(Query.COL_EVENT_ATTEND);
                     String venueName = eventCursor.getString(Query.COL_VENUE_NAME);
                     String venueStreet = eventCursor.getString(Query.COL_VENUE_STREET);

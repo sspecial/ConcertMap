@@ -30,8 +30,9 @@
             android:gravity="center"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
-            android:textSize="@dimen/mobile_empty"
-            android:textColor="@color/black" />
+            android:paddingBottom="50dp"
+            android:textColor="@color/black"
+            android:textSize="@dimen/mobile_empty" />
 
     </LinearLayout>
 

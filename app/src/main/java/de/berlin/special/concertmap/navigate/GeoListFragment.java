@@ -80,7 +80,7 @@ public class GeoListFragment extends Fragment {
                     int eventID = eventCursor.getInt(Query.COL_EVENT_ID);
                     String artistsName = Utility.retrieveArtistName(eventCursor.getString(Query.COL_EVENT_NAME));
                     String startAt = eventCursor.getString(Query.COL_EVENT_START_AT);
-                    String imagePath = Utility.imageDirToday() + "/" + String.valueOf(eventCursor.getInt(Query.COL_EVENT_THRILL_ID));
+                    String imagePath = Utility.IMAGE_DIR_TODAY + "/" + String.valueOf(eventCursor.getInt(Query.COL_EVENT_THRILL_ID));
                     int attended = eventCursor.getInt(Query.COL_EVENT_ATTEND);
                     String venueName = eventCursor.getString(Query.COL_VENUE_NAME);
                     String venueStreet = eventCursor.getString(Query.COL_VENUE_STREET);

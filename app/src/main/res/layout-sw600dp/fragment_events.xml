@@ -24,8 +24,9 @@
             android:gravity="center"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
-            android:textSize="@dimen/tablet_empty"
-            android:textColor="@color/black" />
+            android:paddingBottom="50dp"
+            android:textColor="@color/black"
+            android:textSize="@dimen/tablet_empty" />
 
     </LinearLayout>
 
