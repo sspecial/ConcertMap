@@ -32,7 +32,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:backgroundTint="#a29a78"
+            android:background="@drawable/mytheme_btn"
             android:checked="false"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/black" />
