@@ -34,8 +34,8 @@
             android:layout_weight="1"
             android:background="@drawable/mytheme_btn"
             android:checked="false"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/black" />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/black_brown" />
 
         <Button
             android:id="@+id/button_artist"
@@ -44,8 +44,8 @@
             android:layout_weight="1"
             android:background="@drawable/mytheme_btn"
             android:text="Artist(s)"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/black" />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/black_brown" />
 
         <Button
             android:id="@+id/button_ticket"
@@ -54,8 +54,8 @@
             android:layout_weight="1"
             android:background="@drawable/mytheme_btn"
             android:text="Ticket"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/black" />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/black_brown" />
     </LinearLayout>
 
     <LinearLayout

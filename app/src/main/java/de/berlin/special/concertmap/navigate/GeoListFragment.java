@@ -4,7 +4,9 @@ package de.berlin.special.concertmap.navigate;
  * Created by Saeed on 21-Nov-15.
  */
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -24,6 +26,7 @@ import de.berlin.special.concertmap.util.Utility;
 public class GeoListFragment extends Fragment {
 
     private View rootView;
+    private SharedPreferences settings;
 
     public GeoListFragment() {
         // Required empty public constructor
@@ -39,7 +42,7 @@ public class GeoListFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         rootView = inflater.inflate(R.layout.fragment_events, container, false);
-
+        settings = getActivity().getSharedPreferences(Utility.PREFS_NAME, Context.MODE_PRIVATE);
         String eventQueryStr = Query.eventQueryStr
                 + "WHERE event.event_belong_to_artist = "
                 + Utility.CON_BELONG_TO_ARTIST_DEFAULT
@@ -51,7 +54,7 @@ public class GeoListFragment extends Fragment {
                 + " '%" + Utility.city + "%' COLLATE NOCASE"
                 + " GROUP BY event._ID"
                 + " LIMIT "
-                + String.valueOf(Utility.settings.getInt(Utility.SETTING_EVENT_NUMBER, Utility.EVENT_LIMIT_NUMBER))
+                + String.valueOf(settings.getInt(Utility.SETTING_EVENT_NUMBER, Utility.EVENT_LIMIT_NUMBER))
                 + ";";
         try{
             final Cursor eventCursor = Utility.db.rawQuery(eventQueryStr, null);

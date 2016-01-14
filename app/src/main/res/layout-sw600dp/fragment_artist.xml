@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/mytheme_btn"
-            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/black_brown" />
 
         <Button
@@ -43,7 +43,7 @@
             android:layout_weight="1"
             android:background="@drawable/mytheme_btn"
             android:text="Official Website"
-            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/black_brown" />
     </LinearLayout>
 
