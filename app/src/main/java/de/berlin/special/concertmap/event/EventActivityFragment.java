@@ -48,12 +48,14 @@ public class EventActivityFragment extends Fragment {
     private String imagePath;
     private int attended;
     private String eventStartAt;
+    private String eventThrillURL;
     private String venueName;
     private String venueAddress;
     private double geoLat;
     private double geoLong;
     private GoogleMap map;
 
+    private ImageView imageView;
     private CheckBox attendBtn;
     private Button artistBtn;
     private Button ticketBtn;
@@ -67,6 +69,7 @@ public class EventActivityFragment extends Fragment {
 
         eventID = getArguments().getInt(String.valueOf(Query.COL_EVENT_ID), -1);
         eventStartAt = getArguments().getString(String.valueOf(Query.COL_EVENT_START_AT), "START_AT");
+        eventThrillURL = getArguments().getString(String.valueOf(Query.COL_EVENT_THRILL_URL), "Thrill_URL");
         imagePath = getArguments().getString(String.valueOf(Query.COL_EVENT_IMAGE), Utility.IMAGE_DIR_TODAY);
         attended = getArguments().getInt(String.valueOf(Query.COL_EVENT_ATTEND), Utility.EVENT_ATTEND_NO);
         venueName = getArguments().getString(String.valueOf(Query.COL_VENUE_NAME), "VENUE_NAME");
@@ -82,7 +85,7 @@ public class EventActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_event, container, false);
         LinearLayout eventInfo = (LinearLayout) rootView.findViewById(R.id.linear_event_info);
-        ImageView imageView = (ImageView) rootView.findViewById(R.id.event_mobile_image);
+        imageView = (ImageView) rootView.findViewById(R.id.event_mobile_image);
         TextView venueNameView = (TextView) rootView.findViewById(R.id.textview_event_venue_name);
         TextView venueAddressView = (TextView) rootView.findViewById(R.id.textview_event_venue_street);
         TextView dayView = (TextView) rootView.findViewById(R.id.event_item_day_textview);
@@ -138,6 +141,15 @@ public class EventActivityFragment extends Fragment {
     @Override
     public void onResume(){
         super.onResume();
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(eventThrillURL));
+                startActivity(browserIntent);
+            }
+        });
+
         attendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
@@ -26,11 +25,11 @@ import java.io.File;
 import java.io.FileInputStream;
 
 import de.berlin.special.concertmap.R;
-import de.berlin.special.concertmap.util.Utility;
 import de.berlin.special.concertmap.data.EventContract;
 import de.berlin.special.concertmap.data.Query;
 import de.berlin.special.concertmap.event.EventActivity;
 import de.berlin.special.concertmap.navigate.DownloadImageTask;
+import de.berlin.special.concertmap.util.Utility;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -44,12 +43,15 @@ public class ArtistActivityFragment extends Fragment {
     private int artistThrillID;
     private String artistName;
     private String artistOfficialWebsite;
-    private String artistImageLarge;
+    private String artistWikipediaWebsite;
+    private String artistThrillWebsite;
     private String artistImageMobile;
     private int artistTracked;
 
+    private ImageView imageView;
     private CheckBox trackBtn;
     private Button webBtn;
+    private Button wikiBtn;
 
     public ArtistActivityFragment() {
     }
@@ -63,14 +65,15 @@ public class ArtistActivityFragment extends Fragment {
         String argThrillID = "WHERE artist.artist_thrill_ID = " + artistThrillID + ";";
         String favArtistQueryStr = Query.favArtistQueryStr + argThrillID;
         Cursor favArtistCursor = Utility.db.rawQuery(favArtistQueryStr, null);
-        Log.v(LOG_TAG + " Fav-Artist-Cursor:", DatabaseUtils.dumpCursorToString(favArtistCursor));
+        // Log.v(LOG_TAG + " Fav-Artist-Cursor:", DatabaseUtils.dumpCursorToString(favArtistCursor));
 
         // setting title of activity
         favArtistCursor.moveToFirst();
         artistID = favArtistCursor.getInt(Query.COL_ARTIST_ID);
         artistName = favArtistCursor.getString(Query.COL_ARTIST_NAME);
         artistOfficialWebsite = favArtistCursor.getString(Query.COL_ARTIST_OFFICIAL_URL);
-        artistImageLarge = favArtistCursor.getString(Query.COL_ARTIST_IMAGE_LARGE);
+        artistWikipediaWebsite = favArtistCursor.getString(Query.COL_ARTIST_WIKIPEDIA_URL);
+        artistThrillWebsite = favArtistCursor.getString(Query.COL_ARTIST_THRILL_URL);
         artistImageMobile = favArtistCursor.getString(Query.COL_ARTIST_IMAGE_MOBILE);
         artistTracked = favArtistCursor.getInt(Query.COL_ARTIST_TRACKED);
     }
@@ -82,7 +85,8 @@ public class ArtistActivityFragment extends Fragment {
         getActivity().setTitle(artistName);
 
         trackBtn = (CheckBox) rootView.findViewById(R.id.button_favorite);
-        webBtn = (Button) rootView.findViewById(R.id.button_website);
+        webBtn = (Button) rootView.findViewById(R.id.button_official_website);
+        wikiBtn = (Button) rootView.findViewById(R.id.button_wikipedia_website);
 
         if(artistTracked == Utility.ARTIST_TRACKED_NO){
             trackBtn.setText(Utility.ARTIST_TRACKED_TEXT_NO);
@@ -93,7 +97,7 @@ public class ArtistActivityFragment extends Fragment {
         }
 
         // Image view
-        ImageView imageView = (ImageView) rootView.findViewById(R.id.artist_mobile_image);
+        imageView = (ImageView) rootView.findViewById(R.id.artist_mobile_image);
         // Image dir
         File imageDir = new File(Utility.IMAGE_DIR_TODAY);
         // Image name
@@ -132,7 +136,7 @@ public class ArtistActivityFragment extends Fragment {
                 + Utility.EVENT_ATTEND_NO + " GROUP BY event._ID;";
         try{
             final Cursor eventCursor = Utility.db.rawQuery(eventQueryStr, null);
-            Log.v("Event Cursor", DatabaseUtils.dumpCursorToString(eventCursor));
+            // Log.v("Event Cursor", DatabaseUtils.dumpCursorToString(eventCursor));
 
             // Setup cursor adapter
             ArtistCursorAdapter artistCursorAdapter = new ArtistCursorAdapter(getActivity(), eventCursor, 0);
@@ -152,6 +156,7 @@ public class ArtistActivityFragment extends Fragment {
                     int eventID = eventCursor.getInt(Query.COL_EVENT_ID);
                     String artistsName = Utility.retrieveArtistName(eventCursor.getString(Query.COL_EVENT_NAME));
                     String startAt = eventCursor.getString(Query.COL_EVENT_START_AT);
+                    String thrillURL = eventCursor.getString(Query.COL_EVENT_THRILL_URL);
                     String imagePath = Utility.IMAGE_DIR_TODAY + "/" + String.valueOf(artistID);
                     int attended = eventCursor.getInt(Query.COL_EVENT_ATTEND);
                     String venueName = eventCursor.getString(Query.COL_VENUE_NAME);
@@ -164,6 +169,7 @@ public class ArtistActivityFragment extends Fragment {
                     intent.putExtra(String.valueOf(Query.COL_EVENT_ID), eventID);
                     intent.putExtra(String.valueOf(Query.COL_EVENT_NAME), artistsName);
                     intent.putExtra(String.valueOf(Query.COL_EVENT_START_AT), startAt);
+                    intent.putExtra(String.valueOf(Query.COL_EVENT_THRILL_URL), thrillURL);
                     intent.putExtra(String.valueOf(Query.COL_EVENT_IMAGE), imagePath);
                     intent.putExtra(String.valueOf(Query.COL_EVENT_ATTEND), attended);
                     intent.putExtra(String.valueOf(Query.COL_VENUE_NAME), venueName);
@@ -184,11 +190,20 @@ public class ArtistActivityFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(artistThrillWebsite));
+                startActivity(browserIntent);
+            }
+        });
+
         trackBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ContentValues args = new ContentValues();
-                if(trackBtn.isChecked()) {
+                if (trackBtn.isChecked()) {
                     args.put(EventContract.FavArtistEntry.COL_FAV_ART_TRACKED, Utility.ARTIST_TRACKED_YES);
                     trackBtn.setText(Utility.ARTIST_TRACKED_TEXT_YES);
                 } else {
@@ -211,6 +226,19 @@ public class ArtistActivityFragment extends Fragment {
                     startActivity(browserIntent);
                 } else {
                     Toast toast = Toast.makeText(getContext(), Utility.NO_OFFICIAL_WEBSITE, Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            }
+        });
+
+        wikiBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!artistWikipediaWebsite.equals("null")) {
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(artistWikipediaWebsite));
+                    startActivity(browserIntent);
+                } else {
+                    Toast toast = Toast.makeText(getContext(), Utility.NO_WIKIPEDIA_PAGE, Toast.LENGTH_SHORT);
                     toast.show();
                 }
             }

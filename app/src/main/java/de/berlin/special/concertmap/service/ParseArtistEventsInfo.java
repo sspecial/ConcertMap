@@ -34,9 +34,9 @@ public class ParseArtistEventsInfo {
         final String CON_Thrill_ID = "id";
         final String CON_NAME = "name";
         final String CON_START_AT = "starts_at";
+        final String CON_THRILL_URL = "url";
         final String CON_IMAGE_JSON_KEY = "photos";
         final String CON_IMAGE = "mobile";
-
 
         final String ART_JSON_KEY = "artists";
         final String ART_Thrill_ID = "id";
@@ -61,6 +61,7 @@ public class ParseArtistEventsInfo {
                 int conThrillID;
                 String conName;
                 String conStartAt;
+                String conThrillURL;
                 String conImage;
 
                 Hashtable<Integer, String> artList = new Hashtable<Integer, String>();
@@ -80,6 +81,7 @@ public class ParseArtistEventsInfo {
                 conThrillID = event.getInt(CON_Thrill_ID);
                 conName = event.getString(CON_NAME);
                 conStartAt = event.getString(CON_START_AT);
+                conThrillURL = event.getString(CON_THRILL_URL);
                 JSONObject photosJSONObject = event.getJSONObject(CON_IMAGE_JSON_KEY);
                 conImage = photosJSONObject.getString(CON_IMAGE);
 
@@ -104,6 +106,7 @@ public class ParseArtistEventsInfo {
                 eventValues.put(EventEntry.COLUMN_CON_THRILL_ID, conThrillID);
                 eventValues.put(EventEntry.COLUMN_CON_NAME, conName);
                 eventValues.put(EventEntry.COLUMN_CON_START_AT, conStartAt);
+                eventValues.put(EventEntry.COLUMN_CON_THRILL_URL, conThrillURL);
                 eventValues.put(EventEntry.COLUMN_CON_IMAGE, conImage);
                 eventValues.put(EventEntry.COLUMN_CON_ATTEND, Utility.EVENT_ATTEND_NO);
                 eventValues.put(EventEntry.COLUMN_CON_BELONG_TO_ARTIST, artistID);

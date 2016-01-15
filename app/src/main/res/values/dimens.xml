@@ -12,6 +12,7 @@
     <dimen name="mobile_time">13dp</dimen>
     <dimen name="mobile_comment">15dp</dimen>
     <dimen name="mobile_empty">18dp</dimen>
+    <dimen name="mobile_artist_empty">17dp</dimen>
     <dimen name="mobile_navigate">17dp</dimen>
 
     <dimen name="tablet_title">19dp</dimen>
@@ -19,6 +20,7 @@
     <dimen name="tablet_time">15dp</dimen>
     <dimen name="tablet_comment">19dp</dimen>
     <dimen name="tablet_empty">21dp</dimen>
+    <dimen name="tablet_artist_empty">20dp</dimen>
     <dimen name="tablet_navigate">19dp</dimen>
 
 </resources>

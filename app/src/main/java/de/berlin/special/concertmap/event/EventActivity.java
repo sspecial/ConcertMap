@@ -29,6 +29,8 @@ public class EventActivity extends AppCompatActivity {
                 , intent.getStringExtra(String.valueOf(Query.COL_EVENT_NAME)));
         args.putString(String.valueOf(Query.COL_EVENT_START_AT)
                 , intent.getStringExtra(String.valueOf(Query.COL_EVENT_START_AT)));
+        args.putString(String.valueOf(Query.COL_EVENT_THRILL_URL)
+                , intent.getStringExtra(String.valueOf(Query.COL_EVENT_THRILL_URL)));
         args.putString(String.valueOf(Query.COL_EVENT_IMAGE)
                 , intent.getStringExtra(String.valueOf(Query.COL_EVENT_IMAGE)));
         args.putInt(String.valueOf(Query.COL_EVENT_ATTEND)

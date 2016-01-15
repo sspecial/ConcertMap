@@ -15,6 +15,7 @@ public class EventContract {
         public static final String COLUMN_CON_THRILL_ID = "event_thrill_ID";
         public static final String COLUMN_CON_NAME = "event_name";
         public static final String COLUMN_CON_START_AT = "event_start_at";
+        public static final String COLUMN_CON_THRILL_URL = "event_thrill_url";
         public static final String COLUMN_CON_IMAGE = "event_image";
         public static final String COLUMN_CON_ATTEND = "event_attended";
         public static final String COLUMN_CON_BELONG_TO_ARTIST = "event_belong_to_artist";
@@ -68,7 +69,8 @@ public class EventContract {
         public static final String COL_FAV_ART_THRILL_ID = "artist_thrill_ID";
         public static final String COL_FAV_ART_NAME = "artist_name";
         public static final String COL_FAV_ART_OFFICIAL_URL = "artist_official_url";
-        public static final String COL_FAV_ART_IMAGE_LARGE = "artist_image_large";
+        public static final String COL_FAV_ART_WIKIPEDIA_URL = "artist_wikipedia_url";
+        public static final String COL_FAV_ART_THRILL_URL = "artist_thrill_url";
         public static final String COL_FAV_ART_IMAGE_MOBILE = "artist_image_mobile";
         public static final String COL_FAV_ART_TRACKED = "artist_tracked";
     }

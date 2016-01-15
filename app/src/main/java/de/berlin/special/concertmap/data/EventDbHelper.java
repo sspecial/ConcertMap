@@ -31,6 +31,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
                 EventEntry.COLUMN_CON_THRILL_ID + " INTEGER NOT NULL UNIQUE, " +
                 EventEntry.COLUMN_CON_NAME + " TEXT NOT NULL, " +
                 EventEntry.COLUMN_CON_START_AT + " TEXT NOT NULL, " +
+                EventEntry.COLUMN_CON_THRILL_URL + " TEXT NOT NULL, " +
                 EventEntry.COLUMN_CON_IMAGE + " TEXT NOT NULL, " +
                 EventEntry.COLUMN_CON_ATTEND + " INTEGER NOT NULL, " +
                 EventEntry.COLUMN_CON_BELONG_TO_ARTIST + " INTEGER NOT NULL " + ");";
@@ -76,8 +77,9 @@ public class EventDbHelper extends SQLiteOpenHelper {
                 FavArtistEntry._ID + " INTEGER PRIMARY KEY," +
                 FavArtistEntry.COL_FAV_ART_THRILL_ID + " INTEGER NOT NULL UNIQUE, " +
                 FavArtistEntry.COL_FAV_ART_NAME + " TEXT NOT NULL, " +
-                FavArtistEntry.COL_FAV_ART_OFFICIAL_URL + " TEXT , " +
-                FavArtistEntry.COL_FAV_ART_IMAGE_LARGE + " TEXT NOT NULL, " +
+                FavArtistEntry.COL_FAV_ART_OFFICIAL_URL + " TEXT, " +
+                FavArtistEntry.COL_FAV_ART_WIKIPEDIA_URL + " TEXT, " +
+                FavArtistEntry.COL_FAV_ART_THRILL_URL + " TEXT NOT NULL, " +
                 FavArtistEntry.COL_FAV_ART_IMAGE_MOBILE + " TEXT NOT NULL, " +
                 FavArtistEntry.COL_FAV_ART_TRACKED + " INTEGER NOT NULL " + ");";
 

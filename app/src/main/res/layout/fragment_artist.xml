@@ -7,7 +7,7 @@
     android:padding="5dp"
     tools:context="de.berlin.special.concertmap.event.ArtistActivityFragment">
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/atist_image_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -19,7 +19,18 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop" />
-    </LinearLayout>
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="2dp"
+            android:layout_marginRight="2dp"
+            android:src="@drawable/thrillcall" />
+
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/linear_artist_buttons"
@@ -31,20 +42,31 @@
             style="@android:style/Widget.Holo.Light.Button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="1.1"
             android:background="@drawable/mytheme_btn"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/black_brown" />
 
         <Button
-            android:id="@+id/button_website"
+            android:id="@+id/button_official_website"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/mytheme_btn"
-            android:text="Official Website"
+            android:text="Website"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/black_brown" />
+
+        <Button
+            android:id="@+id/button_wikipedia_website"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/mytheme_btn"
+            android:text="Wikipedia"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/black_brown" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -71,9 +93,11 @@
                 android:layout_height="match_parent"
                 android:background="@color/brown_sky"
                 android:gravity="center"
-                android:padding="20dp"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/black" />
+                android:paddingBottom="25dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:textColor="@color/black"
+                android:textSize="@dimen/mobile_artist_empty" />
         </LinearLayout>
 
     </LinearLayout>
