@@ -113,7 +113,7 @@ public class Utility {
 
     // To get Artist-name out of Event-name
     public static String retrieveArtistName(String eventName){
-        String artNames = null;
+        String artNames = eventName;
         int beginIndex = 0;
         int endIndex = eventName.indexOf("@");
         if(endIndex != -1)
