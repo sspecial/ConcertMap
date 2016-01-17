@@ -135,9 +135,7 @@ public class ArtistActivityFragment extends Fragment {
         String eventQueryStr = Query.eventQueryStr
                 + "WHERE event.event_belong_to_artist = "
                 + artistID
-                + " AND "
-                + "event.event_attended = "
-                + Utility.EVENT_ATTEND_NO + " GROUP BY event._ID;";
+                + " GROUP BY event._ID;";
         try{
             final Cursor eventCursor = liteDatabase.rawQuery(eventQueryStr, null);
             // Log.v("Event Cursor", DatabaseUtils.dumpCursorToString(eventCursor));
