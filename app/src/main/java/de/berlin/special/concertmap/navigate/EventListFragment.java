@@ -1,7 +1,9 @@
 package de.berlin.special.concertmap.navigate;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -13,6 +15,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import de.berlin.special.concertmap.R;
+import de.berlin.special.concertmap.data.EventDbHelper;
 import de.berlin.special.concertmap.data.Query;
 import de.berlin.special.concertmap.event.EventActivity;
 import de.berlin.special.concertmap.util.Utility;
@@ -21,6 +24,7 @@ import de.berlin.special.concertmap.util.Utility;
 public class EventListFragment extends Fragment {
 
     private View rootView;
+    private SQLiteDatabase liteDatabase;
 
     public EventListFragment() {
         // Required empty public constructor
@@ -36,12 +40,13 @@ public class EventListFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         rootView = inflater.inflate(R.layout.fragment_events, container, false);
-
         String eventQueryStr = Query.eventQueryStr
                 + "WHERE event.event_attended = "
                 + Utility.EVENT_ATTEND_YES + " GROUP BY event._ID;";
         try{
-            final Cursor eventCursor = Utility.db.rawQuery(eventQueryStr, null);
+            // To query the database for the list of attended events
+            liteDatabase = getActivity().openOrCreateDatabase(EventDbHelper.DATABASE_NAME, Context.MODE_PRIVATE, null);
+            final Cursor eventCursor = liteDatabase.rawQuery(eventQueryStr, null);
             // Log.v("Event Cursor", DatabaseUtils.dumpCursorToString(eventCursor));
 
             // Find ListView to populate

@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
@@ -26,6 +27,7 @@ import java.io.FileInputStream;
 
 import de.berlin.special.concertmap.R;
 import de.berlin.special.concertmap.data.EventContract;
+import de.berlin.special.concertmap.data.EventDbHelper;
 import de.berlin.special.concertmap.data.Query;
 import de.berlin.special.concertmap.event.EventActivity;
 import de.berlin.special.concertmap.navigate.DownloadImageTask;
@@ -37,6 +39,7 @@ import de.berlin.special.concertmap.util.Utility;
 public class ArtistActivityFragment extends Fragment {
 
     private View rootView;
+    private SQLiteDatabase liteDatabase;
     private final String LOG_TAG = ArtistActivityFragment.class.getSimpleName();
 
     private int artistID;
@@ -64,7 +67,8 @@ public class ArtistActivityFragment extends Fragment {
         // Query database for the artist info using thrill ID
         String argThrillID = "WHERE artist.artist_thrill_ID = " + artistThrillID + ";";
         String favArtistQueryStr = Query.favArtistQueryStr + argThrillID;
-        Cursor favArtistCursor = Utility.db.rawQuery(favArtistQueryStr, null);
+        liteDatabase = getActivity().openOrCreateDatabase(EventDbHelper.DATABASE_NAME, Context.MODE_PRIVATE, null);
+        Cursor favArtistCursor = liteDatabase.rawQuery(favArtistQueryStr, null);
         // Log.v(LOG_TAG + " Fav-Artist-Cursor:", DatabaseUtils.dumpCursorToString(favArtistCursor));
 
         // setting title of activity
@@ -135,7 +139,7 @@ public class ArtistActivityFragment extends Fragment {
                 + "event.event_attended = "
                 + Utility.EVENT_ATTEND_NO + " GROUP BY event._ID;";
         try{
-            final Cursor eventCursor = Utility.db.rawQuery(eventQueryStr, null);
+            final Cursor eventCursor = liteDatabase.rawQuery(eventQueryStr, null);
             // Log.v("Event Cursor", DatabaseUtils.dumpCursorToString(eventCursor));
 
             // Setup cursor adapter
@@ -210,7 +214,7 @@ public class ArtistActivityFragment extends Fragment {
                     args.put(EventContract.FavArtistEntry.COL_FAV_ART_TRACKED, Utility.ARTIST_TRACKED_NO);
                     trackBtn.setText(Utility.ARTIST_TRACKED_TEXT_NO);
                 }
-                int row = Utility.db.update(
+                int row = liteDatabase.update(
                         EventContract.FavArtistEntry.TABLE_NAME,
                         args,
                         EventContract.FavArtistEntry._ID + "=" + artistID,

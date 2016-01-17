@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -19,6 +20,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import de.berlin.special.concertmap.R;
+import de.berlin.special.concertmap.data.EventDbHelper;
 import de.berlin.special.concertmap.data.Query;
 import de.berlin.special.concertmap.event.EventActivity;
 import de.berlin.special.concertmap.util.Utility;
@@ -27,6 +29,7 @@ public class GeoListFragment extends Fragment {
 
     private View rootView;
     private SharedPreferences settings;
+    private SQLiteDatabase liteDatabase;
 
     public GeoListFragment() {
         // Required empty public constructor
@@ -43,6 +46,7 @@ public class GeoListFragment extends Fragment {
 
         rootView = inflater.inflate(R.layout.fragment_events, container, false);
         settings = getActivity().getSharedPreferences(Utility.PREFS_NAME, Context.MODE_PRIVATE);
+
         String eventQueryStr = Query.eventQueryStr
                 + "WHERE event.event_belong_to_artist = "
                 + Utility.CON_BELONG_TO_ARTIST_DEFAULT
@@ -57,7 +61,9 @@ public class GeoListFragment extends Fragment {
                 + String.valueOf(settings.getInt(Utility.SETTING_EVENT_NUMBER, Utility.EVENT_LIMIT_NUMBER))
                 + ";";
         try{
-            final Cursor eventCursor = Utility.db.rawQuery(eventQueryStr, null);
+            // To query the database for the list of geo events
+            liteDatabase = getActivity().openOrCreateDatabase(EventDbHelper.DATABASE_NAME, Context.MODE_PRIVATE, null);
+            final Cursor eventCursor = liteDatabase.rawQuery(eventQueryStr, null);
             // Log.v("Event Cursor", DatabaseUtils.dumpCursorToString(eventCursor));
 
             // Find ListView to populate

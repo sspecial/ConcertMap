@@ -3,6 +3,7 @@ package de.berlin.special.concertmap.navigate;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -20,6 +21,7 @@ import java.io.FileInputStream;
 
 import de.berlin.special.concertmap.R;
 import de.berlin.special.concertmap.artist.ArtistActivity;
+import de.berlin.special.concertmap.data.EventDbHelper;
 import de.berlin.special.concertmap.data.Query;
 import de.berlin.special.concertmap.util.Utility;
 
@@ -30,8 +32,7 @@ import de.berlin.special.concertmap.util.Utility;
 public class ArtistListFragment extends Fragment {
 
     private View rootView;
-    private final String LOG_TAG = ArtistListFragment.class.getSimpleName();
-
+    private SQLiteDatabase liteDatabase;
     private Cursor favArtistCursor;
 
     public ArtistListFragment() {
@@ -50,19 +51,26 @@ public class ArtistListFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_artists, container, false);
         GridView trackedArtistsGrid = (GridView) rootView.findViewById(R.id.tracked_artists_grid);
 
-        // Query database for the tracked artists
         String argTracked = "WHERE artist.artist_tracked = " + Utility.ARTIST_TRACKED_YES + ";";
         String favArtistQueryStr = Query.favArtistQueryStr + argTracked;
-        favArtistCursor = Utility.db.rawQuery(favArtistQueryStr, null);
-        // Log.v(LOG_TAG + " Fav-Artist-Cursor:", DatabaseUtils.dumpCursorToString(favArtistCursor));
 
-        ArtistGridAdapter artistGridAdapter = new ArtistGridAdapter(getActivity(), favArtistCursor, 0);
+        try {
+            // Query database for the tracked artists
+            liteDatabase = getActivity().openOrCreateDatabase(EventDbHelper.DATABASE_NAME, Context.MODE_PRIVATE, null);
+            favArtistCursor = liteDatabase.rawQuery(favArtistQueryStr, null);
+            // Log.v(LOG_TAG + " Fav-Artist-Cursor:", DatabaseUtils.dumpCursorToString(favArtistCursor));
 
-        trackedArtistsGrid.setAdapter(artistGridAdapter);
+            ArtistGridAdapter artistGridAdapter = new ArtistGridAdapter(getActivity(), favArtistCursor, 0);
 
-        TextView emptyView = (TextView) rootView.findViewById(R.id.artistEmptyTextView);
-        emptyView.setText("When you track an artist it will be added here :)");
-        trackedArtistsGrid.setEmptyView(emptyView);
+            trackedArtistsGrid.setAdapter(artistGridAdapter);
+
+            TextView emptyView = (TextView) rootView.findViewById(R.id.artistEmptyTextView);
+            emptyView.setText("When you track an artist it will be added here :)");
+            trackedArtistsGrid.setEmptyView(emptyView);
+
+        } catch (Exception e) {
+            Log.e("error...", e.getMessage());
+        }
 
         return rootView;
     }

@@ -26,6 +26,7 @@ import de.berlin.special.concertmap.data.EventDbHelper;
 public class ParseJSONtoDatabase {
 
     private final String LOG_TAG = ParseJSONtoDatabase.class.getSimpleName();
+    private SQLiteDatabase liteDatabase;
     private EventDbHelper mDbHelper;
     private String concertJsonStr;
 
@@ -36,15 +37,15 @@ public class ParseJSONtoDatabase {
         // If Database exist?
         File dbFile = mContext.getDatabasePath(EventDbHelper.DATABASE_NAME);
         if(dbFile.exists())
-            Utility.db = mContext.openOrCreateDatabase(EventDbHelper.DATABASE_NAME, Context.MODE_PRIVATE, null);
+            liteDatabase = mContext.openOrCreateDatabase(EventDbHelper.DATABASE_NAME, Context.MODE_PRIVATE, null);
         else {
             // Creating the concert.db databases
             mDbHelper = new EventDbHelper(mContext);
             // Gets the data repository in write mode
-            Utility.db = mDbHelper.getWritableDatabase();
+            liteDatabase = mDbHelper.getWritableDatabase();
         }
         // Deleting old records from Database
-        deleteOldDataFromDatabase(Utility.db);
+        deleteOldDataFromDatabase(liteDatabase);
         concertJsonStr = json;
     }
 
@@ -167,7 +168,7 @@ public class ParseJSONtoDatabase {
 
                 // Insert the new event row
                 long newRowIdEvent;
-                newRowIdEvent = Utility.db.insert(
+                newRowIdEvent = liteDatabase.insert(
                         EventEntry.TABLE_NAME,
                         null,
                         eventValues);
@@ -186,7 +187,7 @@ public class ParseJSONtoDatabase {
 
                 // Insert the new venue row
                 long newRowIdVenue;
-                newRowIdVenue = Utility.db.insert(
+                newRowIdVenue = liteDatabase.insert(
                         VenueEntry.TABLE_NAME,
                         null,
                         locationValues);
@@ -199,7 +200,7 @@ public class ParseJSONtoDatabase {
                     artistValues.put(ArtistEntry.COLUMN_ART_NAME, artList.get(key));
                     // Insert the new venue row
                     long newRowIdArtist;
-                    newRowIdArtist = Utility.db.insert(
+                    newRowIdArtist = liteDatabase.insert(
                             ArtistEntry.TABLE_NAME,
                             null,
                             artistValues);
@@ -213,7 +214,7 @@ public class ParseJSONtoDatabase {
                     ticketValues.put(TicketEntry.COLUMN_TICKET_URL, ticketList.get(key));
                     // Insert the new venue row
                     long newRowIdTicket;
-                    newRowIdTicket = Utility.db.insert(
+                    newRowIdTicket = liteDatabase.insert(
                             TicketEntry.TABLE_NAME,
                             null,
                             ticketValues);

@@ -1,11 +1,14 @@
 package de.berlin.special.concertmap.service;
 
 import android.content.ContentValues;
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import de.berlin.special.concertmap.data.EventDbHelper;
 import de.berlin.special.concertmap.util.Utility;
 import de.berlin.special.concertmap.data.EventContract.FavArtistEntry;
 
@@ -15,10 +18,12 @@ import de.berlin.special.concertmap.data.EventContract.FavArtistEntry;
 public class ParseArtistInfo {
 
     private final String LOG_TAG = ParseArtistInfo.class.getSimpleName();
+    private SQLiteDatabase liteDatabase;
     private String artistJsonStr;
 
-    public ParseArtistInfo(String json) {
+    public ParseArtistInfo(Context mContext, String json) {
         artistJsonStr = json;
+        liteDatabase = mContext.openOrCreateDatabase(EventDbHelper.DATABASE_NAME, Context.MODE_PRIVATE, null);
     }
 
     public void parseArtistData() {
@@ -61,7 +66,7 @@ public class ParseArtistInfo {
             artistValues.put(FavArtistEntry.COL_FAV_ART_TRACKED, Utility.ARTIST_TRACKED_NO);
             // Insert the new venue row
             long newRowIdArtist;
-            newRowIdArtist = Utility.db.insert(
+            newRowIdArtist = liteDatabase.insert(
                     FavArtistEntry.TABLE_NAME,
                     null,
                     artistValues);

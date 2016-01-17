@@ -1,8 +1,6 @@
 package de.berlin.special.concertmap.util;
 
 import android.app.Activity;
-import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDatabase;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -79,9 +77,6 @@ public class Utility {
     // To decide if we want a list of geo or attended events
     public static final String FRAG_EL_GEO = "geo";
     public static final String FRAG_EL_ATTENDED = "attended";
-
-    public static SQLiteDatabase db;
-    public static SharedPreferences settings;
 
     public static final int CON_BELONG_TO_ARTIST_DEFAULT = -1;
 

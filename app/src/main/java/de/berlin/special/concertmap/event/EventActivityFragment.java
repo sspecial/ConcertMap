@@ -2,9 +2,11 @@ package de.berlin.special.concertmap.event;
 
 import android.app.AlertDialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
@@ -31,6 +33,7 @@ import java.io.File;
 import java.io.FileInputStream;
 
 import de.berlin.special.concertmap.R;
+import de.berlin.special.concertmap.data.EventDbHelper;
 import de.berlin.special.concertmap.util.Utility;
 import de.berlin.special.concertmap.data.EventContract.EventEntry;
 import de.berlin.special.concertmap.data.Query;
@@ -42,6 +45,7 @@ import de.berlin.special.concertmap.service.DataFetchService;
 public class EventActivityFragment extends Fragment {
 
     private View rootView;
+    private SQLiteDatabase liteDatabase;
     private final String LOG_TAG = EventActivityFragment.class.getSimpleName();
 
     private int eventID;
@@ -84,6 +88,7 @@ public class EventActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_event, container, false);
+        liteDatabase = getActivity().openOrCreateDatabase(EventDbHelper.DATABASE_NAME, Context.MODE_PRIVATE, null);
         LinearLayout eventInfo = (LinearLayout) rootView.findViewById(R.id.linear_event_info);
         imageView = (ImageView) rootView.findViewById(R.id.event_mobile_image);
         TextView venueNameView = (TextView) rootView.findViewById(R.id.textview_event_venue_name);
@@ -161,7 +166,7 @@ public class EventActivityFragment extends Fragment {
                     args.put(EventEntry.COLUMN_CON_ATTEND, Utility.EVENT_ATTEND_NO);
                     attendBtn.setText(Utility.EVENT_ATTEND_TEXT_NO);
                 }
-                int row = Utility.db.update(
+                int row = liteDatabase.update(
                         EventEntry.TABLE_NAME,
                         args,
                         EventEntry._ID + "=" + eventID,
@@ -175,7 +180,7 @@ public class EventActivityFragment extends Fragment {
 
                 String argEventID = "WHERE artists.event_ID = " + String.valueOf(eventID) + ";";
                 String artistQueryStr = Query.artistQueryStr + argEventID;
-                final Cursor artistsCursor = Utility.db.rawQuery(artistQueryStr, null);
+                final Cursor artistsCursor = liteDatabase.rawQuery(artistQueryStr, null);
 
                 // When event has multiple artists
                 // AletDialog to show artists and choose between them
@@ -213,7 +218,7 @@ public class EventActivityFragment extends Fragment {
 
                 String argEventID = "WHERE tickets.event_ID = " + String.valueOf(eventID) + ";";
                 String ticketQueryStr = Query.ticketQueryStr + argEventID;
-                final Cursor ticketsCursor = Utility.db.rawQuery(ticketQueryStr, null);
+                final Cursor ticketsCursor = liteDatabase.rawQuery(ticketQueryStr, null);
 
                 if (ticketsCursor.getCount() == 0) {
 

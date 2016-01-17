@@ -1,6 +1,8 @@
 package de.berlin.special.concertmap.service;
 
 import android.content.ContentValues;
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -9,6 +11,7 @@ import org.json.JSONObject;
 
 import java.util.Hashtable;
 
+import de.berlin.special.concertmap.data.EventDbHelper;
 import de.berlin.special.concertmap.util.Utility;
 import de.berlin.special.concertmap.data.EventContract.ArtistEntry;
 import de.berlin.special.concertmap.data.EventContract.EventEntry;
@@ -20,12 +23,14 @@ import de.berlin.special.concertmap.data.EventContract.VenueEntry;
 public class ParseArtistEventsInfo {
 
     private final String LOG_TAG = ParseArtistEventsInfo.class.getSimpleName();
+    private SQLiteDatabase liteDatabase;
     private String concertJsonStr;
     private int artistID;
 
-    public ParseArtistEventsInfo(String json, int artistID){
+    public ParseArtistEventsInfo(Context mContext, String json, int artistID){
         this.artistID = artistID;
         concertJsonStr = json;
+        liteDatabase = mContext.openOrCreateDatabase(EventDbHelper.DATABASE_NAME, Context.MODE_PRIVATE, null);
     }
 
     public void parseData() {
@@ -113,7 +118,7 @@ public class ParseArtistEventsInfo {
 
                 // Insert the new event row
                 long newRowIdEvent;
-                newRowIdEvent = Utility.db.insert(
+                newRowIdEvent = liteDatabase.insert(
                         EventEntry.TABLE_NAME,
                         null,
                         eventValues);
@@ -132,7 +137,7 @@ public class ParseArtistEventsInfo {
 
                 // Insert the new venue row
                 long newRowIdVenue;
-                newRowIdVenue = Utility.db.insert(
+                newRowIdVenue = liteDatabase.insert(
                         VenueEntry.TABLE_NAME,
                         null,
                         locationValues);
@@ -145,7 +150,7 @@ public class ParseArtistEventsInfo {
                     artistValues.put(ArtistEntry.COLUMN_ART_NAME, artList.get(key));
                     // Insert the new venue row
                     long newRowIdArtist;
-                    newRowIdArtist = Utility.db.insert(
+                    newRowIdArtist = liteDatabase.insert(
                             ArtistEntry.TABLE_NAME,
                             null,
                             artistValues);

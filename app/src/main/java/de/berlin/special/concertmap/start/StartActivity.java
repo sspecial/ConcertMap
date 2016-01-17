@@ -1,6 +1,7 @@
 package de.berlin.special.concertmap.start;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +15,7 @@ public class StartActivity extends AppCompatActivity {
 
     Fragment initiateFragment = new InitiateFragment();
     Fragment startFragment = new StartFragment();
+    private SharedPreferences settings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,9 +23,9 @@ public class StartActivity extends AppCompatActivity {
         setContentView(R.layout.activity_start);
 
         // Getting setting from shared preferences
-        Utility.settings = this.getSharedPreferences(Utility.PREFS_NAME, Context.MODE_PRIVATE);
-        Utility.city = Utility.settings.getString(Utility.SETTING_CITY, Utility.CITY_IS_UNKNOWN);
-        Utility.lastKnownLocation = Utility.settings.getString(Utility.SETTING_LOCATION, Utility.CITY_IS_UNKNOWN);
+        settings = this.getSharedPreferences(Utility.PREFS_NAME, Context.MODE_PRIVATE);
+        Utility.city = settings.getString(Utility.SETTING_CITY, Utility.CITY_IS_UNKNOWN);
+        Utility.lastKnownLocation = settings.getString(Utility.SETTING_LOCATION, Utility.CITY_IS_UNKNOWN);
 
         if (Utility.city.equals(Utility.CITY_IS_UNKNOWN)) {
             getSupportFragmentManager().beginTransaction()

@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -37,6 +38,7 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
 
     private final String LOG_TAG = DataFetchService.class.getSimpleName();
 
+    private SharedPreferences settings;
     private Context mContext;
     private ProgressBar dataProcessPI;
     private TextView artistSearchCommentView;
@@ -50,6 +52,7 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
     // Constructor - Geo events
     public DataFetchService(Context context, View view, Double[] geoParams, int fetchType){
         mContext = context;
+        settings = mContext.getSharedPreferences(Utility.PREFS_NAME, Context.MODE_PRIVATE);
         dataFetchType = fetchType;
         dataProcessPI = (ProgressBar) view.findViewById(R.id.parse_data_progress);
         buildGeoEventsURL(geoParams);
@@ -58,6 +61,7 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
     // Constructor - Artist Info & Events
     public DataFetchService(Context context, int artistID, int fetchType){
         mContext = context;
+        settings = mContext.getSharedPreferences(Utility.PREFS_NAME, Context.MODE_PRIVATE);
         dataFetchType = fetchType;
         this.artistID = artistID;
 
@@ -70,6 +74,7 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
     // Constructor - Artist search
     public DataFetchService(Context context, View view, String artistName, int fetchType){
         mContext = context;
+        settings = mContext.getSharedPreferences(Utility.PREFS_NAME, Context.MODE_PRIVATE);
         dataFetchType = fetchType;
         artistSearchCommentView = (TextView) view.findViewById(R.id.artist_comment_view);
         buildArtistSearchURL(artistName);
@@ -137,12 +142,12 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
             if (params[0] != null)
                 geoLat = params[0];
             else
-                geoLat = (double)Utility.settings.getFloat(Utility.SETTING_GEO_LAT, (float)Utility.GEO_DEFAULT_LAT);
+                geoLat = (double) settings.getFloat(Utility.SETTING_GEO_LAT, (float)Utility.GEO_DEFAULT_LAT);
 
             if (params[1] != null)
                 geoLong = params[1];
             else
-                geoLong = (double)Utility.settings.getFloat(Utility.SETTING_GEO_LONG, (float)Utility.GEO_DEFAULT_LONG);
+                geoLong = (double) settings.getFloat(Utility.SETTING_GEO_LONG, (float)Utility.GEO_DEFAULT_LONG);
 
             // Checking date parameters
             if (Utility.MIN_DATE != null && Utility.MAX_DATE != null) {
@@ -268,11 +273,11 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
 
             // Adding setting to shared preferences
             if (!Utility.city.equals(Utility.CITY_IS_UNKNOWN))
-                Utility.settings.edit().putString(Utility.SETTING_CITY, Utility.city).commit();
+                settings.edit().putString(Utility.SETTING_CITY, Utility.city).commit();
             if (!Utility.lastKnownLocation.equals(Utility.CITY_IS_UNKNOWN))
-                Utility.settings.edit().putString(Utility.SETTING_LOCATION, Utility.lastKnownLocation).commit();
-            Utility.settings.edit().putFloat(Utility.SETTING_GEO_LAT, (float) geoLat).commit();
-            Utility.settings.edit().putFloat(Utility.SETTING_GEO_LONG, (float) geoLong).commit();
+                settings.edit().putString(Utility.SETTING_LOCATION, Utility.lastKnownLocation).commit();
+            settings.edit().putFloat(Utility.SETTING_GEO_LAT, (float) geoLat).commit();
+            settings.edit().putFloat(Utility.SETTING_GEO_LONG, (float) geoLong).commit();
 
             // Finishing start activity
             ((Activity)mContext).finish();
@@ -282,7 +287,7 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
         else if(dataFetchType == Utility.URL_ARTIST_INFO) {
 
             ParseArtistInfo artistInfo;
-            artistInfo = new ParseArtistInfo(JSON);
+            artistInfo = new ParseArtistInfo(mContext, JSON);
             artistInfo.parseArtistData();
 
             new DataFetchService(mContext, artistID, Utility.URL_ARTIST_EVENTS).execute();
@@ -292,7 +297,7 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
 
             if (!JSON.equals(Utility.ERROR_MSG)) {
                 ParseArtistSearchInfo searchInfo;
-                searchInfo = new ParseArtistSearchInfo(JSON);
+                searchInfo = new ParseArtistSearchInfo(mContext, JSON);
                 searchInfo.parseArtistData();
 
                 final Hashtable<String, Integer> artIDList = searchInfo.getArtistIDList();
@@ -334,7 +339,7 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
         else if(dataFetchType == Utility.URL_ARTIST_EVENTS) {
 
             ParseArtistEventsInfo artistEventsInfo;
-            artistEventsInfo = new ParseArtistEventsInfo(JSON, artistID);
+            artistEventsInfo = new ParseArtistEventsInfo(mContext, JSON, artistID);
             artistEventsInfo.parseData();
 
             Intent intent = new Intent(mContext, ArtistActivity.class);

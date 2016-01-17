@@ -1,5 +1,7 @@
 package de.berlin.special.concertmap.start;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -16,6 +18,7 @@ import de.berlin.special.concertmap.util.Utility;
 public class StartFragment extends Fragment {
 
     private View rootView;
+    private SharedPreferences settings;
     private LinearLayout cityViewLayout;
     private ProgressBar dataProcessPI;
     private TextView locationView;
@@ -35,6 +38,7 @@ public class StartFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_start, container, false);
+        settings = getActivity().getSharedPreferences(Utility.PREFS_NAME, Context.MODE_PRIVATE);
 
         dataProcessPI = (ProgressBar) rootView.findViewById(R.id.parse_data_progress);
         cityViewLayout = (LinearLayout) rootView.findViewById(R.id.city_view_layout);
@@ -47,8 +51,8 @@ public class StartFragment extends Fragment {
     public void onStart() {
         super.onStart();
         // Retrieving Geo information of last know location from shared preferences
-        double geoLat = (double)Utility.settings.getFloat(Utility.SETTING_GEO_LAT, (float)Utility.GEO_DEFAULT_LAT);
-        double geoLong = (double)Utility.settings.getFloat(Utility.SETTING_GEO_LONG, (float)Utility.GEO_DEFAULT_LONG);
+        double geoLat = (double)settings.getFloat(Utility.SETTING_GEO_LAT, (float)Utility.GEO_DEFAULT_LAT);
+        double geoLong = (double)settings.getFloat(Utility.SETTING_GEO_LONG, (float)Utility.GEO_DEFAULT_LONG);
         Double[] geoArr = new Double[]{geoLat, geoLong};
 
         cityViewLayout.setVisibility(View.VISIBLE);
