@@ -1,6 +1,7 @@
 package de.berlin.special.concertmap.navigate;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -35,6 +36,7 @@ public class NavigationActivity extends AppCompatActivity {
     private static final int NAV_CASE_EXIT = 5;
 
     // Navigation bar items
+    private SharedPreferences settings;
     private String navItem1;
     private final String navItem2 = "Tracked Artists";
     private final String navItem3 = "Attended Events";
@@ -68,10 +70,11 @@ public class NavigationActivity extends AppCompatActivity {
         }
 
         // Constructing array used ba navigation bar
-        if (!Utility.city.equals(Utility.CITY_IS_UNKNOWN))
-            navItem1 = Utility.city + " Concerts";
+        settings = this.getSharedPreferences(Utility.PREFS_NAME, Context.MODE_PRIVATE);
+        if (settings.getString(Utility.SETTING_CITY, Utility.CITY_IS_UNKNOWN).equals(Utility.CITY_IS_UNKNOWN))
+            navItem1 = Utility.CITY_IS_UNKNOWN;
         else
-            navItem1 = "Concerts";
+            navItem1 = settings.getString(Utility.SETTING_CITY, Utility.CITY_IS_UNKNOWN) + " Concerts";
         eventNavItems = new String[]{navItem1, navItem2, navItem3, navItem4, navItem5, navItem6};
 
         // Initiating GeoFragment as default view of activity

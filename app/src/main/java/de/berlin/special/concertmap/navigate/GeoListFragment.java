@@ -51,8 +51,9 @@ public class GeoListFragment extends Fragment {
                 + "WHERE event.event_belong_to_artist = "
                 + Utility.CON_BELONG_TO_ARTIST_DEFAULT
                 + " AND"
-                + " venue.venue_city LIKE"
-                + " '%" + Utility.city + "%' COLLATE NOCASE"
+                + " venue.venue_city LIKE '%"
+                + settings.getString(Utility.SETTING_CITY, Utility.CITY_IS_UNKNOWN)
+                + "%' COLLATE NOCASE"
                 + " GROUP BY event._ID"
                 + " LIMIT "
                 + String.valueOf(settings.getInt(Utility.SETTING_EVENT_NUMBER, Utility.EVENT_LIMIT_NUMBER))
