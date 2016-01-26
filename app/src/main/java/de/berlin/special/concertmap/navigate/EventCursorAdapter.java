@@ -88,17 +88,17 @@ public class EventCursorAdapter extends CursorAdapter {
         }
 
         // Artists Names
-        nameView.setText(Utility.artistNamePartition(Utility.retrieveArtistName(cursor.getString(Query.COL_EVENT_NAME))));
+        nameView.setText(Utility.retrieveArtistName(cursor.getString(Query.COL_EVENT_NAME)));
 
         // Venue Name & City
         if (fragType.equals(Utility.FRAG_EL_GEO)) {
             String venueNameCity = cursor.getString(Query.COL_VENUE_NAME);
-            addressView.setText(Utility.venueNamePartition(venueNameCity));
+            addressView.setText(venueNameCity);
         } else {
             String venueNameCity = cursor.getString(Query.COL_VENUE_NAME)
                     + ", "
                     + cursor.getString(Query.COL_VENUE_CITY);
-            addressView.setText(Utility.venueNamePartition(venueNameCity));
+            addressView.setText(venueNameCity);
         }
 
         // Event time

@@ -115,39 +115,13 @@ public class Utility {
             artNames = eventName.substring(beginIndex, endIndex);
         return artNames;
     }
-    // To make a break when the artist name is too long
-    public static String artistNamePartition(String str){
-        if (str.length() > 18) {
-            int spaceIndex = str.indexOf(" ", 10);
-            if (spaceIndex != -1)
-                str = str.substring(0, spaceIndex) + " ..";
-            else
-                str = str.substring(0, 18) + "..";
-            return str;
-        } else {
-            return str;
-        }
-    }
-    // To make a break when the venue name is too long
-    public static String venueNamePartition(String str){
-        if (str.length() > 28) {
-            int spaceIndex = str.indexOf(" ", 20);
-            if (spaceIndex != -1) {
-                str = str.substring(0, spaceIndex) + " ..";
-            } else {
-                str = str.substring(0, 28) + "..";
-            }
-            return str;
-        } else {
-            return str;
-        }
-    }
+
     // To divide Date-str into Day-str and Time-str
     public static String[] retrieveDateAndTime(String dateStr){
         String dayStr = dateStr.split("T")[0];
         String timeStr = dateStr.split("T")[1];
         dayStr = dayStr.substring(0,dayStr.length());
-        timeStr = timeStr.substring(0,timeStr.length()-4);
+        timeStr = timeStr.substring(0,timeStr.length()-9);
 
         return new String[]{dayStr, timeStr};
     }

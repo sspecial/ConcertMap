@@ -77,7 +77,7 @@ public class ParseJSONtoDatabase {
         // These are the names of the JSON objects that need to be extracted.
         final String CON_Thrill_ID = "id";
         final String CON_NAME = "name";
-        final String CON_START_AT = "starts_at";
+        final String CON_START_AT = "starts_at_local";
         final String CON_THRILL_URL = "url";
         final String CON_IMAGE_JSON_KEY = "photos";
         final String CON_IMAGE = "mobile";
@@ -89,6 +89,7 @@ public class ParseJSONtoDatabase {
         final String TICKET_JSON_KEY = "ticket_providers";
         final String TICKET_NAME = "name";
         final String TICKET_URL = "url";
+        final String TICKET_THRILL_OFFER = "offer_details";
 
         final String VEN_JSON_KEY = "venue";
         final String VEN_Thrill_ID = "id";
@@ -110,6 +111,7 @@ public class ParseJSONtoDatabase {
                 String conName;
                 String conStartAt;
                 String conThrillURL;
+                String offerDetails;
                 String conImage;
 
                 Hashtable<Integer, String> artList = new Hashtable<Integer, String>();
@@ -131,6 +133,7 @@ public class ParseJSONtoDatabase {
                 conName = event.getString(CON_NAME);
                 conStartAt = event.getString(CON_START_AT);
                 conThrillURL = event.getString(CON_THRILL_URL);
+                offerDetails = event.getString(TICKET_THRILL_OFFER);
                 JSONObject photosJSONObject = event.getJSONObject(CON_IMAGE_JSON_KEY);
                 conImage = photosJSONObject.getString(CON_IMAGE);
 
@@ -155,6 +158,8 @@ public class ParseJSONtoDatabase {
                     JSONObject ticketObject = ticketsJSONArray.getJSONObject(k);
                     ticketList.put(ticketObject.getString(TICKET_NAME), ticketObject.getString(TICKET_URL));
                 }
+                if(!offerDetails.equals("null"))
+                    ticketList.put("Thrillcall", offerDetails);
 
                 ContentValues eventValues = new ContentValues();
                 // Create a new map of values for event, where column names are the keys

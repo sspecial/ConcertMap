@@ -51,6 +51,9 @@ public class GeoListFragment extends Fragment {
                 + "WHERE event.event_belong_to_artist = "
                 + Utility.CON_BELONG_TO_ARTIST_DEFAULT
                 + " AND"
+                + " event.event_attended = "
+                + Utility.EVENT_ATTEND_NO
+                + " AND"
                 + " venue.venue_city LIKE '%"
                 + settings.getString(Utility.SETTING_CITY, Utility.CITY_IS_UNKNOWN)
                 + "%' COLLATE NOCASE"
