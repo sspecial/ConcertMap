@@ -137,6 +137,10 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
     public void buildGeoEventsURL(Double[] params) {
 
         try {
+            // https://api.seatgeek.com/2/events?taxonomies.name=concert&venue.city=berlin&datetime_utc.gte=2016-01-28&datetime_utc.lte=2016-01-30
+
+            // Obtaining city parameter
+            String city = settings.getString(Utility.SETTING_CITY, Utility.CITY_IS_UNKNOWN);
 
             // Checking geo parameters
             if (params[0] != null)
@@ -162,20 +166,16 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
             }
 
             // Construct the URL for the api.thrillcall query
-            final String LAT_PARAM = "lat";
-            final String LONG_PARAM = "long";
-            final String LIMIT_PARAM = "limit";
-            final String MIN_DATE_PARAM = "min_date";
-            final String MAX_DATE_PARAM = "max_date";
-            final String KEY_PARAM = "api_key";
+            final String CITY_PARAM = "venue.city";
+            final String TAXONOMY_PARAM = "taxonomies.name";
+            final String MIN_DATE_PARAM = "datetime_utc.gte";
+            final String MAX_DATE_PARAM = "datetime_utc.lte";
 
-            Uri builtUri = Uri.parse(Utility.THRILLCALL_GEO_BASE_URL).buildUpon()
-                    .appendQueryParameter(LAT_PARAM, String.valueOf(geoLat))
-                    .appendQueryParameter(LONG_PARAM, String.valueOf(geoLong))
+            Uri builtUri = Uri.parse(Utility.SEATGEEK_GEO_BASE_URL).buildUpon()
+                    .appendQueryParameter(TAXONOMY_PARAM, "concert")
+                    .appendQueryParameter(CITY_PARAM, city)
                     .appendQueryParameter(MIN_DATE_PARAM, Utility.URL_MIN_DATE)
                     .appendQueryParameter(MAX_DATE_PARAM, Utility.URL_MAX_DATE)
-                    .appendQueryParameter(LIMIT_PARAM, Utility.EVENT_LIMIT_STR)
-                    .appendQueryParameter(KEY_PARAM, Utility.THRILLCALL_API_KEY)
                     .build();
 
             url = new URL(builtUri.toString());
@@ -262,10 +262,12 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
             } else {
                 Utility.ERROR_OBTAINING_DATA = true;
             }
+
+            Log.d(LOG_TAG, "JSON: "+JSON.toString());
             ParseJSONtoDatabase parseJSONtoDatabase;
             parseJSONtoDatabase = new ParseJSONtoDatabase(mContext, JSON);
             parseJSONtoDatabase.parseData();
-            //Displaying the 'CONTINUE' button after parsing data into database
+
             dataProcessPI.setVisibility(View.GONE);
 
             Intent intent = new Intent(mContext, NavigationActivity.class);

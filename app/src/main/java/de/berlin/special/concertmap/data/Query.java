@@ -6,11 +6,11 @@ package de.berlin.special.concertmap.data;
 public class Query {
 
     public static final String eventQueryStr = "SELECT event._ID, " +
-            "event.event_thrill_ID, event.event_name, " +
-            "event.event_start_at, event.event_thrill_url, " +
+            "event.event_API_ID, event.event_name, " +
+            "event.event_start_at, event.event_url, " +
             "event.event_image, event.event_attended, " +
             "venue.venue_name, venue.venue_street, " +
-            "venue.venue_city, venue.venue_country_code, " +
+            "venue.venue_city, venue.venue_country, " +
             "venue.venue_geo_lat, venue.venue_geo_long " +
             "FROM event " +
             "INNER JOIN venue " +

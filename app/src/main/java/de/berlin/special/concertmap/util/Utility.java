@@ -57,7 +57,7 @@ public class Utility {
     public static String lastKnownLocation = CITY_IS_UNKNOWN;
 
     public static final String THRILLCALL_API_KEY = "d90d066add515bff";
-    public static final String THRILLCALL_GEO_BASE_URL = "https://api.thrillcall.com/api/v3/events";
+    public static final String SEATGEEK_GEO_BASE_URL = "https://api.seatgeek.com/2/events";
     public static final String THRILLCALL_ARTIST_BASE_URL = "https://api.thrillcall.com/api/v3/artist/";
     public static final String THRILLCALL_SEARCH_BASE_URL = "https://api.thrillcall.com/api/v3/search/artists/";
 
@@ -121,7 +121,7 @@ public class Utility {
         String dayStr = dateStr.split("T")[0];
         String timeStr = dateStr.split("T")[1];
         dayStr = dayStr.substring(0,dayStr.length());
-        timeStr = timeStr.substring(0,timeStr.length()-9);
+        timeStr = timeStr.substring(0,timeStr.length()-3);
 
         return new String[]{dayStr, timeStr};
     }
