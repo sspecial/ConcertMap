@@ -21,7 +21,6 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -33,11 +32,11 @@ import java.io.File;
 import java.io.FileInputStream;
 
 import de.berlin.special.concertmap.R;
-import de.berlin.special.concertmap.data.EventDbHelper;
-import de.berlin.special.concertmap.util.Utility;
 import de.berlin.special.concertmap.data.EventContract.EventEntry;
+import de.berlin.special.concertmap.data.EventDbHelper;
 import de.berlin.special.concertmap.data.Query;
 import de.berlin.special.concertmap.service.DataFetchService;
+import de.berlin.special.concertmap.util.Utility;
 
 /**
  * A placeholder fragment containing a event view.
@@ -52,14 +51,13 @@ public class EventActivityFragment extends Fragment {
     private String imagePath;
     private int attended;
     private String eventStartAt;
-    private String eventThrillURL;
+    private String eventTicket;
     private String venueName;
     private String venueAddress;
     private double geoLat;
     private double geoLong;
     private GoogleMap map;
 
-    private ImageView imageView;
     private CheckBox attendBtn;
     private Button artistBtn;
     private Button ticketBtn;
@@ -73,7 +71,7 @@ public class EventActivityFragment extends Fragment {
 
         eventID = getArguments().getInt(String.valueOf(Query.COL_EVENT_ID), -1);
         eventStartAt = getArguments().getString(String.valueOf(Query.COL_EVENT_START_AT), "START_AT");
-        eventThrillURL = getArguments().getString(String.valueOf(Query.COL_EVENT_THRILL_URL), "Thrill_URL");
+        eventTicket = getArguments().getString(String.valueOf(Query.COL_EVENT_TICKET), "EVENT_TICKET");
         imagePath = getArguments().getString(String.valueOf(Query.COL_EVENT_IMAGE), Utility.IMAGE_DIR_TODAY);
         attended = getArguments().getInt(String.valueOf(Query.COL_EVENT_ATTEND), Utility.EVENT_ATTEND_NO);
         venueName = getArguments().getString(String.valueOf(Query.COL_VENUE_NAME), "VENUE_NAME");
@@ -90,7 +88,7 @@ public class EventActivityFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_event, container, false);
         liteDatabase = getActivity().openOrCreateDatabase(EventDbHelper.DATABASE_NAME, Context.MODE_PRIVATE, null);
         LinearLayout eventInfo = (LinearLayout) rootView.findViewById(R.id.linear_event_info);
-        imageView = (ImageView) rootView.findViewById(R.id.event_mobile_image);
+        ImageView imageView = (ImageView) rootView.findViewById(R.id.event_mobile_image);
         TextView venueNameView = (TextView) rootView.findViewById(R.id.textview_event_venue_name);
         TextView venueAddressView = (TextView) rootView.findViewById(R.id.textview_event_venue_street);
         TextView dayView = (TextView) rootView.findViewById(R.id.event_item_day_textview);
@@ -147,14 +145,6 @@ public class EventActivityFragment extends Fragment {
     public void onResume(){
         super.onResume();
 
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(eventThrillURL));
-                startActivity(browserIntent);
-            }
-        });
-
         attendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -196,7 +186,7 @@ public class EventActivityFragment extends Fragment {
                             .setItems(artArr, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     artistsCursor.moveToPosition(which);
-                                    int artistThrillID = artistsCursor.getInt(Query.COL_ARTIST_THRILL_ID);
+                                    int artistThrillID = artistsCursor.getInt(Query.COL_ARTIST_API_ID);
                                     new DataFetchService(getContext(), artistThrillID, Utility.URL_ARTIST_INFO).execute();
                                 }
                             });
@@ -206,8 +196,8 @@ public class EventActivityFragment extends Fragment {
                 // When event has only one artist
                 } else {
                     artistsCursor.moveToFirst();
-                    int artistThrillID = artistsCursor.getInt(Query.COL_ARTIST_THRILL_ID);
-                    new DataFetchService(getContext(), artistThrillID, Utility.URL_ARTIST_INFO).execute();
+                    int artistApiID = artistsCursor.getInt(Query.COL_ARTIST_API_ID);
+                    new DataFetchService(getContext(), artistApiID, Utility.URL_ARTIST_INFO).execute();
                 }
             }
         });
@@ -215,44 +205,8 @@ public class EventActivityFragment extends Fragment {
         ticketBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                String argEventID = "WHERE tickets.event_ID = " + String.valueOf(eventID) + ";";
-                String ticketQueryStr = Query.ticketQueryStr + argEventID;
-                final Cursor ticketsCursor = liteDatabase.rawQuery(ticketQueryStr, null);
-
-                if (ticketsCursor.getCount() == 0) {
-
-                    Toast toast = Toast.makeText(getContext(), Utility.NO_TICKET_PROVIDER, Toast.LENGTH_SHORT);
-                    toast.show();
-
-                } else if (ticketsCursor.getCount() == 1) {
-
-                    ticketsCursor.moveToFirst();
-                    String providerURL = ticketsCursor.getString(Query.COL_TICKET_URL);
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(providerURL));
-                    startActivity(browserIntent);
-
-                } else if (ticketsCursor.getCount() > 1) {
-
-                    String[] ticketArr = new String[ticketsCursor.getCount()];
-                    for (int j = 0; j < ticketsCursor.getCount(); j++) {
-                        ticketsCursor.moveToPosition(j);
-                        ticketArr[j] = ticketsCursor.getString(Query.COL_TICKET_NAME);
-                    }
-                    AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), android.R.style.Theme_Holo_Light_Dialog));
-                    builder.setTitle(R.string.choose_ticket_provider)
-                            .setItems(ticketArr, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    ticketsCursor.moveToPosition(which);
-                                    String providerURL = ticketsCursor.getString(Query.COL_TICKET_URL);
-                                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(providerURL));
-                                    startActivity(browserIntent);
-                                }
-                            });
-                    AlertDialog alert = builder.create();
-                    alert.show();
-                }
-
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(eventTicket));
+                startActivity(browserIntent);
             }
         });
     }

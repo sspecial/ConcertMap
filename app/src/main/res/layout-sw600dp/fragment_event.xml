@@ -18,7 +18,8 @@
             android:id="@+id/event_mobile_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="centerCrop" />
+            android:scaleType="centerCrop"
+            android:src="@drawable/concert2" />
 
         <ImageView
             android:layout_width="30dp"

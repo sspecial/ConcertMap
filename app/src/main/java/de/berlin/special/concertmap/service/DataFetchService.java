@@ -1,15 +1,12 @@
 package de.berlin.special.concertmap.service;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -22,7 +19,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Hashtable;
 
 import de.berlin.special.concertmap.R;
 import de.berlin.special.concertmap.artist.ArtistActivity;
@@ -83,12 +79,11 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
     // build artist info URL
     public void buildArtistInfoURL(int artistID) {
         try {
-            // Construct the URL for the api.thrillcall query
-            final String artistURL = Utility.THRILLCALL_ARTIST_BASE_URL + String.valueOf(artistID);
-            final String KEY_PARAM = "api_key";
+            // Construct the URL to query API
+            final String ID_PARAM = "id";
 
-            Uri builtUri = Uri.parse(artistURL).buildUpon()
-                    .appendQueryParameter(KEY_PARAM, Utility.THRILLCALL_API_KEY)
+            Uri builtUri = Uri.parse(Utility.SEATGEEK_ARTIST_BASE_URL).buildUpon()
+                    .appendQueryParameter(ID_PARAM, String.valueOf(artistID))
                     .build();
 
             url = new URL(builtUri.toString());
@@ -101,13 +96,11 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
     public void buildArtistEventsURL(int artistID) {
         try {
 
-            // Construct the URL for the api.thrillcall query
-            final String artistURL = Utility.THRILLCALL_ARTIST_BASE_URL + String.valueOf(artistID);
-            final String artistEventsURL = artistURL + "/events";
-            final String KEY_PARAM = "api_key";
+            // Construct the URL to query API
+            final String ID_PARAM = "performers.id";
 
-            Uri builtUri = Uri.parse(artistEventsURL).buildUpon()
-                    .appendQueryParameter(KEY_PARAM, Utility.THRILLCALL_API_KEY)
+            Uri builtUri = Uri.parse(Utility.SEATGEEK_EVENT_BASE_URL).buildUpon()
+                    .appendQueryParameter(ID_PARAM, String.valueOf(artistID))
                     .build();
 
             url = new URL(builtUri.toString());
@@ -119,12 +112,11 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
     // build artist search URL
     public void buildArtistSearchURL(String artistName){
         try {
-            // Construct the URL for the api.thrillcall query
-            final String artistSearchURL = Utility.THRILLCALL_SEARCH_BASE_URL + artistName;
-            final String KEY_PARAM = "api_key";
+            // Construct the URL to query API
+            final String SLUG_PARAM = "slug";
 
-            Uri builtUri = Uri.parse(artistSearchURL).buildUpon()
-                    .appendQueryParameter(KEY_PARAM, Utility.THRILLCALL_API_KEY)
+            Uri builtUri = Uri.parse(Utility.SEATGEEK_ARTIST_BASE_URL).buildUpon()
+                    .appendQueryParameter(SLUG_PARAM, artistName)
                     .build();
 
             url = new URL(builtUri.toString());
@@ -138,7 +130,6 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
 
         try {
             // https://api.seatgeek.com/2/events?taxonomies.name=concert&venue.city=berlin&datetime_utc.gte=2016-01-28&datetime_utc.lte=2016-01-30
-
             // Obtaining city parameter
             String city = settings.getString(Utility.SETTING_CITY, Utility.CITY_IS_UNKNOWN);
 
@@ -171,7 +162,7 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
             final String MIN_DATE_PARAM = "datetime_utc.gte";
             final String MAX_DATE_PARAM = "datetime_utc.lte";
 
-            Uri builtUri = Uri.parse(Utility.SEATGEEK_GEO_BASE_URL).buildUpon()
+            Uri builtUri = Uri.parse(Utility.SEATGEEK_EVENT_BASE_URL).buildUpon()
                     .appendQueryParameter(TAXONOMY_PARAM, "concert")
                     .appendQueryParameter(CITY_PARAM, city)
                     .appendQueryParameter(MIN_DATE_PARAM, Utility.URL_MIN_DATE)
@@ -294,49 +285,6 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
 
             new DataFetchService(mContext, artistID, Utility.URL_ARTIST_EVENTS).execute();
         }
-        // Artist search based on name
-        else if(dataFetchType == Utility.URL_ARTIST_SEARCH) {
-
-            if (!JSON.equals(Utility.ERROR_MSG)) {
-                ParseArtistSearchInfo searchInfo;
-                searchInfo = new ParseArtistSearchInfo(mContext, JSON);
-                searchInfo.parseArtistData();
-
-                final Hashtable<String, Integer> artIDList = searchInfo.getArtistIDList();
-                final String[] artNameArr = artIDList.keySet().toArray(new String[artIDList.keySet().size()]);
-
-                    // When the name user is searching does not return any result
-                if (artNameArr.length == 0) {
-                    artistSearchCommentView.setVisibility(View.VISIBLE);
-                    artistSearchCommentView.setText(Utility.ERROR_NO_DATA_ARTIST);
-
-                    // When it returns only one match
-                } else if (artNameArr.length == 1) {
-                    artistSearchCommentView.setVisibility(View.INVISIBLE);
-                    new DataFetchService(mContext, artIDList.get(artNameArr[0]), Utility.URL_ARTIST_EVENTS).execute();
-
-                    // When it returns more than one match
-                } else if (artNameArr.length > 1) {
-
-                    AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(mContext, android.R.style.Theme_Holo_Light_Dialog));
-                    builder.setTitle(R.string.pick_the_artist)
-                            .setItems(artNameArr, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    String artistName = artNameArr[which];
-                                    artistSearchCommentView.setVisibility(View.INVISIBLE);
-                                    new DataFetchService(mContext, artIDList.get(artistName), Utility.URL_ARTIST_EVENTS).execute();
-                                }
-                            });
-                    AlertDialog alert = builder.create();
-                    alert.show();
-                }
-
-            } else {
-                artistSearchCommentView.setVisibility(View.VISIBLE);
-                artistSearchCommentView.setText(Utility.ERROR_OBTAINING_DATA_ARTIST);
-            }
-
-        }
         // Coming events of an artist
         else if(dataFetchType == Utility.URL_ARTIST_EVENTS) {
 
@@ -345,7 +293,7 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
             artistEventsInfo.parseData();
 
             Intent intent = new Intent(mContext, ArtistActivity.class);
-            intent.putExtra(String.valueOf(Query.COL_ARTIST_THRILL_ID), artistID);
+            intent.putExtra(String.valueOf(Query.COL_ARTIST_API_ID), artistID);
             mContext.startActivity(intent);
         }
 

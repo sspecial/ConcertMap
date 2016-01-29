@@ -95,9 +95,9 @@ class ArtistGridAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, final Context context, Cursor cursor) {
 
-        final int artistThrillID = cursor.getInt(Query.COL_ARTIST_THRILL_ID);
+        final int artistThrillID = cursor.getInt(Query.COL_ARTIST_API_ID);
         String artistName = cursor.getString(Query.COL_ARTIST_NAME);
-        String imageURL = cursor.getString(Query.COL_ARTIST_IMAGE_MOBILE);
+        String imageURL = cursor.getString(Query.COL_ARTIST_IMAGE);
 
         nameView = (TextView) view.findViewById(R.id.artist_name_text);
         imageView = (ImageView) view.findViewById(R.id.artist_image_view);
@@ -129,7 +129,7 @@ class ArtistGridAdapter extends CursorAdapter {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, ArtistActivity.class);
-                intent.putExtra(String.valueOf(Query.COL_ARTIST_THRILL_ID), artistThrillID);
+                intent.putExtra(String.valueOf(Query.COL_ARTIST_API_ID), artistThrillID);
                 context.startActivity(intent);
             }
         });

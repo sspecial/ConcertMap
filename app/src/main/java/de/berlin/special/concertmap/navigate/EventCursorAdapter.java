@@ -69,7 +69,7 @@ public class EventCursorAdapter extends CursorAdapter {
         }
 
         // Event image
-        String imageName = String.valueOf(cursor.getInt(Query.COL_EVENT_THRILL_ID));
+        String imageName = String.valueOf(cursor.getInt(Query.COL_EVENT_API_ID));
         // Let's see if it is necessary to download the image file
         File file = new File(imageDir, imageName);
         if (file.exists()) {
@@ -82,9 +82,9 @@ public class EventCursorAdapter extends CursorAdapter {
                 Log.e(LOG_TAG, e.getMessage());
             }
         } else {
-            imageView.setImageResource(R.drawable.concert2);
-            new DownloadImageTask(imageView, imageDir, imageName)
-                    .execute(cursor.getString(Query.COL_EVENT_IMAGE));
+            if (!cursor.getString(Query.COL_EVENT_IMAGE).equals("null"))
+                new DownloadImageTask(imageView, imageDir, imageName)
+                        .execute(cursor.getString(Query.COL_EVENT_IMAGE));
         }
 
         // Artists Names

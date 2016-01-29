@@ -20,8 +20,8 @@ public class ArtistActivity extends AppCompatActivity {
         Intent intent = this.getIntent();
         Bundle args = new Bundle();
 
-        args.putInt(String.valueOf(Query.COL_ARTIST_THRILL_ID)
-                , intent.getIntExtra(String.valueOf(Query.COL_ARTIST_THRILL_ID), -1));
+        args.putInt(String.valueOf(Query.COL_ARTIST_API_ID)
+                , intent.getIntExtra(String.valueOf(Query.COL_ARTIST_API_ID), -1));
 
         artistActivityFragment.setArguments(args);
         getSupportFragmentManager().beginTransaction()

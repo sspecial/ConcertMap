@@ -56,10 +56,8 @@ public class Utility {
     public static String city = CITY_IS_UNKNOWN;
     public static String lastKnownLocation = CITY_IS_UNKNOWN;
 
-    public static final String THRILLCALL_API_KEY = "d90d066add515bff";
-    public static final String SEATGEEK_GEO_BASE_URL = "https://api.seatgeek.com/2/events";
-    public static final String THRILLCALL_ARTIST_BASE_URL = "https://api.thrillcall.com/api/v3/artist/";
-    public static final String THRILLCALL_SEARCH_BASE_URL = "https://api.thrillcall.com/api/v3/search/artists/";
+    public static final String SEATGEEK_EVENT_BASE_URL = "https://api.seatgeek.com/2/events";
+    public static final String SEATGEEK_ARTIST_BASE_URL = "https://api.seatgeek.com/2/performers";
 
     public static final String ERROR_MSG = "Error obtaining data.";
     public static boolean ERROR_OBTAINING_DATA = false;
@@ -89,11 +87,7 @@ public class Utility {
     public static final int ARTIST_TRACKED_NO = 0;
     public static final String ARTIST_TRACKED_TEXT_NO = "Track";
     public static final String ARTIST_TRACKED_TEXT_YES = "Tracked!";
-
-    public static final String NO_TICKET_PROVIDER = "No Ticket Provider!";
     public static final String NO_ARTIST_PLAN = "No Further Plan!";
-    public static final String NO_OFFICIAL_WEBSITE = "No Official Website!";
-    public static final String NO_WIKIPEDIA_PAGE = "No Wikipedia Page!";
 
     private static final String IMAGE_BADE_DIR = "/sdcard/ConcertMap/";
     public static final String IMAGE_DIR_ARTIST = IMAGE_BADE_DIR + "TrackedArtists";

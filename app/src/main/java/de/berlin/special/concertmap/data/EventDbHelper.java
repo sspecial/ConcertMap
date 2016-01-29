@@ -8,6 +8,7 @@ import de.berlin.special.concertmap.data.EventContract.ArtistEntry;
 import de.berlin.special.concertmap.data.EventContract.EventEntry;
 import de.berlin.special.concertmap.data.EventContract.FavArtistEntry;
 import de.berlin.special.concertmap.data.EventContract.VenueEntry;
+import de.berlin.special.concertmap.data.EventContract.LinkEntry;
 
 /**
  * Created by Saeed on 18-Apr-15.
@@ -31,7 +32,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
                 EventEntry.COLUMN_CON_API_ID + " INTEGER NOT NULL UNIQUE, " +
                 EventEntry.COLUMN_CON_NAME + " TEXT NOT NULL, " +
                 EventEntry.COLUMN_CON_START_AT + " TEXT NOT NULL, " +
-                EventEntry.COLUMN_CON_URL + " TEXT NOT NULL, " +
+                EventEntry.COLUMN_CON_TICKET + " TEXT NOT NULL, " +
                 EventEntry.COLUMN_CON_IMAGE + " TEXT, " +
                 EventEntry.COLUMN_CON_ATTEND + " INTEGER NOT NULL, " +
                 EventEntry.COLUMN_CON_BELONG_TO_ARTIST + " INTEGER NOT NULL " + ");";
@@ -48,7 +49,6 @@ public class EventDbHelper extends SQLiteOpenHelper {
                 VenueEntry.COLUMN_VEN_LOCATION + " TEXT NOT NULL, " +
                 VenueEntry.COLUMN_VEN_GEO_LAT + " REAL NOT NULL, " +
                 VenueEntry.COLUMN_VEN_GEO_LONG + " REAL NOT NULL, " +
-                VenueEntry.COLUMN_VEN_TICKET + " TEXT NOT NULL, " +
                 " FOREIGN KEY (" + VenueEntry.COLUMN_VEN_CON_ID + ") REFERENCES " +
                 EventEntry.TABLE_NAME + " (" + EventEntry._ID + ") " +
                 ");";
@@ -67,18 +67,28 @@ public class EventDbHelper extends SQLiteOpenHelper {
         // Create a table to hold favorite artists.
         final String SQL_CREATE_FAV_ARTIST_TABLE = "CREATE TABLE " + FavArtistEntry.TABLE_NAME + " (" +
                 FavArtistEntry._ID + " INTEGER PRIMARY KEY," +
-                FavArtistEntry.COL_FAV_ART_THRILL_ID + " INTEGER NOT NULL UNIQUE, " +
+                FavArtistEntry.COL_FAV_ART_API_ID + " INTEGER NOT NULL UNIQUE, " +
                 FavArtistEntry.COL_FAV_ART_NAME + " TEXT NOT NULL, " +
-                FavArtistEntry.COL_FAV_ART_OFFICIAL_URL + " TEXT, " +
-                FavArtistEntry.COL_FAV_ART_WIKIPEDIA_URL + " TEXT, " +
-                FavArtistEntry.COL_FAV_ART_THRILL_URL + " TEXT NOT NULL, " +
-                FavArtistEntry.COL_FAV_ART_IMAGE_MOBILE + " TEXT NOT NULL, " +
+                FavArtistEntry.COL_FAV_ART_API_URL + " TEXT NOT NULL, " +
+                FavArtistEntry.COL_FAV_ART_IMAGE + " TEXT NOT NULL, " +
+                FavArtistEntry.COL_FAV_ART_UPCOMING_EVENTS + " TEXT NOT NULL, " +
                 FavArtistEntry.COL_FAV_ART_TRACKED + " INTEGER NOT NULL " + ");";
+
+        // Create a table to hold artist links.
+        final String SQL_CREATE_LINKS_TABLE = "CREATE TABLE " + LinkEntry.TABLE_NAME + " (" +
+                LinkEntry._ID + " INTEGER PRIMARY KEY," +
+                LinkEntry.COLUMN_LINK_ART_ID + " INTEGER NOT NULL, " +
+                LinkEntry.COLUMN_LINK_PROVIDER + " TEXT NOT NULL, " +
+                LinkEntry.COLUMN_LINK_URL + " TEXT NOT NULL, " +
+                " FOREIGN KEY (" + LinkEntry.COLUMN_LINK_ART_ID + ") REFERENCES " +
+                FavArtistEntry.TABLE_NAME + " (" + FavArtistEntry._ID + ") " +
+                ");";
 
         db.execSQL(SQL_CREATE_EVENT_TABLE);
         db.execSQL(SQL_CREATE_VENUE_TABLE);
         db.execSQL(SQL_CREATE_ARTISTS_TABLE);
         db.execSQL(SQL_CREATE_FAV_ARTIST_TABLE);
+        db.execSQL(SQL_CREATE_LINKS_TABLE);
     }
 
     @Override

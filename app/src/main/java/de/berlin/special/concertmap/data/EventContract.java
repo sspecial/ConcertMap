@@ -15,7 +15,7 @@ public class EventContract {
         public static final String COLUMN_CON_API_ID = "event_API_ID";
         public static final String COLUMN_CON_NAME = "event_name";
         public static final String COLUMN_CON_START_AT = "event_start_at";
-        public static final String COLUMN_CON_URL = "event_url";
+        public static final String COLUMN_CON_TICKET = "event_ticket";
         public static final String COLUMN_CON_IMAGE = "event_image";
         public static final String COLUMN_CON_ATTEND = "event_attended";
         public static final String COLUMN_CON_BELONG_TO_ARTIST = "event_belong_to_artist";
@@ -48,7 +48,6 @@ public class EventContract {
         public static final String COLUMN_VEN_LOCATION = "venue_location";
         public static final String COLUMN_VEN_GEO_LAT = "venue_geo_lat";
         public static final String COLUMN_VEN_GEO_LONG = "venue_geo_long";
-        public static final String COLUMN_VEN_TICKET = "venue_ticket";
     }
 
     /* Inner class that defines the table contents of the favorite artist table */
@@ -57,12 +56,22 @@ public class EventContract {
         // Table name
         public static final String TABLE_NAME = "artist";
         // Information of artists:
-        public static final String COL_FAV_ART_THRILL_ID = "artist_thrill_ID";
+        public static final String COL_FAV_ART_API_ID = "artist_API_ID";
         public static final String COL_FAV_ART_NAME = "artist_name";
-        public static final String COL_FAV_ART_OFFICIAL_URL = "artist_official_url";
-        public static final String COL_FAV_ART_WIKIPEDIA_URL = "artist_wikipedia_url";
-        public static final String COL_FAV_ART_THRILL_URL = "artist_thrill_url";
-        public static final String COL_FAV_ART_IMAGE_MOBILE = "artist_image_mobile";
+        public static final String COL_FAV_ART_API_URL = "artist_API_url";
+        public static final String COL_FAV_ART_IMAGE = "artist_image";
+        public static final String COL_FAV_ART_UPCOMING_EVENTS = "artist_upcoming_events";
         public static final String COL_FAV_ART_TRACKED = "artist_tracked";
+    }
+
+    /* Inner class that defines the table contents of the artist-links table */
+    public static final class LinkEntry implements BaseColumns {
+
+        // Table name
+        public static final String TABLE_NAME = "links";
+        // Information of artists:
+        public static final String COLUMN_LINK_ART_ID = "artist_ID";
+        public static final String COLUMN_LINK_PROVIDER = "link_provider";
+        public static final String COLUMN_LINK_URL = "link_url";
     }
 }

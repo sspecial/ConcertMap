@@ -69,8 +69,8 @@ public class EventListFragment extends Fragment {
                     int eventID = eventCursor.getInt(Query.COL_EVENT_ID);
                     String artistsName = Utility.retrieveArtistName(eventCursor.getString(Query.COL_EVENT_NAME));
                     String startAt = eventCursor.getString(Query.COL_EVENT_START_AT);
-                    String thrillURL = eventCursor.getString(Query.COL_EVENT_THRILL_URL);
-                    String imagePath = Utility.IMAGE_DIR_EVENT + "/" + String.valueOf(eventCursor.getInt(Query.COL_EVENT_THRILL_ID));
+                    String eventTicket = eventCursor.getString(Query.COL_EVENT_TICKET);
+                    String imagePath = Utility.IMAGE_DIR_EVENT + "/" + String.valueOf(eventCursor.getInt(Query.COL_EVENT_API_ID));
                     int attended = eventCursor.getInt(Query.COL_EVENT_ATTEND);
                     String venueName = eventCursor.getString(Query.COL_VENUE_NAME);
                     String venueStreet = eventCursor.getString(Query.COL_VENUE_STREET);
@@ -82,7 +82,7 @@ public class EventListFragment extends Fragment {
                     intent.putExtra(String.valueOf(Query.COL_EVENT_ID), eventID);
                     intent.putExtra(String.valueOf(Query.COL_EVENT_NAME), artistsName);
                     intent.putExtra(String.valueOf(Query.COL_EVENT_START_AT), startAt);
-                    intent.putExtra(String.valueOf(Query.COL_EVENT_THRILL_URL), thrillURL);
+                    intent.putExtra(String.valueOf(Query.COL_EVENT_TICKET), eventTicket);
                     intent.putExtra(String.valueOf(Query.COL_EVENT_IMAGE), imagePath);
                     intent.putExtra(String.valueOf(Query.COL_EVENT_ATTEND), attended);
                     intent.putExtra(String.valueOf(Query.COL_VENUE_NAME), venueName);

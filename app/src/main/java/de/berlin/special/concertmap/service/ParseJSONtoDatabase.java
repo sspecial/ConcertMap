@@ -57,7 +57,7 @@ public class ParseJSONtoDatabase {
         db.execSQL("DELETE FROM " + EventEntry.TABLE_NAME
                 + " WHERE " + EventEntry.COLUMN_CON_ATTEND + " = " + Utility.EVENT_ATTEND_NO
                 + " AND " + EventEntry.COLUMN_CON_BELONG_TO_ARTIST + " NOT IN "
-                + "( SELECT " + FavArtistEntry.COL_FAV_ART_THRILL_ID + " FROM " + FavArtistEntry.TABLE_NAME + " );");
+                + "( SELECT " + FavArtistEntry.COL_FAV_ART_API_ID + " FROM " + FavArtistEntry.TABLE_NAME + " );");
 
         db.execSQL("DELETE FROM " + VenueEntry.TABLE_NAME
                 + " WHERE " + VenueEntry.COLUMN_VEN_CON_ID + " NOT IN "
@@ -93,7 +93,6 @@ public class ParseJSONtoDatabase {
         final String VEN_GEO_JSON_KEY = "location";
         final String VEN_GEO_LAT = "lat";
         final String VEN_GEO_LONG = "lon";
-        final String VEN_TICKET = "url";
 
         try {
 
@@ -105,7 +104,7 @@ public class ParseJSONtoDatabase {
                 int conID;
                 String conName;
                 String conStartAt;
-                String conURL;
+                String conTicket;
 
                 Hashtable<Integer, Artist> artList = new Hashtable<Integer, Artist>();
 
@@ -117,7 +116,6 @@ public class ParseJSONtoDatabase {
                 String venLocation;
                 double venGeoLat;
                 double venGeoLong;
-                String venTicket;
 
                 // Get the JSON object representing the event
                 JSONObject event = eventArray.getJSONObject(i);
@@ -125,14 +123,14 @@ public class ParseJSONtoDatabase {
                 conID = event.getInt(CON_ID);
                 conName = event.getString(CON_NAME);
                 conStartAt = event.getString(CON_START_AT);
-                conURL = event.getString(CON_URL);
+                conTicket = event.getString(CON_URL);
 
                 JSONArray artistsJSONArray = event.getJSONArray(ART_JSON_KEY);
                 for (int j = 0; j < artistsJSONArray.length(); j++) {
-                    JSONObject artistObject = artistsJSONArray.getJSONObject(j);
-                    int id = artistObject.getInt(ART_ID);
-                    String name = artistObject.getString(ART_NAME);
-                    String image = artistObject.getString(ART_IMAGE);
+                    JSONObject artistObj = artistsJSONArray.getJSONObject(j);
+                    int id = artistObj.getInt(ART_ID);
+                    String name = artistObj.getString(ART_NAME);
+                    String image = artistObj.getString(ART_IMAGE);
                     artList.put(j, new Artist(id, name, image));
                 }
 
@@ -146,15 +144,20 @@ public class ParseJSONtoDatabase {
                 JSONObject venueGeo = venueJSON.getJSONObject(VEN_GEO_JSON_KEY);
                 venGeoLat = venueGeo.getDouble(VEN_GEO_LAT);
                 venGeoLong = venueGeo.getDouble(VEN_GEO_LONG);
-                venTicket = venueJSON.getString(VEN_TICKET);
 
                 ContentValues eventValues = new ContentValues();
                 // Create a new map of values for event, where column names are the keys
                 eventValues.put(EventEntry.COLUMN_CON_API_ID, conID);
                 eventValues.put(EventEntry.COLUMN_CON_NAME, conName);
                 eventValues.put(EventEntry.COLUMN_CON_START_AT, conStartAt);
-                eventValues.put(EventEntry.COLUMN_CON_URL, conURL);
-                eventValues.put(EventEntry.COLUMN_CON_IMAGE, artList.get(0).getImage());
+                eventValues.put(EventEntry.COLUMN_CON_TICKET, conTicket);
+                for (int key : artList.keySet()) {
+                    if(!artList.get(key).getImage().equals("null")){
+                        eventValues.put(EventEntry.COLUMN_CON_IMAGE, artList.get(key).getImage());
+                        break;
+                    }
+                    eventValues.put(EventEntry.COLUMN_CON_IMAGE, "null");
+                }
                 eventValues.put(EventEntry.COLUMN_CON_ATTEND, Utility.EVENT_ATTEND_NO);
                 eventValues.put(EventEntry.COLUMN_CON_BELONG_TO_ARTIST, Utility.CON_BELONG_TO_ARTIST_DEFAULT);
 
@@ -176,7 +179,6 @@ public class ParseJSONtoDatabase {
                 locationValues.put(VenueEntry.COLUMN_VEN_LOCATION, venLocation);
                 locationValues.put(VenueEntry.COLUMN_VEN_GEO_LAT, venGeoLat);
                 locationValues.put(VenueEntry.COLUMN_VEN_GEO_LONG, venGeoLong);
-                locationValues.put(VenueEntry.COLUMN_VEN_TICKET, venTicket);
 
                 // Insert the new venue row
                 long newRowIdVenue;
