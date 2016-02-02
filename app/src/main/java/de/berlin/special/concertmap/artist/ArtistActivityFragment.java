@@ -1,15 +1,19 @@
 package de.berlin.special.concertmap.artist;
 
+import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.CursorAdapter;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +23,7 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -51,7 +56,6 @@ public class ArtistActivityFragment extends Fragment {
     private ImageView imageView;
     private CheckBox trackBtn;
     private Button webBtn;
-    private Button wikiBtn;
 
     public ArtistActivityFragment() {
     }
@@ -86,7 +90,6 @@ public class ArtistActivityFragment extends Fragment {
 
         trackBtn = (CheckBox) rootView.findViewById(R.id.button_favorite);
         webBtn = (Button) rootView.findViewById(R.id.button_official_website);
-        wikiBtn = (Button) rootView.findViewById(R.id.button_wikipedia_website);
 
         if(artistTracked == Utility.ARTIST_TRACKED_NO){
             trackBtn.setText(Utility.ARTIST_TRACKED_TEXT_NO);
@@ -207,6 +210,50 @@ public class ArtistActivityFragment extends Fragment {
                         args,
                         EventContract.FavArtistEntry._ID + "=" + artistID,
                         null);
+            }
+        });
+
+        webBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String argArtistID = "WHERE links.artist_ID = " + String.valueOf(artistID) + ";";
+                String linkQueryStr = Query.linkQueryStr + argArtistID;
+                final Cursor linksCursor = liteDatabase.rawQuery(linkQueryStr, null);
+
+                if (linksCursor.getCount() == 0) {
+
+                    Toast toast = Toast.makeText(getContext(), Utility.NO_LINK_AVAILABLE, Toast.LENGTH_SHORT);
+                    toast.show();
+
+                } else if (linksCursor.getCount() == 1) {
+
+                    linksCursor.moveToFirst();
+                    String providerURL = linksCursor.getString(Query.COL_LINK_URL);
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(providerURL));
+                    startActivity(browserIntent);
+
+                } else if (linksCursor.getCount() > 1) {
+
+                    String[] ticketArr = new String[linksCursor.getCount()];
+                    for (int k = 0; k < linksCursor.getCount(); k++) {
+                        linksCursor.moveToPosition(k);
+                        ticketArr[k] = linksCursor.getString(Query.COL_LINK_PROVIDER);
+                    }
+                    AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), android.R.style.Theme_Holo_Light_Dialog));
+                    builder.setTitle(R.string.choose_ticket_provider)
+                            .setItems(ticketArr, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    linksCursor.moveToPosition(which);
+                                    String providerURL = linksCursor.getString(Query.COL_LINK_URL);
+                                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(providerURL));
+                                    startActivity(browserIntent);
+                                }
+                            });
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                }
+
             }
         });
     }

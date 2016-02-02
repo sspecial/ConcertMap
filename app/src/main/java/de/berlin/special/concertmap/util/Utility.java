@@ -82,9 +82,10 @@ public class Utility {
 
     public static final int ARTIST_TRACKED_YES = 1;
     public static final int ARTIST_TRACKED_NO = 0;
-    public static final String ARTIST_TRACKED_TEXT_NO = "Track";
-    public static final String ARTIST_TRACKED_TEXT_YES = "Tracked!";
+    public static final String ARTIST_TRACKED_TEXT_NO = "Track Artist";
+    public static final String ARTIST_TRACKED_TEXT_YES = "Tracked Artist!";
     public static final String NO_ARTIST_PLAN = "No Further Plan!";
+    public static final String NO_LINK_AVAILABLE= "No Further Info!";
 
     private static final String IMAGE_BADE_DIR = "/sdcard/ConcertMap/";
     public static final String IMAGE_DIR_ARTIST = IMAGE_BADE_DIR + "TrackedArtists";

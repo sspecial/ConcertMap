@@ -51,4 +51,11 @@ public class Query {
     public static final int COL_ARTIST_UPCOMING_EVENTS = 5;
     public static final int COL_ARTIST_TRACKED = 6;
 
+    public static final String linkQueryStr = "SELECT links.link_provider, " +
+            "links.link_url " +
+            "FROM links ";
+    // These indices are tied to TICKETS CURSOR_COLUMNS
+    public static final int COL_LINK_PROVIDER = 0;
+    public static final int COL_LINK_URL = 1;
+
 }

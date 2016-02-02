@@ -15,6 +15,7 @@ import java.util.Hashtable;
 import de.berlin.special.concertmap.data.EventContract.ArtistEntry;
 import de.berlin.special.concertmap.data.EventContract.EventEntry;
 import de.berlin.special.concertmap.data.EventContract.FavArtistEntry;
+import de.berlin.special.concertmap.data.EventContract.LinkEntry;
 import de.berlin.special.concertmap.data.EventContract.VenueEntry;
 import de.berlin.special.concertmap.data.EventDbHelper;
 import de.berlin.special.concertmap.model.Artist;
@@ -66,6 +67,10 @@ public class ParseJSONtoDatabase {
         db.execSQL("DELETE FROM " + ArtistEntry.TABLE_NAME
                 + " WHERE " + ArtistEntry.COLUMN_ART_CON_ID + " NOT IN "
                 + "( SELECT " + EventEntry._ID + " FROM " + EventEntry.TABLE_NAME + " );");
+
+        db.execSQL("DELETE FROM " + LinkEntry.TABLE_NAME
+                + " WHERE " + LinkEntry.COLUMN_LINK_ART_ID + " NOT IN "
+                + "( SELECT " + FavArtistEntry._ID + " FROM " + FavArtistEntry.TABLE_NAME + " );");
     }
 
     public void parseData() {
