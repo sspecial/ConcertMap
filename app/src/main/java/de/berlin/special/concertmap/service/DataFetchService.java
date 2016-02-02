@@ -1,12 +1,15 @@
 package de.berlin.special.concertmap.service;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -19,6 +22,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Hashtable;
 
 import de.berlin.special.concertmap.R;
 import de.berlin.special.concertmap.artist.ArtistActivity;
@@ -274,6 +278,49 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
             Intent intent = new Intent(mContext, ArtistActivity.class);
             intent.putExtra(String.valueOf(Query.COL_ARTIST_API_ID), artistID);
             mContext.startActivity(intent);
+        }
+        // Artist search based on name
+        else if(dataFetchType == Utility.URL_ARTIST_SEARCH) {
+
+            if (!JSON.equals(Utility.ERROR_MSG)) {
+                ParseArtistSearchInfo searchInfo;
+                searchInfo = new ParseArtistSearchInfo(mContext, JSON);
+                searchInfo.parseArtistData();
+
+                final Hashtable<String, Integer> artIDList = searchInfo.getArtistIDList();
+                final String[] artNameArr = artIDList.keySet().toArray(new String[artIDList.keySet().size()]);
+
+                // When the name user is searching does not return any result
+                if (artNameArr.length == 0) {
+                    artistSearchCommentView.setVisibility(View.VISIBLE);
+                    artistSearchCommentView.setText(Utility.ERROR_NO_DATA_ARTIST);
+
+                    // When it returns only one match
+                } else if (artNameArr.length == 1) {
+                    artistSearchCommentView.setVisibility(View.INVISIBLE);
+                    new DataFetchService(mContext, artIDList.get(artNameArr[0]), Utility.URL_ARTIST_EVENTS).execute();
+
+                    // When it returns more than one match
+                } else if (artNameArr.length > 1) {
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(mContext, android.R.style.Theme_Holo_Light_Dialog));
+                    builder.setTitle(R.string.pick_the_artist)
+                            .setItems(artNameArr, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    String artistName = artNameArr[which];
+                                    artistSearchCommentView.setVisibility(View.INVISIBLE);
+                                    new DataFetchService(mContext, artIDList.get(artistName), Utility.URL_ARTIST_EVENTS).execute();
+                                }
+                            });
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                }
+
+            } else {
+                artistSearchCommentView.setVisibility(View.VISIBLE);
+                artistSearchCommentView.setText(Utility.ERROR_OBTAINING_DATA_ARTIST);
+            }
+
         }
 
     }

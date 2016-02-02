@@ -17,6 +17,7 @@ import java.util.Hashtable;
 
 import de.berlin.special.concertmap.data.EventContract;
 import de.berlin.special.concertmap.data.EventDbHelper;
+import de.berlin.special.concertmap.model.Link;
 import de.berlin.special.concertmap.util.Utility;
 
 public class ParseArtistSearchInfo {
@@ -33,46 +34,56 @@ public class ParseArtistSearchInfo {
 
     public void parseArtistData() {
 
+        final String ART_JSON_KEY = "performers";
+        final String ART_API_ID = "id";
         final String ART_NAME = "name";
-        final String ART_THRILL_ID = "id";
-        final String ART_OFFICIAL_URL = "official_url";
-        final String ART_WIKIPEDIA_URL = "wikipedia_url";
-        final String ART_THRILL_URL = "url";
-        final String ART_IMAGE_JSON_KEY = "photos";
-        final String ART_IMAGE_MOBILE = "mobile";
+        final String ART_API_URL = "url";
+        final String ART_IMAGE = "image";
+        final String ART_HAS_UPCOMING_EVENTS = "has_upcoming_events";
+
+        final String LINKS_JSON_KEY = "links";
+        final String LINK_PROVIDER = "provider";
+        final String LINK_URL = "url";
+
+        int artID;
+        String artName;
+        String artURL;
+        String artImage;
+        String artHasUpcomingEvents;
+        Hashtable<Integer, Link> links = new Hashtable<Integer, Link>();
 
         try {
 
-            JSONArray artistArray = new JSONArray(artistJsonStr);
-
-            int length = artistArray.length();
-            int artThrillID;
-            String artName;
-            String artOfficialURL;
-            String artWikipediaURL;
-            String artThrillURL;
-            String artImageMobile;
+            JSONObject mainObj = new JSONObject(artistJsonStr);
+            JSONArray artistArray = mainObj.getJSONArray(ART_JSON_KEY);
 
             for (int i = 0; i < artistArray.length(); i++) {
 
                 JSONObject artistObj = artistArray.getJSONObject(i);
 
-                artThrillID = artistObj.getInt(ART_THRILL_ID);
+                artID = artistObj.getInt(ART_API_ID);
                 artName = artistObj.getString(ART_NAME);
-                artOfficialURL = artistObj.getString(ART_OFFICIAL_URL);
-                artWikipediaURL = artistObj.getString(ART_WIKIPEDIA_URL);
-                artThrillURL = artistObj.getString(ART_THRILL_URL);
-                JSONObject photosJSONObject = artistObj.getJSONObject(ART_IMAGE_JSON_KEY);
-                artImageMobile = photosJSONObject.getString(ART_IMAGE_MOBILE);
+                artURL = artistObj.getString(ART_API_URL);
+                artImage = artistObj.getString(ART_IMAGE);
+                artHasUpcomingEvents = artistObj.getString(ART_HAS_UPCOMING_EVENTS);
+
+                JSONArray linksJSONArray = artistObj.getJSONArray(LINKS_JSON_KEY);
+                for (int j = 0; j < linksJSONArray.length(); j++) {
+                    JSONObject link = linksJSONArray.getJSONObject(j);
+                    String provider = link.getString(LINK_PROVIDER);
+                    if (!provider.equals("musicbrainz")) {
+                        String URL = link.getString(LINK_URL);
+                        links.put(j, new Link(provider, URL));
+                    }
+                }
 
                 ContentValues artistValues = new ContentValues();
                 // Create a new map of values for artist, where column names are the keys
-                artistValues.put(EventContract.FavArtistEntry.COL_FAV_ART_THRILL_ID, artThrillID);
+                artistValues.put(EventContract.FavArtistEntry.COL_FAV_ART_API_ID, artID);
                 artistValues.put(EventContract.FavArtistEntry.COL_FAV_ART_NAME, artName);
-                artistValues.put(EventContract.FavArtistEntry.COL_FAV_ART_OFFICIAL_URL, artOfficialURL);
-                artistValues.put(EventContract.FavArtistEntry.COL_FAV_ART_WIKIPEDIA_URL, artWikipediaURL);
-                artistValues.put(EventContract.FavArtistEntry.COL_FAV_ART_THRILL_URL, artThrillURL);
-                artistValues.put(EventContract.FavArtistEntry.COL_FAV_ART_IMAGE_MOBILE, artImageMobile);
+                artistValues.put(EventContract.FavArtistEntry.COL_FAV_ART_API_URL, artURL);
+                artistValues.put(EventContract.FavArtistEntry.COL_FAV_ART_IMAGE, artImage);
+                artistValues.put(EventContract.FavArtistEntry.COL_FAV_ART_UPCOMING_EVENTS, artHasUpcomingEvents);
                 artistValues.put(EventContract.FavArtistEntry.COL_FAV_ART_TRACKED, Utility.ARTIST_TRACKED_NO);
                 // Insert the new venue row
                 long newRowIdArtist;
@@ -81,7 +92,21 @@ public class ParseArtistSearchInfo {
                         null,
                         artistValues);
 
-                artList.put(artName, artThrillID);
+                for (int key : links.keySet()) {
+                    ContentValues linkValues = new ContentValues();
+                    // Create a new map of values for artist, where column names are the keys
+                    linkValues.put(EventContract.LinkEntry.COLUMN_LINK_ART_ID, newRowIdArtist);
+                    linkValues.put(EventContract.LinkEntry.COLUMN_LINK_PROVIDER, links.get(key).getProvider());
+                    linkValues.put(EventContract.LinkEntry.COLUMN_LINK_URL, links.get(key).getURL());
+                    // Insert the new venue row
+                    long newRowIdLink;
+                    newRowIdLink = liteDatabase.insert(
+                            EventContract.LinkEntry.TABLE_NAME,
+                            null,
+                            linkValues);
+                }
+
+                artList.put(artName, artID);
             }
         } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);

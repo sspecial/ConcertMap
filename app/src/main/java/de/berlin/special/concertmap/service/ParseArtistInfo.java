@@ -34,7 +34,6 @@ public class ParseArtistInfo {
     public void parseArtistData() {
 
         final String ART_JSON_KEY = "performers";
-
         final String ART_API_ID = "id";
         final String ART_NAME = "name";
         final String ART_API_URL = "url";
@@ -45,20 +44,18 @@ public class ParseArtistInfo {
         final String LINK_PROVIDER = "provider";
         final String LINK_URL = "url";
 
+        int artID;
+        String artName;
+        String artURL;
+        String artImage;
+        String artHasUpcomingEvents;
+        Hashtable<Integer, Link> links = new Hashtable<Integer, Link>();
 
         try {
 
             JSONObject mainObj = new JSONObject(artistJsonStr);
             JSONArray artistArray = mainObj.getJSONArray(ART_JSON_KEY);
             JSONObject artistObj = artistArray.getJSONObject(0);
-
-            int artID;
-            String artName;
-            String artURL;
-            String artImage;
-            String artHasUpcomingEvents;
-
-            Hashtable<Integer, Link> links = new Hashtable<Integer, Link>();
 
             artID = artistObj.getInt(ART_API_ID);
             artName = artistObj.getString(ART_NAME);

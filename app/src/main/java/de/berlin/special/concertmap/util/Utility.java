@@ -25,7 +25,6 @@ public class Utility {
     // Settings default values
     public static final double GEO_DEFAULT_LAT = 52.5194;
     public static final double GEO_DEFAULT_LONG = 13.4067;
-    public static final String EVENT_LIMIT_STR = "40";
     public static final int EVENT_LIMIT_NUMBER = 20;
 
     // Time duration

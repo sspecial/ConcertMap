@@ -32,7 +32,7 @@ public class ParseJSONtoDatabase {
 
     public ParseJSONtoDatabase(Context mContext, String json){
         // Deleting the concert.db databases
-        mContext.deleteDatabase(EventDbHelper.DATABASE_NAME);
+        // mContext.deleteDatabase(EventDbHelper.DATABASE_NAME);
 
         // If Database exist?
         File dbFile = mContext.getDatabasePath(EventDbHelper.DATABASE_NAME);

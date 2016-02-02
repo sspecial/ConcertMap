@@ -69,8 +69,8 @@ public class SettingFragment extends Fragment {
 
                         final NumberPicker np = (NumberPicker) layoutInflater.inflate(R.layout.dialog_number_picker, null);
                         np.setMaxValue(40);
-                        np.setMinValue(10);
-                        int defValue = settings.getInt(Utility.SETTING_EVENT_NUMBER, 0);
+                        np.setMinValue(5);
+                        int defValue = settings.getInt(Utility.SETTING_EVENT_NUMBER, Utility.EVENT_LIMIT_NUMBER);
                         np.setValue(defValue);
                         np.setWrapSelectorWheel(false);
 
