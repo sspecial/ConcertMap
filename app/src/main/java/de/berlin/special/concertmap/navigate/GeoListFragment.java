@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -65,7 +66,7 @@ public class GeoListFragment extends Fragment {
             // To query the database for the list of geo events
             liteDatabase = getActivity().openOrCreateDatabase(EventDbHelper.DATABASE_NAME, Context.MODE_PRIVATE, null);
             final Cursor eventCursor = liteDatabase.rawQuery(eventQueryStr, null);
-            // Log.v("Event Cursor", DatabaseUtils.dumpCursorToString(eventCursor));
+            Log.v("Event Cursor", DatabaseUtils.dumpCursorToString(eventCursor));
 
             // Find ListView to populate
             ListView todayListView = (ListView) rootView.findViewById(R.id.list_view_events);

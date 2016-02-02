@@ -1,5 +1,7 @@
 package de.berlin.special.concertmap.settings;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -18,6 +20,7 @@ import de.berlin.special.concertmap.util.Utility;
 public class CityFragment extends Fragment {
 
     private View rootView;
+    private SharedPreferences settings;
     private LinearLayout cityViewLayout;
     private LinearLayout searchCityLayout;
     private TextView locationView;
@@ -41,6 +44,7 @@ public class CityFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_city, container, false);
+        settings = getActivity().getSharedPreferences(Utility.PREFS_NAME, Context.MODE_PRIVATE);
         searchCityLayout = (LinearLayout) rootView.findViewById(R.id.search_city_layout);
         cityViewLayout = (LinearLayout) rootView.findViewById(R.id.city_view_layout);
         locationView = (TextView) rootView.findViewById(R.id.city_text_view);
@@ -76,10 +80,7 @@ public class CityFragment extends Fragment {
                     searchCityLayout.setVisibility(View.INVISIBLE);
                     commentView.setVisibility(View.INVISIBLE);
                     cityViewLayout.setVisibility(View.VISIBLE);
-                    if (!Utility.city.equals(Utility.CITY_IS_UNKNOWN))
-                        locationView.setText(Utility.lastKnownLocation);
-                    else
-                        locationView.setText(Utility.CITY_IS_UNKNOWN);
+                    locationView.setText(settings.getString(Utility.SETTING_LOCATION, Utility.CITY_IS_UNKNOWN));
 
                     // Fetching data from Thrillcall API based on Geo information
                     new DataFetchService(getActivity(), rootView, geoArr, Utility.URL_GEO_EVENTS).execute();

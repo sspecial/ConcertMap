@@ -53,8 +53,6 @@ public class Utility {
 
     public static final String CITY_NAME_NOT_VALID = "Please enter a valid city name.";
     public static final String CITY_IS_UNKNOWN = "City is Unknown!";
-    public static String city = CITY_IS_UNKNOWN;
-    public static String lastKnownLocation = CITY_IS_UNKNOWN;
 
     public static final String SEATGEEK_EVENT_BASE_URL = "https://api.seatgeek.com/2/events";
     public static final String SEATGEEK_ARTIST_BASE_URL = "https://api.seatgeek.com/2/performers";

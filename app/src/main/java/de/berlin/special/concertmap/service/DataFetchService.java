@@ -40,8 +40,6 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
     private TextView artistSearchCommentView;
     private URL url;
     private int artistID;
-    private double geoLat;
-    private double geoLong;
     // Deciding to fetch geo-events data, artist-events data, or artist-info data
     private int dataFetchType;
 
@@ -132,17 +130,6 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
             // https://api.seatgeek.com/2/events?taxonomies.name=concert&venue.city=berlin&datetime_utc.gte=2016-01-28&datetime_utc.lte=2016-01-30
             // Obtaining city parameter
             String city = settings.getString(Utility.SETTING_CITY, Utility.CITY_IS_UNKNOWN);
-
-            // Checking geo parameters
-            if (params[0] != null)
-                geoLat = params[0];
-            else
-                geoLat = (double) settings.getFloat(Utility.SETTING_GEO_LAT, (float)Utility.GEO_DEFAULT_LAT);
-
-            if (params[1] != null)
-                geoLong = params[1];
-            else
-                geoLong = (double) settings.getFloat(Utility.SETTING_GEO_LONG, (float)Utility.GEO_DEFAULT_LONG);
 
             // Checking date parameters
             if (Utility.MIN_DATE != null && Utility.MAX_DATE != null) {
@@ -263,14 +250,6 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
 
             Intent intent = new Intent(mContext, NavigationActivity.class);
             mContext.startActivity(intent);
-
-            // Adding setting to shared preferences
-            if (!Utility.city.equals(Utility.CITY_IS_UNKNOWN))
-                settings.edit().putString(Utility.SETTING_CITY, Utility.city).commit();
-            if (!Utility.lastKnownLocation.equals(Utility.CITY_IS_UNKNOWN))
-                settings.edit().putString(Utility.SETTING_LOCATION, Utility.lastKnownLocation).commit();
-            settings.edit().putFloat(Utility.SETTING_GEO_LAT, (float) geoLat).commit();
-            settings.edit().putFloat(Utility.SETTING_GEO_LONG, (float) geoLong).commit();
 
             // Finishing start activity
             ((Activity)mContext).finish();

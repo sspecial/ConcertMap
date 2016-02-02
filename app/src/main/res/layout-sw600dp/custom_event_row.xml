@@ -18,8 +18,7 @@
             android:id="@+id/list_item_imageView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            android:src="@drawable/concert2" />
+            android:scaleType="centerCrop" />
     </LinearLayout>
 
     <LinearLayout

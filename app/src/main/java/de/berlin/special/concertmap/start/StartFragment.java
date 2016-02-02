@@ -57,10 +57,7 @@ public class StartFragment extends Fragment {
 
         cityViewLayout.setVisibility(View.VISIBLE);
         dataProcessPI.setVisibility(View.VISIBLE);
-        if(!Utility.lastKnownLocation.equals(Utility.CITY_IS_UNKNOWN))
-            locationView.setText(Utility.lastKnownLocation);
-        else
-            locationView.setText(Utility.city);
+        locationView.setText(settings.getString(Utility.SETTING_LOCATION, Utility.CITY_IS_UNKNOWN));
 
         // Fetching data from Thrillcall API based on Geo information
         new DataFetchService(getActivity(), rootView, geoArr, Utility.URL_GEO_EVENTS).execute();
