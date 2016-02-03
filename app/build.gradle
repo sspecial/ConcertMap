@@ -8,7 +8,7 @@ android {
         applicationId "de.berlin.special.concertmap"
         minSdkVersion 14
         targetSdkVersion 23
-        versionCode 2
+        versionCode 1
         versionName "beta"
     }
     buildTypes {
