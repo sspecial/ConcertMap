@@ -1,6 +1,8 @@
 package de.berlin.special.concertmap.start;
 
+import android.content.Context;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -46,6 +48,7 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
     private double geo_long;
 
     private View rootView;
+    private SharedPreferences settings;
     private LinearLayout foundLayout;
     private LinearLayout notFoundLayout;
     private ProgressBar dataProcessPI;
@@ -81,7 +84,7 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_initiate, container, false);
-
+        settings = getActivity().getSharedPreferences(Utility.PREFS_NAME, Context.MODE_PRIVATE);
         dataProcessPI = (ProgressBar) rootView.findViewById(R.id.parse_data_progress);
         foundLayout = (LinearLayout) rootView.findViewById(R.id.found_layout);
         notFoundLayout = (LinearLayout) rootView.findViewById(R.id.not_found_layout);
@@ -133,10 +136,8 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
                         notFoundLayout.setVisibility(View.INVISIBLE);
                         foundLayout.setVisibility(View.VISIBLE);
                         dataProcessPI.setVisibility(View.VISIBLE);
-                        if (!Utility.city.equals(Utility.CITY_IS_UNKNOWN))
-                            locationView.setText(Utility.lastKnownLocation);
-                        else
-                            locationView.setText(Utility.CITY_IS_UNKNOWN);
+                        locationView.setText(settings.getString(Utility.SETTING_LOCATION, Utility.CITY_IS_UNKNOWN));
+
                         // Fetching data from Thrillcall API based on Geo information
                         new DataFetchService(getActivity(), rootView, geoArr, Utility.URL_GEO_EVENTS).execute();
                     } else {
@@ -154,10 +155,7 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
 
             notFoundLayout.setVisibility(View.INVISIBLE);
             foundLayout.setVisibility(View.VISIBLE);
-            if (!Utility.city.equals(Utility.CITY_IS_UNKNOWN))
-                locationView.setText(Utility.lastKnownLocation);
-            else
-                locationView.setText(Utility.CITY_IS_UNKNOWN);
+            locationView.setText(settings.getString(Utility.SETTING_LOCATION, Utility.CITY_IS_UNKNOWN));
 
             // Fetching data from Thrillcall API based on Geo information
             new DataFetchService(getActivity(), rootView, geoArr, Utility.URL_GEO_EVENTS).execute();
@@ -217,8 +215,8 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
                 else
                     countryStr = a.getAddressLine(1);
 
-                Utility.city = cityStr;
-                Utility.lastKnownLocation = String.format("%s, %s", cityStr, countryStr);
+                settings.edit().putString(Utility.SETTING_CITY, cityStr).commit();
+                settings.edit().putString(Utility.SETTING_LOCATION, String.format("%s, %s", cityStr, countryStr)).commit();
 
                 connStat = LOCATION_AVAILABLE;
 

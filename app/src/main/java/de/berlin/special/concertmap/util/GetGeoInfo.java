@@ -1,6 +1,7 @@
 package de.berlin.special.concertmap.util;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
 
@@ -12,10 +13,12 @@ import java.util.List;
 public class GetGeoInfo {
 
     private Context mContext;
+    private SharedPreferences settings;
     public Double[] geoArr = new Double[2];
 
     public GetGeoInfo(Context context) {
         mContext = context;
+        settings = mContext.getSharedPreferences(Utility.PREFS_NAME, Context.MODE_PRIVATE);
     }
 
     // Obtaining lat & long for the user entry city
@@ -44,14 +47,17 @@ public class GetGeoInfo {
                         geoArr[0] = a.getLatitude();
                         geoArr[1] = a.getLongitude();
 
-                        Utility.city = cityStr;
-                        Utility.lastKnownLocation = String.format("%s, %s", cityStr, countryStr);
+                        // Adding setting to shared preferences
+                        settings.edit().putString(Utility.SETTING_CITY, cityStr).commit();
+                        settings.edit().putString(Utility.SETTING_LOCATION, String.format("%s, %s", cityStr, countryStr)).commit();
+                        settings.edit().putFloat(Utility.SETTING_GEO_LAT, (float) a.getLatitude()).commit();
+                        settings.edit().putFloat(Utility.SETTING_GEO_LONG, (float) a.getLongitude()).commit();
                     }
                 }
 
         } catch (Exception e) {
-            Utility.city = Utility.CITY_IS_UNKNOWN;
-            Utility.lastKnownLocation = Utility.CITY_IS_UNKNOWN;
+            settings.edit().putString(Utility.SETTING_CITY, Utility.CITY_IS_UNKNOWN).commit();
+            settings.edit().putString(Utility.SETTING_LOCATION, Utility.CITY_IS_UNKNOWN).commit();
         }
         return geoArr;
     }

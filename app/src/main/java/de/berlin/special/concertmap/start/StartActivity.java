@@ -24,10 +24,9 @@ public class StartActivity extends AppCompatActivity {
 
         // Getting setting from shared preferences
         settings = this.getSharedPreferences(Utility.PREFS_NAME, Context.MODE_PRIVATE);
-        Utility.city = settings.getString(Utility.SETTING_CITY, Utility.CITY_IS_UNKNOWN);
-        Utility.lastKnownLocation = settings.getString(Utility.SETTING_LOCATION, Utility.CITY_IS_UNKNOWN);
+        String city = settings.getString(Utility.SETTING_CITY, Utility.CITY_IS_UNKNOWN);
 
-        if (Utility.city.equals(Utility.CITY_IS_UNKNOWN)) {
+        if (city.equals(Utility.CITY_IS_UNKNOWN)) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, initiateFragment)
                     .commit();

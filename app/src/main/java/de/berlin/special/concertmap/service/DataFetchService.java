@@ -271,14 +271,6 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
             Intent intent = new Intent(mContext, NavigationActivity.class);
             mContext.startActivity(intent);
 
-            // Adding setting to shared preferences
-            if (!Utility.city.equals(Utility.CITY_IS_UNKNOWN))
-                settings.edit().putString(Utility.SETTING_CITY, Utility.city).commit();
-            if (!Utility.lastKnownLocation.equals(Utility.CITY_IS_UNKNOWN))
-                settings.edit().putString(Utility.SETTING_LOCATION, Utility.lastKnownLocation).commit();
-            settings.edit().putFloat(Utility.SETTING_GEO_LAT, (float) geoLat).commit();
-            settings.edit().putFloat(Utility.SETTING_GEO_LONG, (float) geoLong).commit();
-
             // Finishing start activity
             ((Activity)mContext).finish();
 
