@@ -18,7 +18,8 @@
             android:id="@+id/list_item_imageView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="centerCrop" />
+            android:scaleType="centerCrop"
+            android:background="@color/action_bar_text_color" />
     </LinearLayout>
 
     <LinearLayout

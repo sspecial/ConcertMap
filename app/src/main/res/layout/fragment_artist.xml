@@ -18,7 +18,8 @@
             android:id="@+id/artist_mobile_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="centerCrop" />
+            android:scaleType="centerCrop"
+            android:background="@color/brown_sky" />
 
         <ImageView
             android:layout_width="25dp"

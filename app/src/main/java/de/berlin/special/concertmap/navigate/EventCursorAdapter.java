@@ -82,7 +82,6 @@ public class EventCursorAdapter extends CursorAdapter {
                 Log.e(LOG_TAG, e.getMessage());
             }
         } else {
-            imageView.setImageResource(R.drawable.concert2);
             new DownloadImageTask(imageView, imageDir, imageName)
                     .execute(cursor.getString(Query.COL_EVENT_IMAGE));
         }
