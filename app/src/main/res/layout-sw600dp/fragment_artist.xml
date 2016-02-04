@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            android:background="@color/brown_sky" />
+            android:background="@color/custom_image_background" />
 
         <ImageView
             android:layout_width="30dp"

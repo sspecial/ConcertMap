@@ -17,4 +17,5 @@
     <color name="action_bar_color">#e83673cc</color>
     <color name="action_bar_text_color">#dde0e6</color>
     <color name="edit_text_color">#291818</color>
+    <color name="custom_image_background">#ffeee2</color>
 </resources>
