@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="2dp"
             android:text="From Date"
-            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/black_cow" />
 
         <EditText
@@ -53,7 +53,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="2dp"
             android:text="To Date"
-            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/black_cow" />
 
     </LinearLayout>

@@ -14,7 +14,7 @@ public class GetGeoInfo {
 
     private Context mContext;
     private SharedPreferences settings;
-    public Double[] geoArr = new Double[2];
+    private boolean correctName = false;
 
     public GetGeoInfo(Context context) {
         mContext = context;
@@ -22,7 +22,7 @@ public class GetGeoInfo {
     }
 
     // Obtaining lat & long for the user entry city
-    public Double[] getGeoInfoFromCityName(String city){
+    public boolean getGeoInfoFromCityName(String city){
 
         try {
             Geocoder gc = new Geocoder(mContext);
@@ -31,6 +31,7 @@ public class GetGeoInfo {
 
                 for (Address a : addresses) {
                     if (a.hasLatitude() && a.hasLongitude()) {
+                        correctName = true;
 
                         String cityStr;
                         if (a.getLocality() != null)
@@ -44,9 +45,6 @@ public class GetGeoInfo {
                         else
                             countryStr = a.getAddressLine(1);
 
-                        geoArr[0] = a.getLatitude();
-                        geoArr[1] = a.getLongitude();
-
                         // Adding setting to shared preferences
                         settings.edit().putString(Utility.SETTING_CITY, cityStr).commit();
                         settings.edit().putString(Utility.SETTING_LOCATION, String.format("%s, %s", cityStr, countryStr)).commit();
@@ -59,6 +57,6 @@ public class GetGeoInfo {
             settings.edit().putString(Utility.SETTING_CITY, Utility.CITY_IS_UNKNOWN).commit();
             settings.edit().putString(Utility.SETTING_LOCATION, Utility.CITY_IS_UNKNOWN).commit();
         }
-        return geoArr;
+        return correctName;
     }
 }

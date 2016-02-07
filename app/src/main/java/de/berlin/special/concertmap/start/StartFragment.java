@@ -50,17 +50,13 @@ public class StartFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        // Retrieving Geo information of last know location from shared preferences
-        double geoLat = (double)settings.getFloat(Utility.SETTING_GEO_LAT, (float)Utility.GEO_DEFAULT_LAT);
-        double geoLong = (double)settings.getFloat(Utility.SETTING_GEO_LONG, (float)Utility.GEO_DEFAULT_LONG);
-        Double[] geoArr = new Double[]{geoLat, geoLong};
 
         cityViewLayout.setVisibility(View.VISIBLE);
         dataProcessPI.setVisibility(View.VISIBLE);
         locationView.setText(settings.getString(Utility.SETTING_LOCATION, Utility.CITY_IS_UNKNOWN));
 
         // Fetching data from Thrillcall API based on Geo information
-        new DataFetchService(getActivity(), rootView, geoArr, Utility.URL_GEO_EVENTS).execute();
+        new DataFetchService(getActivity(), rootView, Utility.URL_GEO_EVENTS).execute();
 
     }
 

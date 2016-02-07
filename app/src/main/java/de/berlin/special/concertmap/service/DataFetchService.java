@@ -50,12 +50,12 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
     private int dataFetchType;
 
     // Constructor - Geo events
-    public DataFetchService(Context context, View view, Double[] geoParams, int fetchType){
+    public DataFetchService(Context context, View view, int fetchType){
         mContext = context;
         settings = mContext.getSharedPreferences(Utility.PREFS_NAME, Context.MODE_PRIVATE);
         dataFetchType = fetchType;
         dataProcessPI = (ProgressBar) view.findViewById(R.id.parse_data_progress);
-        buildGeoEventsURL(geoParams);
+        buildGeoEventsURL();
     }
 
     // Constructor - Artist Info & Events
@@ -134,20 +134,13 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
     }
 
     // build geo events URL
-    public void buildGeoEventsURL(Double[] params) {
+    public void buildGeoEventsURL() {
 
         try {
 
             // Checking geo parameters
-            if (params[0] != null)
-                geoLat = params[0];
-            else
-                geoLat = (double) settings.getFloat(Utility.SETTING_GEO_LAT, (float)Utility.GEO_DEFAULT_LAT);
-
-            if (params[1] != null)
-                geoLong = params[1];
-            else
-                geoLong = (double) settings.getFloat(Utility.SETTING_GEO_LONG, (float)Utility.GEO_DEFAULT_LONG);
+            geoLat = (double) settings.getFloat(Utility.SETTING_GEO_LAT, (float)Utility.GEO_DEFAULT_LAT);
+            geoLong = (double) settings.getFloat(Utility.SETTING_GEO_LONG, (float)Utility.GEO_DEFAULT_LONG);
 
             // Checking date parameters
             if (Utility.MIN_DATE != null && Utility.MAX_DATE != null) {

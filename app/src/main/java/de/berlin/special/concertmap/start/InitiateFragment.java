@@ -128,10 +128,10 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
                     if (entry.lastIndexOf(" ") == (entry.length()-1))
                         entry = entry.substring(0, entry.length()-1);
 
-                    Double[] geoArr = getGeoInfo.getGeoInfoFromCityName(entry);
+                    boolean correctName = getGeoInfo.getGeoInfoFromCityName(entry);
 
                     // To see if the user entry is a valid city name
-                    if (geoArr[0] != null && geoArr[1] != null) {
+                    if (correctName) {
 
                         notFoundLayout.setVisibility(View.INVISIBLE);
                         foundLayout.setVisibility(View.VISIBLE);
@@ -139,7 +139,7 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
                         locationView.setText(settings.getString(Utility.SETTING_LOCATION, Utility.CITY_IS_UNKNOWN));
 
                         // Fetching data from Thrillcall API based on Geo information
-                        new DataFetchService(getActivity(), rootView, geoArr, Utility.URL_GEO_EVENTS).execute();
+                        new DataFetchService(getActivity(), rootView, Utility.URL_GEO_EVENTS).execute();
                     } else {
                         commentView.setText(Utility.CITY_NAME_NOT_VALID);
                     }
@@ -148,17 +148,12 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
         // When location is available!
         } else if (connStat == LOCATION_AVAILABLE) {
 
-            // Latitude & Longitude
-            geo_lat = mLastLocation.getLatitude();
-            geo_long = mLastLocation.getLongitude();
-            Double[] geoArr = new Double[]{geo_lat, geo_long};
-
             notFoundLayout.setVisibility(View.INVISIBLE);
             foundLayout.setVisibility(View.VISIBLE);
             locationView.setText(settings.getString(Utility.SETTING_LOCATION, Utility.CITY_IS_UNKNOWN));
 
             // Fetching data from Thrillcall API based on Geo information
-            new DataFetchService(getActivity(), rootView, geoArr, Utility.URL_GEO_EVENTS).execute();
+            new DataFetchService(getActivity(), rootView, Utility.URL_GEO_EVENTS).execute();
         }
     }
 
@@ -217,6 +212,8 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
 
                 settings.edit().putString(Utility.SETTING_CITY, cityStr).commit();
                 settings.edit().putString(Utility.SETTING_LOCATION, String.format("%s, %s", cityStr, countryStr)).commit();
+                settings.edit().putFloat(Utility.SETTING_GEO_LAT, (float) a.getLatitude()).commit();
+                settings.edit().putFloat(Utility.SETTING_GEO_LONG, (float) a.getLongitude()).commit();
 
                 connStat = LOCATION_AVAILABLE;
 

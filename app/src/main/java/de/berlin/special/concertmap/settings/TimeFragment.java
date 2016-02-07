@@ -140,8 +140,7 @@ public class TimeFragment extends Fragment {
                 progressBar.setVisibility(View.VISIBLE);
 
                 // Fetching data from Thrillcall API based on Geo information
-                Double[] geoArr = new Double[2];
-                new DataFetchService(getActivity(), rootView, geoArr, Utility.URL_GEO_EVENTS).execute();
+                new DataFetchService(getActivity(), rootView, Utility.URL_GEO_EVENTS).execute();
             }
         });
     }

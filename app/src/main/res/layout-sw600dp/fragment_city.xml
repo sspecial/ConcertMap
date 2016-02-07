@@ -68,7 +68,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="2dp"
             android:text="City"
-            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/black_cow" />
 
         <EditText
@@ -88,7 +88,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="2dp"
             android:text="Country (Optional)"
-            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/black_cow" />
 
         <ImageButton

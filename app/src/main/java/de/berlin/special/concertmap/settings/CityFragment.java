@@ -72,10 +72,10 @@ public class CityFragment extends Fragment {
 
                 String entry = city + " " + country;
 
-                Double[] geoArr = getGeoInfo.getGeoInfoFromCityName(entry);
+                boolean correctName = getGeoInfo.getGeoInfoFromCityName(entry);
 
                 // To see if the user entry is a valid city name
-                if (geoArr[0] != null && geoArr[1] != null) {
+                if (correctName) {
 
                     searchCityLayout.setVisibility(View.INVISIBLE);
                     commentView.setVisibility(View.INVISIBLE);
@@ -83,7 +83,7 @@ public class CityFragment extends Fragment {
                     locationView.setText(settings.getString(Utility.SETTING_LOCATION, Utility.CITY_IS_UNKNOWN));
 
                     // Fetching data from Thrillcall API based on Geo information
-                    new DataFetchService(getActivity(), rootView, geoArr, Utility.URL_GEO_EVENTS).execute();
+                    new DataFetchService(getActivity(), rootView, Utility.URL_GEO_EVENTS).execute();
                 } else {
                     commentView.setText(Utility.CITY_NAME_NOT_VALID);
                 }
