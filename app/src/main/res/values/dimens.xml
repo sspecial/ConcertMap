@@ -14,6 +14,9 @@
     <dimen name="mobile_empty">18dp</dimen>
     <dimen name="mobile_artist_empty">17dp</dimen>
     <dimen name="mobile_navigate">17dp</dimen>
+    <dimen name="mobile_label">14dp</dimen>
+    <dimen name="mobile_entry">17dp</dimen>
+    <dimen name="mobile_result">18dp</dimen>
 
     <dimen name="tablet_title">19dp</dimen>
     <dimen name="tablet_address">17dp</dimen>
@@ -22,5 +25,8 @@
     <dimen name="tablet_empty">21dp</dimen>
     <dimen name="tablet_artist_empty">20dp</dimen>
     <dimen name="tablet_navigate">19dp</dimen>
+    <dimen name="tablet_label">17dp</dimen>
+    <dimen name="tablet_entry">20dp</dimen>
+    <dimen name="tablet_result">21dp</dimen>
 
 </resources>

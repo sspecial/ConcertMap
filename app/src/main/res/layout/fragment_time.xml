@@ -25,7 +25,7 @@
             android:lines="1"
             android:singleLine="true"
             android:textColor="@color/black"
-            android:textSize="17dp"
+            android:textSize="@dimen/mobile_entry"
             android:theme="@android:style/Theme.DeviceDefault" />
 
         <TextView
@@ -33,8 +33,8 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="2dp"
             android:text="From Date"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/black_cow" />
+            android:textColor="@color/black_cow"
+            android:textSize="@dimen/mobile_label" />
 
         <EditText
             android:id="@+id/to_date_edit_text"
@@ -45,7 +45,7 @@
             android:lines="1"
             android:singleLine="true"
             android:textColor="@color/black"
-            android:textSize="17dp"
+            android:textSize="@dimen/mobile_entry"
             android:theme="@android:style/Theme.DeviceDefault" />
 
         <TextView
@@ -53,8 +53,8 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="2dp"
             android:text="To Date"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/black_cow" />
+            android:textColor="@color/black_cow"
+            android:textSize="@dimen/mobile_label" />
 
     </LinearLayout>
 
