@@ -40,14 +40,16 @@ public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
     }
 
     protected void onPostExecute(Bitmap imageToSave) {
-        imageView.setImageBitmap(imageToSave);
 
         File file = new File(imageDir, imageName);
         try {
-            FileOutputStream out = new FileOutputStream(file);
-            imageToSave.compress(Bitmap.CompressFormat.JPEG, 100, out);
-            out.flush();
-            out.close();
+            if (imageToSave != null) {
+                imageView.setImageBitmap(imageToSave);
+                FileOutputStream out = new FileOutputStream(file);
+                imageToSave.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                out.flush();
+                out.close();
+            }
         } catch (Exception e) {
             Log.e(LOG_TAG, "Error writing the image file to sdcard");
             Log.e(LOG_TAG, e.getMessage());

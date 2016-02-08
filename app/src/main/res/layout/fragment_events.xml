@@ -7,8 +7,7 @@
     <ListView
         android:id="@+id/list_view_events"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:dividerHeight="2dp" />
+        android:layout_height="fill_parent" />
 
     <LinearLayout
         android:id="@+id/emptyLayout"

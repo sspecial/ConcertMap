@@ -23,7 +23,7 @@
          the container. -->
     <ListView
         android:id="@+id/drawer_list"
-        android:layout_width="290dp"
+        android:layout_width="@dimen/tablet_navigation_drawer_width"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:background="@color/brown_sky"

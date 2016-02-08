@@ -24,7 +24,7 @@
          the container. -->
     <ListView
         android:id="@+id/drawer_list"
-        android:layout_width="@dimen/navigation_drawer_width"
+        android:layout_width="@dimen/mobile_navigation_drawer_width"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:choiceMode="singleChoice"

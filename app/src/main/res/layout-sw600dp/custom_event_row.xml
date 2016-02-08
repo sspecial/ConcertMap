@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="110dp"
+    android:layout_height="115dp"
     android:background="@color/blue_sky"
     android:gravity="center_vertical"
     android:minHeight="?android:attr/listPreferredItemHeight"
@@ -10,6 +10,8 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:layout_marginBottom="1dp"
+        android:layout_marginTop="1dp"
         android:layout_weight="1"
         android:gravity="center_horizontal"
         android:orientation="vertical">
@@ -19,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            android:background="@color/custom_image_background" />
+            android:background="@color/grey_700" />
     </LinearLayout>
 
     <LinearLayout
@@ -38,7 +40,7 @@
             android:ellipsize="end"
             android:singleLine="true"
             android:textColor="@color/blue"
-            android:textSize="20dp" />
+            android:textSize="22dp" />
 
         <TextView
             android:id="@+id/list_item_address_textview"
@@ -48,7 +50,7 @@
             android:ellipsize="end"
             android:singleLine="true"
             android:textColor="@color/black_cow"
-            android:textSize="@dimen/tablet_address" />
+            android:textSize="18dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -69,7 +71,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="9dp"
-                android:textSize="@dimen/tablet_time"
+                android:textSize="16dp"
                 android:textColor="@color/black_cow" />
 
             <ImageView
@@ -83,7 +85,7 @@
                 android:id="@+id/list_item_time_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/tablet_time"
+                android:textSize="16dp"
                 android:textColor="@color/black_cow" />
         </LinearLayout>
 

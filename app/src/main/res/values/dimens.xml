@@ -5,7 +5,8 @@
     <dimen name="fragment_margin">8dp</dimen>
     <!-- Per the design guidelines, navigation drawers should be between 240dp and 320dp:
          https://developer.android.com/design/patterns/navigation-drawer.html -->
-    <dimen name="navigation_drawer_width">265dp</dimen>
+    <dimen name="mobile_navigation_drawer_width">265dp</dimen>
+    <dimen name="tablet_navigation_drawer_width">300dp</dimen>
 
     <dimen name="mobile_title">16dp</dimen>
     <dimen name="mobile_address">14dp</dimen>
@@ -24,9 +25,9 @@
     <dimen name="tablet_comment">19dp</dimen>
     <dimen name="tablet_empty">21dp</dimen>
     <dimen name="tablet_artist_empty">20dp</dimen>
-    <dimen name="tablet_navigate">19dp</dimen>
+    <dimen name="tablet_navigate">20dp</dimen>
     <dimen name="tablet_label">17dp</dimen>
-    <dimen name="tablet_entry">20dp</dimen>
+    <dimen name="tablet_entry">19dp</dimen>
     <dimen name="tablet_result">21dp</dimen>
 
 </resources>
