@@ -35,8 +35,8 @@
 
     <ImageButton
         android:id="@+id/artist_search_button"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
+        android:layout_width="80dp"
+        android:layout_height="45dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
         android:background="@drawable/mytheme_btn"

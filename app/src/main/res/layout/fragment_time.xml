@@ -60,8 +60,8 @@
 
     <ImageButton
         android:id="@+id/set_date_button"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
+        android:layout_width="80dp"
+        android:layout_height="45dp"
         android:layout_below="@+id/set_date_layout"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
