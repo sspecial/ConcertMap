@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
@@ -63,6 +63,7 @@ public class NavigationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
+        actionBar = getSupportActionBar();
 
         // To not have multiple instances of Navigation Activity
         if (Utility.formerNavigateActivity != null){
@@ -76,6 +77,8 @@ public class NavigationActivity extends AppCompatActivity {
         else
             navItem1 = settings.getString(Utility.SETTING_CITY, Utility.CITY_IS_UNKNOWN) + " Concerts";
         eventNavItems = new String[]{navItem1, navItem2, navItem3, navItem4, navItem5, navItem6};
+        // Setting title
+        setTitle(navItem1);
 
         // Initiating GeoFragment as default view of activity
         manager = getSupportFragmentManager();
@@ -85,7 +88,6 @@ public class NavigationActivity extends AppCompatActivity {
                     .commit();
         }
 
-        actionBar = getSupportActionBar();
         myAdapter = new NavigateAdapter(this, eventNavItems);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.drawer_list);
@@ -176,7 +178,7 @@ public class NavigationActivity extends AppCompatActivity {
                     .replace(R.id.content_frame, geoListFragment)
                     .addToBackStack(null)
                     .commit();
-            this.setTitle("Concert Map");
+            setTitle(mTitle);
         }
     }
 
@@ -190,7 +192,6 @@ public class NavigationActivity extends AppCompatActivity {
         mDrawerToggle = new ActionBarDrawerToggle(
                 this,                      /* host Activity */
                 mDrawerLayout,             /* DrawerLayout object */
-                R.drawable.ic_drawer,      /* nav drawer image to replace 'Up' caret */
                 R.string.navigation_drawer_open,  /* "open drawer" description for accessibility */
                 R.string.navigation_drawer_close  /* "close drawer" description for accessibility */
         ) {
