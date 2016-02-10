@@ -38,8 +38,8 @@ public class NavigationActivity extends AppCompatActivity {
     // Navigation bar items
     private SharedPreferences settings;
     private String navItem1;
-    private final String navItem2 = "Tracked Artists";
-    private final String navItem3 = "Attended Events";
+    private final String navItem2 = "My Artists";
+    private final String navItem3 = "My Events";
     private final String navItem4 = "Search an Artist";
     private final String navItem5 = "Settings";
     private final String navItem6 = "Exit";

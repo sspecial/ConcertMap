@@ -3,7 +3,6 @@ package de.berlin.special.concertmap.navigate;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.CursorAdapter;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,8 +15,8 @@ import java.io.File;
 import java.io.FileInputStream;
 
 import de.berlin.special.concertmap.R;
-import de.berlin.special.concertmap.util.Utility;
 import de.berlin.special.concertmap.data.Query;
+import de.berlin.special.concertmap.util.Utility;
 
 /**
  * Created by Saeed on 21-Nov-15.
@@ -59,15 +58,6 @@ public class EventCursorAdapter extends CursorAdapter {
         dayView = (TextView) view.findViewById(R.id.list_item_day_textview);
         timeView = (TextView) view.findViewById(R.id.list_item_time_textview);
 
-        // Setting the background and text color based on fragment type
-        if (fragType.equals(Utility.FRAG_EL_GEO)) {
-            view.setBackgroundColor(ContextCompat.getColor(context, R.color.blue_sky));
-            nameView.setTextColor(ContextCompat.getColor(context, R.color.blue));
-        } else {
-            view.setBackgroundColor(ContextCompat.getColor(context, R.color.orange_sky));
-            nameView.setTextColor(ContextCompat.getColor(context, R.color.orange));
-        }
-
         // Event image
         String imageName = String.valueOf(cursor.getInt(Query.COL_EVENT_THRILL_ID));
         // Let's see if it is necessary to download the image file
@@ -82,7 +72,7 @@ public class EventCursorAdapter extends CursorAdapter {
                 Log.e(LOG_TAG, e.getMessage());
             }
         } else {
-            imageView.setImageResource(R.drawable.concert2);
+            imageView.setImageResource(R.drawable.bigstock2);
             new DownloadImageTask(imageView, imageDir, imageName)
                     .execute(cursor.getString(Query.COL_EVENT_IMAGE));
         }

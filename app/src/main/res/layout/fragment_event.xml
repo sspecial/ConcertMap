@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            android:background="@color/brown_sky" />
+            android:background="@color/blue_sky" />
 
         <ImageView
             android:layout_width="25dp"
@@ -36,11 +36,11 @@
     <LinearLayout
         android:id="@+id/linear_event_buttons"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="35dp">
 
         <CheckBox
             android:id="@+id/button_attend"
-            style="@android:style/Widget.Holo.Light.Button"
+            style="@android:style/Widget.Holo.Light.CompoundButton.CheckBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1.1"
@@ -55,7 +55,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/mytheme_btn"
-            android:text="Artist(s)"
+            android:text="Artist"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/black_brown" />
 

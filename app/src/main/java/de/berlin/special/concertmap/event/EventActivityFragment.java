@@ -111,6 +111,7 @@ public class EventActivityFragment extends Fragment {
         map = mapFragment.getMap();
 
         // Populating UI elements with event info
+        imageView.setImageResource(R.drawable.bigstock2);
         File file = new File(imagePath);
         if (file.exists()) {
             try {

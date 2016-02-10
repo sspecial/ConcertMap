@@ -6,8 +6,6 @@
     <color name="black">#000000</color>
     <color name="black_cow">#4C4646</color>
     <color name="black_brown">#3b3737</color>
-    <color name="light_coral">#fdefa7a5</color>
-    <color name="brown">#C7B097</color>
     <color name="brown_sky">#fef8ef</color>
     <color name="blue">#2195f4</color>
     <color name="blue_sky">#46e1fcff</color>
@@ -17,4 +15,5 @@
     <color name="action_bar_color">#e83673cc</color>
     <color name="action_bar_text_color">#dde0e6</color>
     <color name="edit_text_color">#291818</color>
+    <color name="event_list_background">#92e7e7e7</color>
 </resources>
