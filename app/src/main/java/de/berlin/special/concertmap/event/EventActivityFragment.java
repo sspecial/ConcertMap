@@ -119,7 +119,6 @@ public class EventActivityFragment extends Fragment {
         map = mapFragment.getMap();
 
         // Populating UI elements with event info
-        imageView.setImageResource(R.drawable.bigstock2);
         File file = new File(imagePath);
         if (file.exists()) {
             try {
@@ -130,6 +129,8 @@ public class EventActivityFragment extends Fragment {
                 Log.e(LOG_TAG, "Error reading the image from file");
                 Log.e(LOG_TAG, e.getMessage());
             }
+        } else {
+            imageView.setImageResource(R.drawable.bigstock2);
         }
 
         venueNameView.setText(venueName);

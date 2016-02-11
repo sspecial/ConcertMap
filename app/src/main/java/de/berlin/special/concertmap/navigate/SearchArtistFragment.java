@@ -46,12 +46,14 @@ public class SearchArtistFragment extends Fragment {
             public void onClick(View view) {
 
                 String entry = entryView.getText().toString();
-                entry = entry.replaceAll(" ", "+");
+                if (!entry.equals("")) {
+                    entry = entry.replaceAll(" ", "+");
 
-                if (entry.lastIndexOf("+") == (entry.length()-1))
-                    entry = entry.substring(0, entry.length()-1);
+                    if (entry.lastIndexOf("+") == (entry.length() - 1))
+                        entry = entry.substring(0, entry.length() - 1);
 
-                new DataFetchService(getContext(), rootView, entry, Utility.URL_ARTIST_SEARCH).execute();
+                    new DataFetchService(getContext(), rootView, entry, Utility.URL_ARTIST_SEARCH).execute();
+                }
             }
         });
     }
