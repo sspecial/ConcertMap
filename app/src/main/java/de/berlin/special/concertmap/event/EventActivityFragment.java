@@ -11,9 +11,14 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -33,11 +38,11 @@ import java.io.File;
 import java.io.FileInputStream;
 
 import de.berlin.special.concertmap.R;
-import de.berlin.special.concertmap.data.EventDbHelper;
-import de.berlin.special.concertmap.util.Utility;
 import de.berlin.special.concertmap.data.EventContract.EventEntry;
+import de.berlin.special.concertmap.data.EventDbHelper;
 import de.berlin.special.concertmap.data.Query;
 import de.berlin.special.concertmap.service.DataFetchService;
+import de.berlin.special.concertmap.util.Utility;
 
 /**
  * A placeholder fragment containing a event view.
@@ -47,6 +52,8 @@ public class EventActivityFragment extends Fragment {
     private View rootView;
     private SQLiteDatabase liteDatabase;
     private final String LOG_TAG = EventActivityFragment.class.getSimpleName();
+
+    private ShareActionProvider mShareActionProvider;
 
     private int eventID;
     private String imagePath;
@@ -70,6 +77,7 @@ public class EventActivityFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
 
         eventID = getArguments().getInt(String.valueOf(Query.COL_EVENT_ID), -1);
         eventStartAt = getArguments().getString(String.valueOf(Query.COL_EVENT_START_AT), "START_AT");
@@ -129,6 +137,7 @@ public class EventActivityFragment extends Fragment {
         String[] dateArr = Utility.retrieveDateAndTime(eventStartAt);
         dayView.setText(dateArr[0]);
         timeView.setText(dateArr[1]);
+
         return rootView;
     }
 
@@ -142,6 +151,30 @@ public class EventActivityFragment extends Fragment {
         map.addMarker(new MarkerOptions()
                 .title(venueName)
                 .position(eventGeo));
+    }
+
+    private Intent createShareIntent(){
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, getActivity().getTitle());
+        shareIntent.putExtra(Intent.EXTRA_TEXT, Uri.parse(eventThrillURL).toString());
+        return shareIntent;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate menu resource file.
+        inflater.inflate(R.menu.event, menu);
+
+        // Locate MenuItem with ShareActionProvider
+        MenuItem item = menu.findItem(R.id.menu_item_share);
+        // Fetch and store ShareActionProvider
+        mShareActionProvider = new ShareActionProvider(getContext());
+        if (mShareActionProvider != null) {
+            mShareActionProvider.setShareIntent(createShareIntent());
+        }
+        MenuItemCompat.setActionProvider(item, mShareActionProvider);
     }
 
     @Override

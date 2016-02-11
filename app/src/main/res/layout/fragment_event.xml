@@ -22,8 +22,8 @@
             android:background="@color/blue_sky" />
 
         <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="23dp"
+            android:layout_height="23dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
