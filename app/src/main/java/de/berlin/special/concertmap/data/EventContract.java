@@ -32,17 +32,6 @@ public class EventContract {
         public static final String COLUMN_ART_NAME = "artist_name";
     }
 
-    /* Inner class that defines the table contents of the artist table */
-    public static final class TicketEntry implements BaseColumns {
-
-        // Table name
-        public static final String TABLE_NAME = "tickets";
-        // Information of artists:
-        public static final String COLUMN_TICKET_CON_ID = "event_ID";
-        public static final String COLUMN_TICKET_NAME = "ticket_name";
-        public static final String COLUMN_TICKET_URL = "ticket_url";
-    }
-
     /* Inner class that defines the table contents of the location table */
     public static final class VenueEntry implements BaseColumns {
 

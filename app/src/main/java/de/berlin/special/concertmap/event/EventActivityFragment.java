@@ -26,7 +26,6 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -182,14 +181,6 @@ public class EventActivityFragment extends Fragment {
     public void onResume(){
         super.onResume();
 
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(eventThrillURL));
-                startActivity(browserIntent);
-            }
-        });
-
         attendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -250,43 +241,8 @@ public class EventActivityFragment extends Fragment {
         ticketBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                String argEventID = "WHERE tickets.event_ID = " + String.valueOf(eventID) + ";";
-                String ticketQueryStr = Query.ticketQueryStr + argEventID;
-                final Cursor ticketsCursor = liteDatabase.rawQuery(ticketQueryStr, null);
-
-                if (ticketsCursor.getCount() == 0) {
-
-                    Toast toast = Toast.makeText(getContext(), Utility.NO_TICKET_PROVIDER, Toast.LENGTH_SHORT);
-                    toast.show();
-
-                } else if (ticketsCursor.getCount() == 1) {
-
-                    ticketsCursor.moveToFirst();
-                    String providerURL = ticketsCursor.getString(Query.COL_TICKET_URL);
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(providerURL));
-                    startActivity(browserIntent);
-
-                } else if (ticketsCursor.getCount() > 1) {
-
-                    String[] ticketArr = new String[ticketsCursor.getCount()];
-                    for (int j = 0; j < ticketsCursor.getCount(); j++) {
-                        ticketsCursor.moveToPosition(j);
-                        ticketArr[j] = ticketsCursor.getString(Query.COL_TICKET_NAME);
-                    }
-                    AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), android.R.style.Theme_Holo_Light_Dialog));
-                    builder.setTitle(R.string.choose_ticket_provider)
-                            .setItems(ticketArr, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    ticketsCursor.moveToPosition(which);
-                                    String providerURL = ticketsCursor.getString(Query.COL_TICKET_URL);
-                                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(providerURL));
-                                    startActivity(browserIntent);
-                                }
-                            });
-                    AlertDialog alert = builder.create();
-                    alert.show();
-                }
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(eventThrillURL));
+                startActivity(browserIntent);
 
             }
         });

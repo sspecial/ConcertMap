@@ -50,11 +50,4 @@ public class Query {
     public static final int COL_ARTIST_IMAGE_MOBILE = 6;
     public static final int COL_ARTIST_TRACKED = 7;
 
-    public static final String ticketQueryStr = "SELECT tickets._ID, " +
-            "tickets.ticket_name, tickets.ticket_url " +
-            "FROM tickets ";
-    // These indices are tied to TICKETS CURSOR_COLUMNS
-    public static final int COL_TICKET_ID = 0;
-    public static final int COL_TICKET_NAME = 1;
-    public static final int COL_TICKET_URL = 2;
 }
