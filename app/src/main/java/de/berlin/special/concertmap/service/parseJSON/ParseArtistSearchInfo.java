@@ -1,4 +1,4 @@
-package de.berlin.special.concertmap.service;
+package de.berlin.special.concertmap.service.parseJSON;
 
 /**
  * Created by Saeed on 28-Nov-15.

@@ -54,6 +54,7 @@ public class Utility {
     public static final String CITY_NAME_NOT_VALID = "Please enter a valid city name.";
     public static final String CITY_IS_UNKNOWN = "City is Unknown!";
 
+    public static final String URL = "url";
     public static final String THRILLCALL_API_KEY = "d90d066add515bff";
     public static final String THRILLCALL_GEO_BASE_URL = "https://api.thrillcall.com/api/v3/events";
     public static final String THRILLCALL_ARTIST_BASE_URL = "https://api.thrillcall.com/api/v3/artist/";

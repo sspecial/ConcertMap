@@ -1,14 +1,20 @@
 package de.berlin.special.concertmap.start;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
 import java.io.File;
+import java.net.URL;
 
 import de.berlin.special.concertmap.R;
+import de.berlin.special.concertmap.service.FetchIntentService;
+import de.berlin.special.concertmap.util.BuildURL;
 import de.berlin.special.concertmap.util.Utility;
 
 public class StartActivity extends AppCompatActivity {
@@ -83,6 +89,26 @@ public class StartActivity extends AppCompatActivity {
         if (!todayDir.exists()) {
             todayDir.mkdirs();
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        BuildURL.instance().init(getApplicationContext());
+        URL url = BuildURL.instance().buildGeoEventsURL();
+        Context mContext = getApplicationContext();
+
+        Intent alarmIntent = new Intent(mContext, FetchIntentService.AlarmReceiver.class);
+        alarmIntent.putExtra(Utility.URL, url.toString());
+
+        //Wrap in a pending intent which only fires once.
+        PendingIntent pi = PendingIntent.getBroadcast(mContext, 0, alarmIntent, PendingIntent.FLAG_ONE_SHOT);//getBroadcast(context, 0, i, 0);
+
+        AlarmManager am = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
+
+        //Set the AlarmManager to wake up the system.
+        am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), pi);
     }
 
     @Override

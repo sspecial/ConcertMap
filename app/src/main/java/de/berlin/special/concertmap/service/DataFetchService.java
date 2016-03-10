@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
@@ -20,14 +19,17 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Hashtable;
 
 import de.berlin.special.concertmap.R;
 import de.berlin.special.concertmap.artist.ArtistActivity;
 import de.berlin.special.concertmap.data.Query;
 import de.berlin.special.concertmap.navigate.NavigationActivity;
+import de.berlin.special.concertmap.service.parseJSON.ParseArtistEventsInfo;
+import de.berlin.special.concertmap.service.parseJSON.ParseArtistInfo;
+import de.berlin.special.concertmap.service.parseJSON.ParseArtistSearchInfo;
+import de.berlin.special.concertmap.service.parseJSON.ParseJSONtoDatabase;
+import de.berlin.special.concertmap.util.BuildURL;
 import de.berlin.special.concertmap.util.Utility;
 
 /**
@@ -40,22 +42,20 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
 
     private SharedPreferences settings;
     private Context mContext;
-    private ProgressBar dataProcessPI;
-    private TextView artistSearchCommentView;
+    private View mView;
     private URL url;
     private int artistID;
-    private double geoLat;
-    private double geoLong;
+
     // Deciding to fetch geo-events data, artist-events data, or artist-info data
     private int dataFetchType;
 
     // Constructor - Geo events
     public DataFetchService(Context context, View view, int fetchType){
         mContext = context;
+        mView = view;
         settings = mContext.getSharedPreferences(Utility.PREFS_NAME, Context.MODE_PRIVATE);
         dataFetchType = fetchType;
-        dataProcessPI = (ProgressBar) view.findViewById(R.id.parse_data_progress);
-        buildGeoEventsURL();
+        url = BuildURL.instance().buildGeoEventsURL();
     }
 
     // Constructor - Artist Info & Events
@@ -66,115 +66,18 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
         this.artistID = artistID;
 
         if(dataFetchType == Utility.URL_ARTIST_EVENTS)
-            buildArtistEventsURL(artistID);
+            url = BuildURL.instance().buildArtistEventsURL(artistID);
         else if(dataFetchType == Utility.URL_ARTIST_INFO)
-            buildArtistInfoURL(artistID);
+            url = BuildURL.instance().buildArtistInfoURL(artistID);
     }
 
     // Constructor - Artist search
     public DataFetchService(Context context, View view, String artistName, int fetchType){
         mContext = context;
+        mView = view;
         settings = mContext.getSharedPreferences(Utility.PREFS_NAME, Context.MODE_PRIVATE);
         dataFetchType = fetchType;
-        artistSearchCommentView = (TextView) view.findViewById(R.id.artist_comment_view);
-        buildArtistSearchURL(artistName);
-    }
-
-    // build artist info URL
-    public void buildArtistInfoURL(int artistID) {
-        try {
-            // Construct the URL for the api.thrillcall query
-            final String artistURL = Utility.THRILLCALL_ARTIST_BASE_URL + String.valueOf(artistID);
-            final String KEY_PARAM = "api_key";
-
-            Uri builtUri = Uri.parse(artistURL).buildUpon()
-                    .appendQueryParameter(KEY_PARAM, Utility.THRILLCALL_API_KEY)
-                    .build();
-
-            url = new URL(builtUri.toString());
-        } catch (Exception e) {
-            Log.e(LOG_TAG, "Error making URL: ", e);
-        }
-    }
-
-    // build artist events URL
-    public void buildArtistEventsURL(int artistID) {
-        try {
-
-            // Construct the URL for the api.thrillcall query
-            final String artistURL = Utility.THRILLCALL_ARTIST_BASE_URL + String.valueOf(artistID);
-            final String artistEventsURL = artistURL + "/events";
-            final String KEY_PARAM = "api_key";
-
-            Uri builtUri = Uri.parse(artistEventsURL).buildUpon()
-                    .appendQueryParameter(KEY_PARAM, Utility.THRILLCALL_API_KEY)
-                    .build();
-
-            url = new URL(builtUri.toString());
-        } catch (Exception e) {
-            Log.e(LOG_TAG, "Error making URL: ", e);
-        }
-    }
-
-    // build artist search URL
-    public void buildArtistSearchURL(String artistName){
-        try {
-            // Construct the URL for the api.thrillcall query
-            final String artistSearchURL = Utility.THRILLCALL_SEARCH_BASE_URL + artistName;
-            final String KEY_PARAM = "api_key";
-
-            Uri builtUri = Uri.parse(artistSearchURL).buildUpon()
-                    .appendQueryParameter(KEY_PARAM, Utility.THRILLCALL_API_KEY)
-                    .build();
-
-            url = new URL(builtUri.toString());
-        } catch (Exception e) {
-            Log.e(LOG_TAG, "Error making URL: ", e);
-        }
-    }
-
-    // build geo events URL
-    public void buildGeoEventsURL() {
-
-        try {
-
-            // Checking geo parameters
-            geoLat = (double) settings.getFloat(Utility.SETTING_GEO_LAT, (float)Utility.GEO_DEFAULT_LAT);
-            geoLong = (double) settings.getFloat(Utility.SETTING_GEO_LONG, (float)Utility.GEO_DEFAULT_LONG);
-
-            // Checking date parameters
-            if (Utility.MIN_DATE != null && Utility.MAX_DATE != null) {
-                Date min = Utility.MIN_DATE.getTime();
-                Date max = Utility.MAX_DATE.getTime();
-                Utility.URL_MIN_DATE = new SimpleDateFormat("yyyy-MM-dd").format(min);
-                Utility.URL_MAX_DATE = new SimpleDateFormat("yyyy-MM-dd").format(max);
-
-            } else {
-                Utility.URL_MIN_DATE = Utility.MIN_DATE_DEFAULT();
-                Utility.URL_MAX_DATE = Utility.MAX_DATE_DEFAULT();
-            }
-
-            // Construct the URL for the api.thrillcall query
-            final String LAT_PARAM = "lat";
-            final String LONG_PARAM = "long";
-            final String LIMIT_PARAM = "limit";
-            final String MIN_DATE_PARAM = "min_date";
-            final String MAX_DATE_PARAM = "max_date";
-            final String KEY_PARAM = "api_key";
-
-            Uri builtUri = Uri.parse(Utility.THRILLCALL_GEO_BASE_URL).buildUpon()
-                    .appendQueryParameter(LAT_PARAM, String.valueOf(geoLat))
-                    .appendQueryParameter(LONG_PARAM, String.valueOf(geoLong))
-                    .appendQueryParameter(MIN_DATE_PARAM, Utility.URL_MIN_DATE)
-                    .appendQueryParameter(MAX_DATE_PARAM, Utility.URL_MAX_DATE)
-                    .appendQueryParameter(LIMIT_PARAM, Utility.EVENT_LIMIT_STR)
-                    .appendQueryParameter(KEY_PARAM, Utility.THRILLCALL_API_KEY)
-                    .build();
-
-            url = new URL(builtUri.toString());
-        } catch (Exception e) {
-            Log.e(LOG_TAG, "Error making URL: ", e);
-        }
+        url = BuildURL.instance().buildArtistSearchURL(artistName);
     }
 
     @Override
@@ -239,9 +142,9 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
             }
         }
 
-
     }
 
+    @Override
     protected void onPostExecute(String JSON) {
 
         // To-Do when JSON data is unavailable
@@ -249,6 +152,8 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
 
         // Geo Events
         if(dataFetchType == Utility.URL_GEO_EVENTS) {
+
+            ProgressBar dataProcessPI = (ProgressBar) mView.findViewById(R.id.parse_data_progress);
             // To decide what error message to show in GeoListFragment
             if (!JSON.equals(Utility.ERROR_MSG)) {
                 Utility.ERROR_OBTAINING_DATA = false;
@@ -280,6 +185,7 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
         // Artist search based on name
         else if(dataFetchType == Utility.URL_ARTIST_SEARCH) {
 
+            final TextView artistSearchCommentView = (TextView) mView.findViewById(R.id.artist_comment_view);
             if (!JSON.equals(Utility.ERROR_MSG)) {
                 ParseArtistSearchInfo searchInfo;
                 searchInfo = new ParseArtistSearchInfo(mContext, JSON);
@@ -331,6 +237,5 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
             intent.putExtra(String.valueOf(Query.COL_ARTIST_THRILL_ID), artistID);
             mContext.startActivity(intent);
         }
-
     }
 }

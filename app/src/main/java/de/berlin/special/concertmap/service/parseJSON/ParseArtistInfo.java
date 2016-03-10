@@ -1,4 +1,4 @@
-package de.berlin.special.concertmap.service;
+package de.berlin.special.concertmap.service.parseJSON;
 
 import android.content.ContentValues;
 import android.content.Context;

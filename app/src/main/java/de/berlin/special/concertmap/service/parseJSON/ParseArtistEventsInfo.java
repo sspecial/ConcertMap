@@ -1,4 +1,4 @@
-package de.berlin.special.concertmap.service;
+package de.berlin.special.concertmap.service.parseJSON;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -67,7 +67,6 @@ public class ParseArtistEventsInfo {
                 String conName;
                 String conStartAt;
                 String conThrillURL;
-                String offerDetails;
                 String conImage;
 
                 Hashtable<Integer, String> artList = new Hashtable<Integer, String>();

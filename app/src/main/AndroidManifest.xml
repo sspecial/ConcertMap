@@ -78,6 +78,9 @@
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyC11xNEZZw2tjmhwaKhuNmyVcxai7FunPw" />
 
+        <service android:name=".service.FetchIntentService"/>
+        <receiver android:name=".service.FetchIntentService$AlarmReceiver" android:enabled="true"/>
+
     </application>
 
 </manifest>
