@@ -110,7 +110,7 @@ public class FetchIntentService extends IntentService {
         @Override
         public void onReceive(Context context, Intent intent) {
             Intent sendIntent = new Intent(context, FetchIntentService.class);
-            sendIntent.putExtra(Utility.URL, BuildURL.instance().buildGeoEventsURL().toString());
+            sendIntent.putExtra(Utility.URL, new BuildURL(context).buildGeoEventsURL().toString());
             context.startService(sendIntent);
         }
     }

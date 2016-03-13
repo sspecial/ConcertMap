@@ -31,8 +31,6 @@ public class Utility {
     // Time duration
     public static Calendar MIN_DATE;
     public static Calendar MAX_DATE;
-    public static String URL_MIN_DATE = MIN_DATE_DEFAULT();
-    public static String URL_MAX_DATE = MAX_DATE_DEFAULT();
     // Default Today - MIN_DATE
     public static String MIN_DATE_DEFAULT(){
         Calendar calendar = Calendar.getInstance();

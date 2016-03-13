@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
@@ -40,7 +39,6 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
 
     private final String LOG_TAG = DataFetchService.class.getSimpleName();
 
-    private SharedPreferences settings;
     private Context mContext;
     private View mView;
     private URL url;
@@ -53,31 +51,28 @@ public class DataFetchService extends AsyncTask<Void, Void, String> {
     public DataFetchService(Context context, View view, int fetchType){
         mContext = context;
         mView = view;
-        settings = mContext.getSharedPreferences(Utility.PREFS_NAME, Context.MODE_PRIVATE);
         dataFetchType = fetchType;
-        url = BuildURL.instance().buildGeoEventsURL();
+        url = new BuildURL(mContext).buildGeoEventsURL();
     }
 
     // Constructor - Artist Info & Events
     public DataFetchService(Context context, int artistID, int fetchType){
         mContext = context;
-        settings = mContext.getSharedPreferences(Utility.PREFS_NAME, Context.MODE_PRIVATE);
         dataFetchType = fetchType;
         this.artistID = artistID;
 
         if(dataFetchType == Utility.URL_ARTIST_EVENTS)
-            url = BuildURL.instance().buildArtistEventsURL(artistID);
+            url = new BuildURL(mContext).buildArtistEventsURL(artistID);
         else if(dataFetchType == Utility.URL_ARTIST_INFO)
-            url = BuildURL.instance().buildArtistInfoURL(artistID);
+            url = new BuildURL(mContext).buildArtistInfoURL(artistID);
     }
 
     // Constructor - Artist search
     public DataFetchService(Context context, View view, String artistName, int fetchType){
         mContext = context;
         mView = view;
-        settings = mContext.getSharedPreferences(Utility.PREFS_NAME, Context.MODE_PRIVATE);
         dataFetchType = fetchType;
-        url = BuildURL.instance().buildArtistSearchURL(artistName);
+        url = new BuildURL(mContext).buildArtistSearchURL(artistName);
     }
 
     @Override

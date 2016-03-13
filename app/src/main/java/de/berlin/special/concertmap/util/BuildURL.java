@@ -7,26 +7,18 @@ import android.util.Log;
 
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Calendar;
 
 /**
  * Created by Saeed on 10-Mar-16.
  */
 public class BuildURL {
 
-    private static BuildURL buildURL;
-    private Context mContext;
     private SharedPreferences settings;
     private final String LOG_TAG = BuildURL.class.getSimpleName();
 
-    public static BuildURL instance(){
-        buildURL = new BuildURL();
-        return buildURL;
-    }
-
-    public void init(Context context) {
-        mContext = context;
-        settings = mContext.getSharedPreferences(Utility.PREFS_NAME, Context.MODE_PRIVATE);
+    public BuildURL(Context context){
+        settings = context.getSharedPreferences(Utility.PREFS_NAME, Context.MODE_PRIVATE);
     }
 
     // build geo events URL
@@ -38,15 +30,15 @@ public class BuildURL {
             double geoLong = (double) settings.getFloat(Utility.SETTING_GEO_LONG, (float)Utility.GEO_DEFAULT_LONG);
 
             // Checking date parameters
-            if (Utility.MIN_DATE != null && Utility.MAX_DATE != null) {
-                Date min = Utility.MIN_DATE.getTime();
-                Date max = Utility.MAX_DATE.getTime();
-                Utility.URL_MIN_DATE = new SimpleDateFormat("yyyy-MM-dd").format(min);
-                Utility.URL_MAX_DATE = new SimpleDateFormat("yyyy-MM-dd").format(max);
+            String minDate = Utility.MIN_DATE_DEFAULT();
+            String maxDate = Utility.MAX_DATE_DEFAULT();
+            Calendar today = Calendar.getInstance();
 
-            } else {
-                Utility.URL_MIN_DATE = Utility.MIN_DATE_DEFAULT();
-                Utility.URL_MAX_DATE = Utility.MAX_DATE_DEFAULT();
+            if (Utility.MIN_DATE != null && Utility.MAX_DATE != null) {
+                if (Utility.MIN_DATE.DAY_OF_YEAR >= today.DAY_OF_YEAR) {
+                    minDate = new SimpleDateFormat("yyyy-MM-dd").format(Utility.MIN_DATE.getTime());
+                    maxDate = new SimpleDateFormat("yyyy-MM-dd").format(Utility.MAX_DATE.getTime());
+                }
             }
 
             // Construct the URL for the api.thrillcall query
@@ -60,8 +52,8 @@ public class BuildURL {
             Uri builtUri = Uri.parse(Utility.THRILLCALL_GEO_BASE_URL).buildUpon()
                     .appendQueryParameter(LAT_PARAM, String.valueOf(geoLat))
                     .appendQueryParameter(LONG_PARAM, String.valueOf(geoLong))
-                    .appendQueryParameter(MIN_DATE_PARAM, Utility.URL_MIN_DATE)
-                    .appendQueryParameter(MAX_DATE_PARAM, Utility.URL_MAX_DATE)
+                    .appendQueryParameter(MIN_DATE_PARAM, minDate)
+                    .appendQueryParameter(MAX_DATE_PARAM, maxDate)
                     .appendQueryParameter(LIMIT_PARAM, Utility.EVENT_LIMIT_STR)
                     .appendQueryParameter(KEY_PARAM, Utility.THRILLCALL_API_KEY)
                     .build();

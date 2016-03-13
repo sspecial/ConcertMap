@@ -10,11 +10,10 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
 import java.io.File;
-import java.net.URL;
+import java.util.Calendar;
 
 import de.berlin.special.concertmap.R;
 import de.berlin.special.concertmap.service.FetchIntentService;
-import de.berlin.special.concertmap.util.BuildURL;
 import de.berlin.special.concertmap.util.Utility;
 
 public class StartActivity extends AppCompatActivity {
@@ -95,20 +94,22 @@ public class StartActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
 
-        BuildURL.instance().init(getApplicationContext());
-        URL url = BuildURL.instance().buildGeoEventsURL();
         Context mContext = getApplicationContext();
-
         Intent alarmIntent = new Intent(mContext, FetchIntentService.AlarmReceiver.class);
-        alarmIntent.putExtra(Utility.URL, url.toString());
 
         //Wrap in a pending intent which only fires once.
         PendingIntent pi = PendingIntent.getBroadcast(mContext, 0, alarmIntent, PendingIntent.FLAG_ONE_SHOT);//getBroadcast(context, 0, i, 0);
 
         AlarmManager am = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
 
+        Calendar firingCal = Calendar.getInstance();
+        firingCal.set(Calendar.HOUR, 0); // At the hour you want to fire the alarm
+        firingCal.set(Calendar.MINUTE, 5); // alarm minute
+        firingCal.set(Calendar.SECOND, 0); // and alarm second
+        long intendedTime = firingCal.getTimeInMillis();
+
         //Set the AlarmManager to wake up the system.
-        am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), pi);
+        am.setRepeating(AlarmManager.RTC_WAKEUP, intendedTime, AlarmManager.INTERVAL_DAY , pi);
     }
 
     @Override
