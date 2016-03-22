@@ -34,7 +34,8 @@ public class Utility {
     // Default Today - MIN_DATE
     public static String MIN_DATE_DEFAULT(){
         Calendar calendar = Calendar.getInstance();
-        MIN_DATE = calendar;
+        if (MIN_DATE == null)
+            MIN_DATE = calendar;
         Date today = calendar.getTime();
         String date = new SimpleDateFormat("yyyy-MM-dd").format(today);
         return date;
@@ -43,10 +44,15 @@ public class Utility {
     public static String MAX_DATE_DEFAULT(){
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_YEAR, 1);
-        MAX_DATE = calendar;
+        if (MAX_DATE == null)
+            MAX_DATE = calendar;
         Date tomorrow = calendar.getTime();
         String date = new SimpleDateFormat("yyyy-MM-dd").format(tomorrow);
         return date;
+    }
+
+    public static String simpleDate(Calendar calendar){
+        return new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime());
     }
 
     public static final String CITY_NAME_NOT_VALID = "Please enter a valid city name.";

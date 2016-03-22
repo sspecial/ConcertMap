@@ -12,6 +12,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import de.berlin.special.concertmap.service.parseJSON.ParseJSONtoDatabase;
 import de.berlin.special.concertmap.util.BuildURL;
@@ -39,7 +41,7 @@ public class FetchIntentService extends IntentService {
         String concertJSONStr = null;
         try {
             URL url = new URL(intent.getStringExtra(Utility.URL));
-            Log.d(LOG_TAG, "URL: "+url.toString());
+            Log.d(LOG_TAG, "URL: " + url.toString());
 
             // Create the request to OpenEventMap, and open the connection
             urlConnection = (HttpURLConnection) url.openConnection();
@@ -70,7 +72,7 @@ public class FetchIntentService extends IntentService {
             }
             concertJSONStr = buffer.toString();
             // Returning JSON data containing complete event list
-            Log.d(LOG_TAG+"-Fetched JSON data: ", concertJSONStr);
+            Log.d(LOG_TAG + "-Fetched JSON data: ", concertJSONStr);
 
             onPostExecute(concertJSONStr);
 
@@ -107,11 +109,16 @@ public class FetchIntentService extends IntentService {
 
     public static class AlarmReceiver extends BroadcastReceiver {
 
+        private final String LOG_TAG = AlarmReceiver.class.getSimpleName();
+
         @Override
         public void onReceive(Context context, Intent intent) {
+
+            Log.d(LOG_TAG, "---------------------" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime()));
             Intent sendIntent = new Intent(context, FetchIntentService.class);
             sendIntent.putExtra(Utility.URL, new BuildURL(context).buildGeoEventsURL().toString());
             context.startService(sendIntent);
+
         }
     }
 

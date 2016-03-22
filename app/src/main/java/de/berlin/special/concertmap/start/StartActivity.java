@@ -8,9 +8,12 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.TimeZone;
 
 import de.berlin.special.concertmap.R;
 import de.berlin.special.concertmap.service.FetchIntentService;
@@ -20,6 +23,7 @@ public class StartActivity extends AppCompatActivity {
 
     Fragment initiateFragment = new InitiateFragment();
     Fragment startFragment = new StartFragment();
+    private static final String LOG_TAG = StartActivity.class.getSimpleName();
     private SharedPreferences settings;
 
     @Override
@@ -103,13 +107,15 @@ public class StartActivity extends AppCompatActivity {
         AlarmManager am = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
 
         Calendar firingCal = Calendar.getInstance();
+        firingCal.setTimeZone(TimeZone.getTimeZone("GMT"));
         firingCal.set(Calendar.HOUR, 0); // At the hour you want to fire the alarm
         firingCal.set(Calendar.MINUTE, 5); // alarm minute
         firingCal.set(Calendar.SECOND, 0); // and alarm second
+        Log.d(LOG_TAG, "---------------------" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(firingCal.getTime()));
         long intendedTime = firingCal.getTimeInMillis();
 
         //Set the AlarmManager to wake up the system.
-        am.setRepeating(AlarmManager.RTC_WAKEUP, intendedTime, AlarmManager.INTERVAL_DAY , pi);
+        am.setInexactRepeating(AlarmManager.RTC_WAKEUP, intendedTime, AlarmManager.INTERVAL_FIFTEEN_MINUTES , pi);
     }
 
     @Override
