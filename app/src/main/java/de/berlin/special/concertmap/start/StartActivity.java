@@ -102,20 +102,20 @@ public class StartActivity extends AppCompatActivity {
         Intent alarmIntent = new Intent(mContext, FetchIntentService.AlarmReceiver.class);
 
         //Wrap in a pending intent which only fires once.
-        PendingIntent pi = PendingIntent.getBroadcast(mContext, 0, alarmIntent, PendingIntent.FLAG_ONE_SHOT);//getBroadcast(context, 0, i, 0);
+        PendingIntent pi = PendingIntent.getBroadcast(mContext, 0, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);//getBroadcast(context, 0, i, 0);
 
         AlarmManager am = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
 
         Calendar firingCal = Calendar.getInstance();
         firingCal.setTimeZone(TimeZone.getTimeZone("GMT"));
-        firingCal.set(Calendar.HOUR, 0); // At the hour you want to fire the alarm
+        firingCal.set(Calendar.HOUR_OF_DAY, 23); // At the hour you want to fire the alarm
         firingCal.set(Calendar.MINUTE, 5); // alarm minute
         firingCal.set(Calendar.SECOND, 0); // and alarm second
-        Log.d(LOG_TAG, "---------------------" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(firingCal.getTime()));
+        Log.d(LOG_TAG, "****-----------------" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(firingCal.getTime()));
         long intendedTime = firingCal.getTimeInMillis();
 
         //Set the AlarmManager to wake up the system.
-        am.setInexactRepeating(AlarmManager.RTC_WAKEUP, intendedTime, AlarmManager.INTERVAL_FIFTEEN_MINUTES , pi);
+        am.setInexactRepeating(AlarmManager.RTC_WAKEUP, intendedTime, AlarmManager.INTERVAL_DAY , pi);
     }
 
     @Override
