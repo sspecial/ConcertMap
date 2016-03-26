@@ -86,6 +86,17 @@ public class ParseArtistSearchInfo {
         } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
             e.printStackTrace();
+
+        } finally {
+            try {
+                if (liteDatabase != null) {
+                    liteDatabase.close();
+                    liteDatabase = null;
+                }
+            } catch (Exception e) {
+                Log.e(LOG_TAG, e.getMessage(), e);
+                e.printStackTrace();
+            }
         }
     }
 
