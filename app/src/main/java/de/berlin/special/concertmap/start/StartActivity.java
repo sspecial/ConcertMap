@@ -109,8 +109,8 @@ public class StartActivity extends AppCompatActivity {
         Calendar firingCal = Calendar.getInstance();
         firingCal.setTimeZone(TimeZone.getTimeZone("GMT"));
         firingCal.set(Calendar.HOUR_OF_DAY, 23); // At the hour you want to fire the alarm
-        firingCal.set(Calendar.MINUTE, 5); // alarm minute
-        firingCal.set(Calendar.SECOND, 0); // and alarm second
+        firingCal.set(Calendar.MINUTE, 0); // alarm minute
+        firingCal.set(Calendar.SECOND, 30); // and alarm second
         Log.d(LOG_TAG, "****-----------------" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(firingCal.getTime()));
         long intendedTime = firingCal.getTimeInMillis();
 

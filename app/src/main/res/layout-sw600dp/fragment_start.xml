@@ -6,7 +6,7 @@
     android:background="@drawable/background"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context="de.berlin.special.concertmap.navigate.StartFragment">
+    tools:context=".start.StartActivity">
 
     <ImageView
         android:id="@+id/imageView"

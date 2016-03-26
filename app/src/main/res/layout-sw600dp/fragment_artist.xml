@@ -5,7 +5,7 @@
     android:background="@drawable/light_blue_background"
     android:orientation="vertical"
     android:padding="5dp"
-    tools:context="de.berlin.special.concertmap.event.ArtistActivityFragment">
+    tools:context=".artist.ArtistActivity">
 
     <RelativeLayout
         android:id="@+id/atist_image_layout"

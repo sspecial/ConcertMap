@@ -7,7 +7,7 @@
     android:gravity="center_horizontal"
     android:orientation="vertical"
     android:padding="@dimen/fragment_margin"
-    tools:context="de.berlin.special.concertmap.navigate.CityFragment">
+    tools:context=".settings.CityFragment">
 
     <LinearLayout
         android:id="@+id/city_view_layout"
