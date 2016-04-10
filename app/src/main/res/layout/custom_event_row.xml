@@ -44,7 +44,7 @@
                 android:ellipsize="end"
                 android:singleLine="true"
                 android:textColor="@color/blue"
-                android:textSize="18dp" />
+                android:textSize="@dimen/mobile_title" />
 
             <TextView
                 android:id="@+id/list_item_address_textview"
@@ -54,7 +54,7 @@
                 android:ellipsize="end"
                 android:singleLine="true"
                 android:textColor="@color/black_cow"
-                android:textSize="15dp" />
+                android:textSize="@dimen/mobile_address" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -77,7 +77,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="9dp"
                     android:textColor="@color/black_cow"
-                    android:textSize="13dp" />
+                    android:textSize="@dimen/mobile_time" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -91,7 +91,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black_cow"
-                    android:textSize="13dp" />
+                    android:textSize="@dimen/mobile_time" />
             </LinearLayout>
 
         </LinearLayout>

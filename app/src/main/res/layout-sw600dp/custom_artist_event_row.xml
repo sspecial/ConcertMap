@@ -3,15 +3,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/linear_artist_event_info"
     android:layout_width="match_parent"
-    android:layout_height="110dp"
+    android:layout_height="wrap_content"
     android:layout_gravity="center_vertical"
     android:background="@color/blue_sky"
     android:gravity="center_vertical"
     android:orientation="vertical"
-    android:paddingBottom="8dp"
-    android:paddingLeft="4dp"
-    android:paddingRight="4dp"
-    android:paddingTop="8dp">
+    android:paddingBottom="12dp"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp"
+    android:paddingTop="12dp">
 
     <TextView
         android:id="@+id/textview_venue_name"
@@ -20,25 +20,24 @@
         android:ellipsize="marquee"
         android:gravity="center_horizontal"
         android:lines="1"
-        android:textSize="@dimen/tablet_title"
-        android:textColor="@color/black"
-        android:textStyle="bold" />
+        android:textColor="@color/blue"
+        android:textSize="@dimen/tablet_title" />
 
     <TextView
         android:id="@+id/textview_venue_street"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="7dp"
+        android:layout_marginTop="12dp"
         android:ellipsize="marquee"
         android:gravity="center_horizontal"
         android:lines="1"
-        android:textSize="@dimen/tablet_address"
-        android:textColor="@color/black" />
+        android:textColor="@color/black_cow"
+        android:textSize="@dimen/tablet_address" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="7dp"
+        android:layout_marginTop="12dp"
         android:gravity="center_horizontal"
         android:orientation="horizontal">
 
@@ -54,8 +53,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="9dp"
-            android:textSize="@dimen/tablet_time"
-            android:textColor="@color/black" />
+            android:textColor="@color/black_cow"
+            android:textSize="@dimen/tablet_time" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -68,8 +67,8 @@
             android:id="@+id/artist_item_time_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/tablet_time"
-            android:textColor="@color/black" />
+            android:textColor="@color/black_cow"
+            android:textSize="@dimen/tablet_time" />
     </LinearLayout>
 
 </LinearLayout>

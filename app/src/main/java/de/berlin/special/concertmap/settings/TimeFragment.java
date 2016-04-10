@@ -52,11 +52,17 @@ public class TimeFragment extends Fragment {
         fromDateEntry = (EditText) rootView.findViewById(R.id.from_date_edit_text);
         fromDateEntry.setInputType(InputType.TYPE_NULL);
         fromDateEntry.requestFocus();
-        fromDateEntry.setText(Utility.simpleDate(Utility.MIN_DATE));
 
         toDateEntry = (EditText) rootView.findViewById(R.id.to_date_edit_text);
         toDateEntry.setInputType(InputType.TYPE_NULL);
-        toDateEntry.setText(Utility.simpleDate(Utility.MAX_DATE));
+
+        if (Utility.MIN_DATE != null && Utility.MAX_DATE != null) {
+            fromDateEntry.setText(Utility.simpleDate(Utility.MIN_DATE));
+            toDateEntry.setText(Utility.simpleDate(Utility.MAX_DATE));
+        } else {
+            fromDateEntry.setText(Utility.MIN_DATE_DEFAULT());
+            toDateEntry.setText(Utility.MAX_DATE_DEFAULT());
+        }
 
         setDateBtn = (ImageButton) rootView.findViewById(R.id.set_date_button);
         progressBar = (ProgressBar) rootView.findViewById(R.id.parse_data_progress);

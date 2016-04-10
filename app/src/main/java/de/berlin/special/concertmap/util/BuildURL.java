@@ -35,19 +35,16 @@ public class BuildURL {
             String minDate = Utility.MIN_DATE_DEFAULT();
             String maxDate = Utility.MAX_DATE_DEFAULT();
 
-            if (Utility.MIN_DATE != null && Utility.MAX_DATE != null) {
-
-                if (Utility.MIN_DATE.DAY_OF_YEAR >= today.DAY_OF_YEAR) {
-                    minDate = Utility.simpleDate(Utility.MIN_DATE);
+            if (Utility.MIN_DATE.DAY_OF_YEAR >= today.DAY_OF_YEAR) {
+                minDate = Utility.simpleDate(Utility.MIN_DATE);
+                maxDate = Utility.simpleDate(Utility.MAX_DATE);
+            } else {
+                if (Utility.MAX_DATE.DAY_OF_YEAR > today.DAY_OF_YEAR) {
+                    Utility.MIN_DATE = today;
                     maxDate = Utility.simpleDate(Utility.MAX_DATE);
                 } else {
-                    if(Utility.MAX_DATE.DAY_OF_YEAR > today.DAY_OF_YEAR){
-                        Utility.MIN_DATE = today;
-                        maxDate = Utility.simpleDate(Utility.MAX_DATE);
-                    } else {
-                        Utility.MIN_DATE = today;
-                        Utility.MAX_DATE = tomorrow;
-                    }
+                    Utility.MIN_DATE = today;
+                    Utility.MAX_DATE = tomorrow;
                 }
             }
 

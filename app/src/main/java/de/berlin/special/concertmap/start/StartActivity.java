@@ -13,7 +13,6 @@ import android.util.Log;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.TimeZone;
 
 import de.berlin.special.concertmap.R;
 import de.berlin.special.concertmap.service.FetchIntentService;
@@ -107,8 +106,7 @@ public class StartActivity extends AppCompatActivity {
         AlarmManager am = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
 
         Calendar firingCal = Calendar.getInstance();
-        firingCal.setTimeZone(TimeZone.getTimeZone("GMT"));
-        firingCal.set(Calendar.HOUR_OF_DAY, 23); // At the hour you want to fire the alarm
+        firingCal.set(Calendar.HOUR_OF_DAY, 24); // At the hour you want to fire the alarm
         firingCal.set(Calendar.MINUTE, 0); // alarm minute
         firingCal.set(Calendar.SECOND, 30); // and alarm second
         Log.d(LOG_TAG, "****-----------------" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(firingCal.getTime()));
