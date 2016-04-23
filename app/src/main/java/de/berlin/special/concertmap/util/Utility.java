@@ -34,7 +34,7 @@ public class Utility {
     // Default Today - MIN_DATE
     public static String MIN_DATE_DEFAULT(){
         Calendar calendar = Calendar.getInstance();
-        if (MIN_DATE == null)
+        if (MIN_DATE == null || MIN_DATE.compareTo(calendar) == -1 )
             MIN_DATE = calendar;
         Date today = calendar.getTime();
         String date = new SimpleDateFormat("yyyy-MM-dd").format(today);
@@ -44,7 +44,7 @@ public class Utility {
     public static String MAX_DATE_DEFAULT(){
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_YEAR, 1);
-        if (MAX_DATE == null)
+        if (MAX_DATE == null || MAX_DATE.compareTo(calendar) == -1)
             MAX_DATE = calendar;
         Date tomorrow = calendar.getTime();
         String date = new SimpleDateFormat("yyyy-MM-dd").format(tomorrow);
@@ -102,7 +102,6 @@ public class Utility {
     public static final String IMAGE_DIR_ARTIST = IMAGE_BADE_DIR + "TrackedArtists";
     public static final String IMAGE_DIR_EVENT = IMAGE_BADE_DIR + "AttendedEvents";
     public static final String IMAGE_DIR_DAILY = IMAGE_BADE_DIR + "DailyEvents";
-    public static final String IMAGE_DIR_TODAY = imageDirToday();
 
     public static String imageDirToday(){
         String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());

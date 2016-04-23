@@ -17,6 +17,7 @@ import java.util.Calendar;
 
 import de.berlin.special.concertmap.service.parseJSON.ParseJSONtoDatabase;
 import de.berlin.special.concertmap.util.BuildURL;
+import de.berlin.special.concertmap.util.ImageDirectories;
 import de.berlin.special.concertmap.util.Utility;
 
 /**
@@ -114,7 +115,8 @@ public class FetchIntentService extends IntentService {
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            Log.d(LOG_TAG, "---------------------" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime()));
+            Log.d(LOG_TAG, "****-----------------" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime()));
+            ImageDirectories.organize();
             Intent sendIntent = new Intent(context, FetchIntentService.class);
             sendIntent.putExtra(Utility.URL, new BuildURL(context).buildGeoEventsURL().toString());
             context.startService(sendIntent);

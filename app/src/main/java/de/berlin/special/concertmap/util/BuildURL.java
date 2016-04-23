@@ -29,23 +29,17 @@ public class BuildURL {
             double geoLong = (double) settings.getFloat(Utility.SETTING_GEO_LONG, (float)Utility.GEO_DEFAULT_LONG);
 
             // Checking date parameters
+            String minDate = Utility.MIN_DATE_DEFAULT();
+            String maxDate = Utility.MAX_DATE_DEFAULT();
             Calendar today = Calendar.getInstance();
             Calendar tomorrow = Calendar.getInstance();
             tomorrow.add(Calendar.DAY_OF_YEAR, 1);
-            String minDate = Utility.MIN_DATE_DEFAULT();
-            String maxDate = Utility.MAX_DATE_DEFAULT();
 
-            if (Utility.MIN_DATE.DAY_OF_YEAR >= today.DAY_OF_YEAR) {
+            if (Utility.MIN_DATE.compareTo(today) == 1) {
                 minDate = Utility.simpleDate(Utility.MIN_DATE);
                 maxDate = Utility.simpleDate(Utility.MAX_DATE);
-            } else {
-                if (Utility.MAX_DATE.DAY_OF_YEAR > today.DAY_OF_YEAR) {
-                    Utility.MIN_DATE = today;
-                    maxDate = Utility.simpleDate(Utility.MAX_DATE);
-                } else {
-                    Utility.MIN_DATE = today;
-                    Utility.MAX_DATE = tomorrow;
-                }
+            } else if (Utility.MAX_DATE.compareTo(tomorrow) == 1) {
+                maxDate = Utility.simpleDate(Utility.MAX_DATE);
             }
 
             // Construct the URL for the api.thrillcall query

@@ -10,12 +10,12 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import de.berlin.special.concertmap.R;
 import de.berlin.special.concertmap.service.FetchIntentService;
+import de.berlin.special.concertmap.util.ImageDirectories;
 import de.berlin.special.concertmap.util.Utility;
 
 public class StartActivity extends AppCompatActivity {
@@ -49,48 +49,7 @@ public class StartActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        /*
-        File dir = new File(Utility.imageDirPath());
-        if (dir.exists()) {
-            for (File imFile : dir.listFiles()) {
-                imFile.delete();
-            }
-            dir.delete();
-        }
-        */
-        File artistDir = new File(Utility.IMAGE_DIR_ARTIST);
-        if (!artistDir.exists()) {
-            artistDir.mkdirs();
-        }
-
-        File eventDir = new File(Utility.IMAGE_DIR_EVENT);
-        if (!eventDir.exists()) {
-            eventDir.mkdirs();
-        }
-
-        File dailyDir = new File(Utility.IMAGE_DIR_DAILY);
-
-        if (!dailyDir.exists()) {
-            dailyDir.mkdirs();
-        } else {
-            for (File imFile : dailyDir.listFiles()) {
-                if(!Utility.imageDirToday().equals(imFile.getAbsolutePath())) {
-                    if(imFile.isDirectory()) {
-                        for (File image : imFile.listFiles()) {
-                            image.delete();
-                        }
-                        imFile.delete();
-                    }else {
-                        imFile.delete();
-                    }
-                }
-            }
-        }
-
-        File todayDir = new File(Utility.imageDirToday());
-        if (!todayDir.exists()) {
-            todayDir.mkdirs();
-        }
+        ImageDirectories.organize();
     }
 
     @Override
