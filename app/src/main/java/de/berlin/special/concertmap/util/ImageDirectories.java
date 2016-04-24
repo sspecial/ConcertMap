@@ -32,15 +32,17 @@ public class ImageDirectories {
         if (!dailyDir.exists()) {
             dailyDir.mkdirs();
         } else {
-            for (File imFile : dailyDir.listFiles()) {
-                if(!Utility.imageDirToday().equals(imFile.getAbsolutePath())) {
-                    if(imFile.isDirectory()) {
-                        for (File image : imFile.listFiles()) {
-                            image.delete();
+            if (dailyDir.listFiles() != null) {
+                for (File imFile : dailyDir.listFiles()) {
+                    if (!Utility.imageDirToday().equals(imFile.getAbsolutePath())) {
+                        if (imFile.isDirectory()) {
+                            for (File image : imFile.listFiles()) {
+                                image.delete();
+                            }
+                            imFile.delete();
+                        } else {
+                            imFile.delete();
                         }
-                        imFile.delete();
-                    }else {
-                        imFile.delete();
                     }
                 }
             }

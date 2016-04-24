@@ -1,12 +1,16 @@
 package de.berlin.special.concertmap.start;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,17 +39,23 @@ import de.berlin.special.concertmap.util.Utility;
 /**
  * Created by Saeed on 18-Nov-14.
  */
-public class InitiateFragment extends Fragment implements ConnectionCallbacks, OnConnectionFailedListener{
+public class InitiateFragment extends Fragment implements ConnectionCallbacks, OnConnectionFailedListener {
 
     private static final String LOG_TAG = InitiateFragment.class.getSimpleName();
     private static final String ENTER_CITY = "Location is not available, Enter the city.";
     private static final String FINDING_YOUR_LOCATION = "Finding your location...";
 
+    // Location Permissions
+    private static final int REQUEST_LOCATION_ACCESS = 1;
+    private static String[] PERMISSIONS_LOCATION = {
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+    };
+
     private static final int LOCATION_AVAILABLE = 100;
     private static final int LOCATION_NOT_AVAILABLE = 101;
 
-    private double geo_lat;
-    private double geo_long;
+    private boolean locationPermission = false;
 
     private View rootView;
     private SharedPreferences settings;
@@ -65,8 +75,6 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
     private boolean mResolvingError = false;
     // Status of connection to google location service
     private int connStat;
-    // Location to be retrieved
-    private Location mLastLocation;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -100,15 +108,51 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
     @Override
     public void onStart() {
         super.onStart();
-        if (!mResolvingError) {
-            mGoogleApiClient.connect();
+
+        /**
+         * Checks if the app has permission to access the Location
+         * If the app does not has permission then the user will be prompted to grant permissions
+         */
+        int fineLocationPermission = ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION);
+        int coarseLocationPermission = ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION);
+
+        if (fineLocationPermission != PackageManager.PERMISSION_GRANTED && coarseLocationPermission != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(PERMISSIONS_LOCATION, REQUEST_LOCATION_ACCESS);
+        } else {
+            locationPermission = true;
+            if (!mResolvingError) {
+                mGoogleApiClient.connect();
+            }
         }
     }
 
     @Override
-    public void onConnected(Bundle bundle) {
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        getLastKnownLocation(mLastLocation);
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        switch (requestCode) {
+            case REQUEST_LOCATION_ACCESS: {
+
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    locationPermission = true;
+                }
+                if (!mResolvingError) {
+                    mGoogleApiClient.connect();
+                }
+                return;
+            }
+        }
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) throws SecurityException {
+
+        if (locationPermission) {
+            getLastKnownLocation(LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient));
+        }
+        else {
+            connStat = LOCATION_NOT_AVAILABLE;
+        }
 
         // When location is NOT available!
         if (connStat == LOCATION_NOT_AVAILABLE) {
@@ -189,12 +233,12 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
         super.onStop();
     }
 
-    public void getLastKnownLocation(Location loc) {
+    public void getLastKnownLocation(Location mLastLocation) {
 
         List<Address> addresses = null;
         try {
             Geocoder gcd = new Geocoder(getContext(), Locale.getDefault());
-            addresses = gcd.getFromLocation(loc.getLatitude(), loc.getLongitude(), 1);
+            addresses = gcd.getFromLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude(), 1);
             if (addresses != null && addresses.size() > 0) {
                 Address a = addresses.get(0);
 
