@@ -2,6 +2,7 @@ package de.berlin.special.concertmap.start;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -47,15 +48,20 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
 
     // Location Permissions
     private static final int REQUEST_LOCATION_ACCESS = 1;
+    private boolean locationPermission = false;
     private static String[] PERMISSIONS_LOCATION = {
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_COARSE_LOCATION
     };
+    private static String[] PERMISSIONS_ALL = {
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
 
     private static final int LOCATION_AVAILABLE = 100;
     private static final int LOCATION_NOT_AVAILABLE = 101;
-
-    private boolean locationPermission = false;
 
     private View rootView;
     private SharedPreferences settings;
@@ -115,9 +121,15 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
          */
         int fineLocationPermission = ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION);
         int coarseLocationPermission = ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION);
+        int readStoragePermission = ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE);
+        int writeStoragePermission = ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
         if (fineLocationPermission != PackageManager.PERMISSION_GRANTED && coarseLocationPermission != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(PERMISSIONS_LOCATION, REQUEST_LOCATION_ACCESS);
+            if (readStoragePermission != PackageManager.PERMISSION_GRANTED && writeStoragePermission != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(PERMISSIONS_ALL, REQUEST_LOCATION_ACCESS);
+            } else {
+                requestPermissions(PERMISSIONS_LOCATION, REQUEST_LOCATION_ACCESS);
+            }
         } else {
             locationPermission = true;
             if (!mResolvingError) {
@@ -130,10 +142,18 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
+        for (int i = 0; i < grantResults.length; i++) {
+            Log.d(LOG_TAG, String.format("permission '%s' : granted result '%d'", permissions[i], grantResults[i]));
+        }
+
         switch (requestCode) {
+
             case REQUEST_LOCATION_ACCESS: {
 
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                        && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+
                     locationPermission = true;
                 }
                 if (!mResolvingError) {
@@ -182,8 +202,16 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
                         dataProcessPI.setVisibility(View.VISIBLE);
                         locationView.setText(settings.getString(Utility.SETTING_LOCATION, Utility.CITY_IS_UNKNOWN));
 
-                        // Fetching data from Thrillcall API based on Geo information
-                        new DataFetchService(getActivity(), rootView, Utility.URL_GEO_EVENTS).execute();
+                        int readStoragePermission = ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE);
+                        int writeStoragePermission = ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+                        if (readStoragePermission != PackageManager.PERMISSION_GRANTED && writeStoragePermission != PackageManager.PERMISSION_GRANTED) {
+                            startActivity(new Intent(getContext(), PermissionActivity.class));
+                        } else {
+                            // Fetching data from Thrillcall API based on Geo information
+                            new DataFetchService(getActivity(), rootView, Utility.URL_GEO_EVENTS).execute();
+                        }
+
                     } else {
                         commentView.setText(Utility.CITY_NAME_NOT_VALID);
                     }
@@ -196,8 +224,15 @@ public class InitiateFragment extends Fragment implements ConnectionCallbacks, O
             foundLayout.setVisibility(View.VISIBLE);
             locationView.setText(settings.getString(Utility.SETTING_LOCATION, Utility.CITY_IS_UNKNOWN));
 
-            // Fetching data from Thrillcall API based on Geo information
-            new DataFetchService(getActivity(), rootView, Utility.URL_GEO_EVENTS).execute();
+            int readStoragePermission = ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE);
+            int writeStoragePermission = ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+            if (readStoragePermission != PackageManager.PERMISSION_GRANTED && writeStoragePermission != PackageManager.PERMISSION_GRANTED) {
+                startActivity(new Intent(getContext(), PermissionActivity.class));
+            } else {
+                // Fetching data from Thrillcall API based on Geo information
+                new DataFetchService(getActivity(), rootView, Utility.URL_GEO_EVENTS).execute();
+            }
         }
     }
 

@@ -1,8 +1,12 @@
 package de.berlin.special.concertmap.start;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,9 +59,14 @@ public class StartFragment extends Fragment {
         dataProcessPI.setVisibility(View.VISIBLE);
         locationView.setText(settings.getString(Utility.SETTING_LOCATION, Utility.CITY_IS_UNKNOWN));
 
-        // Fetching data from Thrillcall API based on Geo information
-        new DataFetchService(getActivity(), rootView, Utility.URL_GEO_EVENTS).execute();
+        int readStoragePermission = ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE);
+        int writeStoragePermission = ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
+        if (readStoragePermission != PackageManager.PERMISSION_GRANTED && writeStoragePermission != PackageManager.PERMISSION_GRANTED) {
+            startActivity(new Intent(getContext(), PermissionActivity.class));
+        } else {
+            // Fetching data from Thrillcall API based on Geo information
+            new DataFetchService(getActivity(), rootView, Utility.URL_GEO_EVENTS).execute();
+        }
     }
-
 }
