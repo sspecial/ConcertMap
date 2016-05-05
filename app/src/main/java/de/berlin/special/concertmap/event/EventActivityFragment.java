@@ -1,15 +1,18 @@
 package de.berlin.special.concertmap.event;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.ShareActionProvider;
@@ -29,6 +32,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -46,7 +50,7 @@ import de.berlin.special.concertmap.util.Utility;
 /**
  * A placeholder fragment containing a event view.
  */
-public class EventActivityFragment extends Fragment {
+public class EventActivityFragment extends Fragment implements OnMapReadyCallback {
 
     private View rootView;
     private SQLiteDatabase liteDatabase;
@@ -63,7 +67,6 @@ public class EventActivityFragment extends Fragment {
     private String venueAddress;
     private double geoLat;
     private double geoLong;
-    private GoogleMap map;
 
     private ImageView imageView;
     private CheckBox attendBtn;
@@ -115,7 +118,7 @@ public class EventActivityFragment extends Fragment {
         ticketBtn = (Button) rootView.findViewById(R.id.button_ticket);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-        map = mapFragment.getMap();
+        mapFragment.getMapAsync(this);
 
         // Populating UI elements with event info
         File file = new File(imagePath);
@@ -139,18 +142,6 @@ public class EventActivityFragment extends Fragment {
         timeView.setText(dateArr[1]);
 
         return rootView;
-    }
-
-    @Override
-    public void onStart(){
-        super.onStart();
-        // Setting up the map
-        LatLng eventGeo = new LatLng(geoLat, geoLong);
-        map.setMyLocationEnabled(true);
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(eventGeo, 13));
-        map.addMarker(new MarkerOptions()
-                .title(venueName)
-                .position(eventGeo));
     }
 
     private Intent createShareIntent(){
@@ -248,4 +239,22 @@ public class EventActivityFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onMapReady(GoogleMap map) {
+        /**
+         * Checks if the app has permission to access the Location
+         */
+        int fineLocationPermission = ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION);
+        int coarseLocationPermission = ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION);
+        if (fineLocationPermission == PackageManager.PERMISSION_GRANTED && coarseLocationPermission == PackageManager.PERMISSION_GRANTED) {
+            // Setting up the map
+            LatLng eventGeo = new LatLng(geoLat, geoLong);
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(eventGeo, 13));
+            map.addMarker(new MarkerOptions()
+                    .title(venueName)
+                    .position(eventGeo));
+        } else {
+            // TO_DO
+        }
+    }
 }

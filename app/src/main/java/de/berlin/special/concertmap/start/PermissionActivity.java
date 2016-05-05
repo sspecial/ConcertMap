@@ -15,7 +15,6 @@ public class PermissionActivity extends AppCompatActivity {
     private Button settingBtn;
     private Button exitBtn;
     private TextView grantExplanation;
-    private boolean appExit = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,15 +46,15 @@ public class PermissionActivity extends AppCompatActivity {
         exitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                appExit = true;
-                finish();
+                Intent intent = new Intent(Intent.ACTION_MAIN);
+                intent.addCategory(Intent.CATEGORY_HOME);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
             }
         });
     }
 
     public void onDestroy() {
         super.onDestroy();
-        if (appExit)
-            android.os.Process.killProcess(android.os.Process.myPid());
     }
 }
